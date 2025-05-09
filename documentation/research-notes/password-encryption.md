@@ -174,7 +174,7 @@ Winner of the Password Hashing Competition (PHC). State-of-the-art password hash
 
 ## Links
 
-[Video: Password Storage Tier List: encryption, hashing, salting, bcrypt and beyond](https://youtu.be/qgpsIBLvrGY?si=qGPk8w2uNEUzWGds)
+- [Video: Password Storage Tier List: encryption, hashing, salting, bcrypt and beyond](https://youtu.be/qgpsIBLvrGY?si=qGPk8w2uNEUzWGds)
 
 ## Thoughts
 
