@@ -8,10 +8,10 @@ const path = require("path");
 // Azurite default account info
 const account = "devstoreaccount1";
 const accountKey =
-  "Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc=="; // Use full dev key
+  "Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc==";
 const containerName = "beat-block-storage";
-const blobName = "sample.wav"; // The blob name to download
-const downloadFilePath = path.join(__dirname, "downloaded_sample.wav"); // Where to save the file locally
+const blobName = "sample.wav";
+const downloadFilePath = path.join(__dirname, "downloaded_sample.wav");
 
 // Setup credentials and blob service client for Azurite
 const sharedKeyCredential = new StorageSharedKeyCredential(account, accountKey);
@@ -21,31 +21,42 @@ const blobServiceClient = new BlobServiceClient(
 );
 
 async function main() {
-  // Get container client
   const containerClient = blobServiceClient.getContainerClient(containerName);
-
-  // Get blob client for the WAV file
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-  // Download the WAV file
-  const downloadResponse = await blockBlobClient.download();
-  const downloadedContent = await streamToBuffer(
-    downloadResponse.readableStreamBody
-  );
+  // Get blob properties to find out size
+  const properties = await blockBlobClient.getProperties();
+  const blobSize = properties.contentLength;
 
-  // Write the downloaded content to a local file
-  fs.writeFileSync(downloadFilePath, downloadedContent);
-  console.log(
-    `Downloaded '${blobName}' from container '${containerName}' to '${downloadFilePath}'`
-  );
+  const chunkSize = 4 * 1024 * 1024; // 4MB per chunk
+  const fileHandle = fs.openSync(downloadFilePath, "w");
+
+  try {
+    for (let offset = 0; offset < blobSize; offset += chunkSize) {
+      const count = Math.min(chunkSize, blobSize - offset);
+      console.log(`Downloading bytes ${offset} to ${offset + count - 1}`);
+
+      // Download chunk with range
+      const downloadResponse = await blockBlobClient.download(offset, count);
+      const chunkBuffer = await streamToBuffer(
+        downloadResponse.readableStreamBody
+      );
+
+      // Write chunk to file at correct position
+      fs.writeSync(fileHandle, chunkBuffer, 0, chunkBuffer.length, offset);
+    }
+    console.log(`Download complete, saved to '${downloadFilePath}'`);
+  } finally {
+    fs.closeSync(fileHandle);
+  }
 }
 
-// Convert a Node.js readable stream to a Buffer
+// Helper function to convert stream to buffer
 async function streamToBuffer(readableStream) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    readableStream.on("data", (chunk) => {
-      chunks.push(chunk);
+    readableStream.on("data", (data) => {
+      chunks.push(data);
     });
     readableStream.on("end", () => {
       resolve(Buffer.concat(chunks));

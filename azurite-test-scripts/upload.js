@@ -21,7 +21,6 @@ const blobServiceClient = new BlobServiceClient(
 );
 
 async function main() {
-  // Get container client
   const containerClient = blobServiceClient.getContainerClient(containerName);
 
   // Create container if it doesn't exist
@@ -36,10 +35,43 @@ async function main() {
     }
   }
 
-  // Upload the WAV file
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  await blockBlobClient.uploadFile(localFilePath);
-  console.log(`Uploaded '${blobName}' to container '${containerName}'`);
+
+  const fileSize = fs.statSync(localFilePath).size;
+  const blockSize = 4 * 1024 * 1024; // 4MB block size
+  const blockCount = Math.ceil(fileSize / blockSize);
+
+  const blockIds = [];
+
+  const fileHandle = fs.openSync(localFilePath, "r");
+
+  try {
+    for (let i = 0; i < blockCount; i++) {
+      const start = i * blockSize;
+      const end = Math.min(start + blockSize, fileSize);
+      const chunkSize = end - start;
+      const buffer = Buffer.alloc(chunkSize);
+
+      fs.readSync(fileHandle, buffer, 0, chunkSize, start);
+
+      // Azure requires block IDs to be base64-encoded strings
+      const blockId = Buffer.from(String(i).padStart(6, "0")).toString(
+        "base64"
+      );
+      blockIds.push(blockId);
+
+      console.log(
+        `Uploading block ${i + 1} of ${blockCount} (size: ${chunkSize} bytes)`
+      );
+      await blockBlobClient.stageBlock(blockId, buffer, chunkSize);
+    }
+
+    // Commit the block list to assemble the blob
+    await blockBlobClient.commitBlockList(blockIds);
+    console.log(`Upload complete for blob '${blobName}'`);
+  } finally {
+    fs.closeSync(fileHandle);
+  }
 }
 
 main().catch((err) => {
