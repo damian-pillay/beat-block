@@ -82,6 +82,33 @@ Files are uploaded to Azure Blob Storage, and metadata or URLs are saved in the 
 
 ---
 
+### Storage Emulator (Azurite)
+
+**Description**  
+Azurite is a local emulator for Azure Blob Storage, allowing developers to test blob storage functionality without connecting to the actual Azure cloud.
+
+**Pros**
+
+- No internet connection or Azure subscription required.
+- Fast local testing and development.
+- Easy to set up using Docker or npm.
+- Compatible with Azure SDKs and tools.
+
+**Cons**
+
+- Not suitable for production use.
+- Lacks some advanced Azure features.
+- Temporary storage — data is lost when the container is removed unless volumes are mounted.
+
+**Best For**
+
+- Local development and testing.
+- Simulating Azure Blob Storage before deployment.
+- Building MVPs before committing to Azure services.
+
+**Scalability**: Low (dev use only)  
+**Deployment Readiness**: Not for production
+
 ### Storage Using FILESTREAM (Local)
 
 **Description**  
@@ -146,3 +173,10 @@ An interesting and optimized alternative is using MSSQL's FILESTREAM, which stor
 Given that FILESTREAM is MSSQL-exclusive and well-integrated, it seems ideal for this MVP, especially when hosting on an Azure VM. It allows for straightforward demos without exceeding reasonable storage limits. While not cloud-native like Blob Storage, it demonstrates thoughtful consideration of trade-offs, scalability, and database strengths, which could impress during presentation.
 
 Ultimately, both options are viable. FILESTREAM offers better integration and simplicity for local development and proof-of-concept, while Blob Storage is better suited for production-scale systems. Choosing FILESTREAM now keeps development light but doesn't prevent future migration to Blob or other scalable storage solutions.
+
+**UPDATE: 15/05/2025**
+After initially attempting to implement the FILESTREAM method for handling large files, I discovered that FILESTREAM support in MSSQL is limited to Windows-based environments. This limitation effectively rules out containerisation, significantly reducing the flexibility and optimisation potential of deployment. As a result, I pivoted to exploring Azure Blob Storage as a more versatile solution.
+
+To test blob storage functionality in a local development environment, I needed a service that could emulate Azure Blob Storage. I came across Azurite, Microsoft’s open-source storage emulator, which proved to be much simpler to set up and use than I initially anticipated. Azurite works by mocking blob storage within a container that runs on the same Docker network as my application, allowing seamless communication between services.
+
+I tested Azurite’s performance by uploading and downloading a 55MB .wav file using basic JavaScript scripts. The emulator handled the file transfers efficiently, with no noticeable performance issues, demonstrating that it’s a solid local alternative for prototyping Azure Blob Storage integrations.
