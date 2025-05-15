@@ -1,6 +1,7 @@
-﻿using backend.Data;
-using Microsoft.EntityFrameworkCore;
-using backend.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using BeatBlock.Repositories;
+using BeatBlock.Data;
+using BeatBlock.Models;
 
 namespace backend_test;
 
@@ -20,7 +21,7 @@ public class ProjectRepositoryTest
 
         _context = new AppDbContext(options);
 
-        _context.Projects.Add(new backend.Models.Project
+        _context.Projects.Add(new Project
         {
             Name = "Test Project",
             Description = "This is a demo project",

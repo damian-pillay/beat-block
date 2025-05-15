@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "backend.csproj", "{53CF1F7E-6439-4A9B-85C3-108D5F8796BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatBlock", "BeatBlock.csproj", "{53CF1F7E-6439-4A9B-85C3-108D5F8796BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend-test", "..\backend-test\backend-test.csproj", "{93CD986E-66A3-4688-B901-BA746602080C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatBlockTest", "..\backend-test\BeatBlockTest.csproj", "{93CD986E-66A3-4688-B901-BA746602080C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

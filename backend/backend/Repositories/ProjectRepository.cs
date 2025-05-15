@@ -1,7 +1,7 @@
-﻿using backend.Data;
-using backend.Models;
+﻿using BeatBlock.Data;
+using BeatBlock.Models;
 
-namespace backend.Repositories;
+namespace BeatBlock.Repositories;
 
 public class ProjectRepository : IProjectRepository
 {

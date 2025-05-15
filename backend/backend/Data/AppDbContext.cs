@@ -1,7 +1,7 @@
-﻿using backend.Models;
+﻿using BeatBlock.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Data;
+namespace BeatBlock.Data;
 
 public class AppDbContext : DbContext
 {

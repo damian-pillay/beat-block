@@ -1,6 +1,6 @@
-using backend.Data;
-using backend.Repositories;
-using backend.Services;
+using BeatBlock.Data;
+using BeatBlock.Repositories;
+using BeatBlock.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

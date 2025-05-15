@@ -1,7 +1,7 @@
-﻿using backend.Models;
-using backend.Repositories;
+﻿using BeatBlock.Models;
+using BeatBlock.Repositories;
 
-namespace backend.Services;
+namespace BeatBlock.Services;
 
 public class ProjectService : IProjectService
 {

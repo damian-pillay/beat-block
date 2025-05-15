@@ -1,6 +1,6 @@
-﻿using backend.Models;
+﻿using BeatBlock.Models;
 
-namespace backend.Repositories;
+namespace BeatBlock.Repositories;
 
 public interface IProjectRepository
 {

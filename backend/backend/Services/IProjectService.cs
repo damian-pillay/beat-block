@@ -1,6 +1,6 @@
-﻿using backend.Models;
+﻿using BeatBlock.Models;
 
-namespace backend.Services
+namespace BeatBlock.Services
 {
     public interface IProjectService
     {

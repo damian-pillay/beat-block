@@ -1,4 +1,4 @@
-﻿namespace backend.Models
+﻿namespace BeatBlock.Models
 {
     public class Project
     {
