@@ -4,7 +4,7 @@ using backend.Repositories;
 
 namespace backend_test;
 
-public class ProjectEfTests
+public class ProjectRepositoryTest
 {
     private AppDbContext _context = null!;
     private ProjectRepository _repository = null!;
