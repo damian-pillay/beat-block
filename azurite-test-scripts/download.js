@@ -9,7 +9,7 @@ const path = require("path");
 const account = "devstoreaccount1";
 const accountKey =
   "Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc=="; // Use full dev key
-const containerName = "test-container";
+const containerName = "beat-block-storage";
 const blobName = "sample.wav"; // The blob name to download
 const downloadFilePath = path.join(__dirname, "downloaded_sample.wav"); // Where to save the file locally
 
