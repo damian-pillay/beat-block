@@ -1,4 +1,5 @@
-﻿using BeatBlock.Models;
+﻿using BeatBlock.DTOs;
+using BeatBlock.Models;
 using BeatBlock.Repositories;
 
 namespace BeatBlock.Services;
@@ -34,5 +35,10 @@ public class ProjectService : IProjectService
 
         await _repository.AddAsync(project);
         return project;
+    }
+
+    public async Task<Project?> GetProjectByIdAsync(int id)
+    {
+        return await _repository.GetByIdAsync(id);
     }
 }
