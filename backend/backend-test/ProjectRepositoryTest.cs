@@ -3,7 +3,7 @@ using BeatBlock.Repositories;
 using BeatBlock.Data;
 using BeatBlock.Models;
 
-namespace backend_test;
+namespace BeatBlockTest;
 
 public class ProjectRepositoryTest
 {
@@ -23,6 +23,7 @@ public class ProjectRepositoryTest
 
         _context.Projects.Add(new Project
         {
+            ProjectId = 1,
             Name = "Test Project",
             Description = "This is a demo project",
             KeySignature = "C#m",
@@ -41,15 +42,18 @@ public class ProjectRepositoryTest
     }
 
     [Test]
-    public void CanFetchProject()
+    public void CALLING_GetAllProjects_RETURNS_AllProjectsInDataBase()
     {
+        // Arrange
         var projects = _repository.GetAllProjects().ToList();
 
-        Assert.That(projects.Count, Is.EqualTo(1));
-        var project = projects[0];
-
+        // Act and Assert
         Assert.Multiple(() =>
         {
+            Assert.That(projects.Count, Is.EqualTo(1));
+            var project = projects[0];
+
+            Assert.That(project.ProjectId, Is.EqualTo(1));
             Assert.That(project.Name, Is.EqualTo("Test Project"));
             Assert.That(project.Description, Is.EqualTo("This is a demo project"));
             Assert.That(project.KeySignature, Is.EqualTo("C#m"));
