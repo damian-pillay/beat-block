@@ -18,7 +18,7 @@ public class ProjectService : IProjectService
         return _repository.GetAllProjects();
     }
 
-    public async Task<Project> CreateProjectAsync(ProjectDTO projectDto)
+    public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
         var project = new Project
         {
