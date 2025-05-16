@@ -21,7 +21,7 @@ public class ProjectRepositoryTest
 
         _context = new AppDbContext(options);
 
-        _context.Projects.Add(new Project
+        _context.Project.Add(new Project
         {
             ProjectId = 1,
             Name = "Test Project",
