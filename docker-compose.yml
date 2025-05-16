@@ -1,11 +1,27 @@
 services:
+  beatblock-api:
+    build:
+      context: ./backend/backend
+      dockerfile: Dockerfile
+    ports:
+    - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_DB=${SQL_DB}
+      - SQL_PORT=${SQL_PORT}
+    depends_on:
+      - sqlserver
+    networks:
+      - beatblock
+  
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${SQL_PASSWORD}
     ports:
-      - "1433:1433"
+      - "${SQL_PORT}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
     healthcheck:
@@ -14,6 +30,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+    networks:
+      - beatblock
   
   db-init:
     image: mcr.microsoft.com/mssql-tools
@@ -26,15 +44,19 @@ services:
       /bin/bash -c '
       /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${SQL_PASSWORD} -C -i /sql/CreateDatabase.sql;
       '
+    networks:
+      - beatblock
 
   flyway:
     image: flyway/flyway:9-alpine
     depends_on:
       db-init:
         condition: service_completed_successfully
-    entrypoint: ["flyway", "-url=jdbc:sqlserver://host.docker.internal:1433;databaseName=BeatBlock;trustServerCertificate=true", "-user=sa", "-password=${SQL_PASSWORD}", "migrate"] 
+    entrypoint: ["flyway", "-url=jdbc:sqlserver://host.docker.internal:${SQL_PORT};databaseName=${SQL_DB};trustServerCertificate=true", "-user=sa", "-password=${SQL_PASSWORD}", "migrate"] 
     volumes:
       - ./db/sql/migrations:/flyway/sql
+    networks:
+      - beatblock
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
@@ -50,7 +72,12 @@ services:
     environment:
       - AZURITE_ACCOUNTS=devstoreaccount1:Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc==
     command: ["azurite-blob", "--blobHost", "0.0.0.0", "--silent"]
+    networks:
+      - beatblock
 
 volumes:
   sqlserver_data:
   azurite_data:
+
+networks:
+  - beatblock
