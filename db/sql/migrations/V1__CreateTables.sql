@@ -1,14 +1,14 @@
-CREATE TABLE [User] (
-  UserId INT PRIMARY KEY IDENTITY(1,1),
-  Email VARCHAR(320) NOT NULL UNIQUE,
-  Password VARCHAR(60) NOT NULL,
-  FirstName VARCHAR(20) NOT NULL,
-  LastName VARCHAR(50) NOT NULL
-);
+-- CREATE TABLE [User] (
+--   UserId INT PRIMARY KEY IDENTITY(1,1),
+--   Email VARCHAR(320) NOT NULL UNIQUE,
+--   Password VARCHAR(60) NOT NULL,
+--   FirstName VARCHAR(20) NOT NULL,
+--   LastName VARCHAR(50) NOT NULL
+-- );
 
 CREATE TABLE [Project] (
   ProjectId INT PRIMARY KEY IDENTITY(1,1),
-  UserId INT NOT NULL,
+  -- UserId INT NOT NULL,
   Name VARCHAR(50) NOT NULL,
   Description VARCHAR(100),
   KeySignature VARCHAR(4),
