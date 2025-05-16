@@ -14,6 +14,6 @@ public class ProjectRepository : IProjectRepository
 
     public IEnumerable<Project> GetAllProjects()
     {
-        return _context.Projects.ToList();
+        return _context.Project.ToList();
     }
 }
