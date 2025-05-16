@@ -16,4 +16,23 @@ public class ProjectService : IProjectService
     {
         return _repository.GetAllProjects();
     }
+
+    public async Task<Project> CreateProjectAsync(ProjectDTO projectDto)
+    {
+        var project = new Project
+        {
+            Name = projectDto.Name,
+            Description = projectDto.Description,
+            KeySignature = projectDto.KeySignature,
+            Bpm = projectDto.Bpm,
+            Genre = projectDto.Genre,
+            Daw = projectDto.Daw,
+            FilesUrl = projectDto.FilesUrl,
+            AudioUrl = projectDto.AudioUrl,
+            ArtworkUrl = projectDto.ArtworkUrl
+        };
+
+        await _repository.AddAsync(project);
+        return project;
+    }
 }
