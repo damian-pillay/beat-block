@@ -2,7 +2,7 @@
 
 namespace BeatBlock.DTOs;
 
-public class ProjectDTO
+public class CreateProjectResponse
 {
     [Required]
     public string Name { get; set; } = null!;

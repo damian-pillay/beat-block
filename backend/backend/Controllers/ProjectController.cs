@@ -1,5 +1,4 @@
 ﻿using BeatBlock.DTOs;
-using BeatBlock.Models;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,20 +16,22 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Project>> GetAll()
+    public ActionResult<GetAllProjectsRequest> GetAll()
     {
         var projects = _projectService.GetAllProjects();
-        return Ok(projects);
+        var response = new GetAllProjectsRequest(projects);
+
+        return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProject([FromBody] ProjectDTO projectDto)
+    public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest projectDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-
+        
         var createdProject = await _projectService.CreateProjectAsync(projectDto);
 
         return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.ProjectId }, createdProject);
