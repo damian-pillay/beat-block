@@ -9,6 +9,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - SQL_PASSWORD=${SQL_PASSWORD}
       - SQL_DB=${SQL_DB}
+      - SQL_SERVER=${SQL_SERVER}
       - SQL_PORT=${SQL_PORT}
     depends_on:
       - sqlserver
@@ -80,4 +81,4 @@ volumes:
   azurite_data:
 
 networks:
-  - beatblock
+  beatblock:
