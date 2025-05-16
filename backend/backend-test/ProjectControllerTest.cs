@@ -42,7 +42,7 @@ public class ProjectControllerTest
             var okResult = result.Result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
 
-            var returnedProjects = okResult.Value as IEnumerable<Project>;
+            var returnedProjects = okResult!.Value as IEnumerable<Project>;
             Assert.That(returnedProjects, Is.Not.Null);
             CollectionAssert.AreEqual(testProjects, returnedProjects);
         });    
