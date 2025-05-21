@@ -21,8 +21,4 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\Response\" />
-  </ItemGroup>
-
 </Project>

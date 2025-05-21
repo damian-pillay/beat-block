@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using Azure.Storage.Blobs;
 using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 
 Env.Load();
 
@@ -29,7 +30,12 @@ builder.Services.AddSingleton(new BlobServiceClient(blobStorageConnectionString)
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Limits.MaxRequestBodySize = long.MaxValue;
+    options.Limits.MaxRequestBodySize = null;
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
