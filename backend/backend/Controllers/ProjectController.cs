@@ -1,6 +1,7 @@
 ﻿using BeatBlock.DTOs.Request;
 using BeatBlock.DTOs.Response;
 using BeatBlock.Services;
+using BeatBlock.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeatBlock.Controllers;
@@ -9,9 +10,8 @@ namespace BeatBlock.Controllers;
 [Route("api/[controller]")]
 public class ProjectController : ControllerBase
 {
-    private const long ByteMultiplier = 1024 * 1024;
-
     private readonly IProjectService _projectService;
+    private readonly IProjectUploadValidator _uploadValidator;
 
     public ProjectController(IProjectService projectService)
     {
@@ -30,24 +30,7 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
-        const long maxFileSize = 300 * ByteMultiplier; // MB to bytes
-        const long maxAudioSize = 30 * ByteMultiplier;
-        const long maxImageSize = 5 * ByteMultiplier;
-
-        if (projectDto.Mp3File != null && projectDto.Mp3File.Length > maxFileSize)
-        {
-            ModelState.AddModelError(nameof(projectDto.Mp3File), "MP3 file size exceeds the 30MB limit.");
-        }
-
-        if (projectDto.CoverImage != null && projectDto.CoverImage.Length > maxImageSize)
-        {
-            ModelState.AddModelError(nameof(projectDto.CoverImage), "Cover image size exceeds the 5MB limit.");
-        }
-
-        if (projectDto.ZipFile != null && projectDto.ZipFile.Length > maxAudioSize)
-        {
-            ModelState.AddModelError(nameof(projectDto.ZipFile), "Project ZIP file size exceeds the 300MB limit.");
-        }
+        _uploadValidator.Validate(projectDto, ModelState);
 
         if (!ModelState.IsValid)
         {
