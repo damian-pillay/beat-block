@@ -23,41 +23,10 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        Console.WriteLine("[CreateProjectAsync] Called.");
-
-        if (projectDto.ZipFile == null)
-        {
-            Console.WriteLine("[CreateProjectAsync] ZipFile is null — this is required.");
-            throw new ArgumentException("ZipFile is required");
-        }
-
         var zipPath = await UploadFileToBlobAsync(projectDto.ZipFile, "project-files");
+        var mp3Path = projectDto.Mp3File != null ? await UploadFileToBlobAsync(projectDto.Mp3File, "project-audio") : null;
+        var imagePath = projectDto.CoverImage != null ? await UploadFileToBlobAsync(projectDto.CoverImage, "project-artwork") : null;
 
-        string? mp3Path = null;
-        if (projectDto.Mp3File != null)
-        {
-            try
-            {
-                mp3Path = await UploadFileToBlobAsync(projectDto.Mp3File, "project-audio");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[CreateProjectAsync] MP3 upload failed: {ex.Message}");
-            }
-        }
-
-        string? imagePath = null;
-        if (projectDto.CoverImage != null)
-        {
-            try
-            {
-                imagePath = await UploadFileToBlobAsync(projectDto.CoverImage, "project-artwork");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[CreateProjectAsync] Image upload failed: {ex.Message}");
-            }
-        }
         var project = new Project
         {
             Name = projectDto.Name,
@@ -77,30 +46,16 @@ public class ProjectService : IProjectService
 
     private async Task<string> UploadFileToBlobAsync(IFormFile file, string containerName)
     {
-        Console.WriteLine($"[UploadFileToBlobAsync] Start uploading '{file.FileName}' to container '{containerName}'");
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        await containerClient.CreateIfNotExistsAsync();
 
-        try
-        {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-            await containerClient.CreateIfNotExistsAsync();
-            Console.WriteLine("[UploadFileToBlobAsync] Container ready.");
+        var blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var blobClient = containerClient.GetBlobClient(blobName);
 
-            var blobName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var blobClient = containerClient.GetBlobClient(blobName);
+        using var stream = file.OpenReadStream();
+        await blobClient.UploadAsync(stream);
 
-            await using var stream = file.OpenReadStream();
-            Console.WriteLine("[UploadFileToBlobAsync] Stream opened.");
-
-            await blobClient.UploadAsync(stream, overwrite: true);
-            Console.WriteLine($"[UploadFileToBlobAsync] Upload successful. Blob URL: {blobClient.Uri}");
-
-            return blobClient.Uri.ToString();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[UploadFileToBlobAsync] ERROR: {ex.Message}");
-            throw;
-        }
+        return blobClient.Uri.ToString();
     }
 
     public async Task<Project?> GetProjectByIdAsync(int id)

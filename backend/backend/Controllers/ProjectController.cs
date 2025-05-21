@@ -27,8 +27,6 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
-        Console.WriteLine("CONTROLLER: Received POST request");
-
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
