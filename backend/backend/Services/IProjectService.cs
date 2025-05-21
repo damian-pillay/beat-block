@@ -1,4 +1,4 @@
-﻿using BeatBlock.DTOs;
+﻿using BeatBlock.DTOs.Request;
 using BeatBlock.Models;
 
 namespace BeatBlock.Services

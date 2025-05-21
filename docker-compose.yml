@@ -11,6 +11,7 @@ services:
       - SQL_DB=${SQL_DB}
       - SQL_SERVER=${SQL_SERVER}
       - SQL_PORT=${SQL_PORT}
+      - AZURITE_CONNECTION_STRING=${AZURITE_CONNECTION_STRING}
     depends_on:
       - sqlserver
     networks:

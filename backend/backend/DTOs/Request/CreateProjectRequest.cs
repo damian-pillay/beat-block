@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BeatBlock.DTOs;
+namespace BeatBlock.DTOs.Request;
 
 public class CreateProjectRequest
 {
@@ -15,7 +15,7 @@ public class CreateProjectRequest
     public string Daw { get; set; } = null!;
 
     [Required]
-    public string FilesUrl { get; set; } = null!;
-    public string? AudioUrl { get; set; }
-    public string? ArtworkUrl { get; set; }
+    public IFormFile ZipFile { get; set; } = null!;
+    public IFormFile? Mp3File { get; set; }
+    public IFormFile? CoverImage { get; set; }
 }
