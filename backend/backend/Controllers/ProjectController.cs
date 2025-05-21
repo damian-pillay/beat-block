@@ -37,7 +37,7 @@ public class ProjectController : ControllerBase
         return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.ProjectId }, createdProject);
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
         var project = await _projectService.GetProjectByIdAsync(id);
