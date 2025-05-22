@@ -1,9 +1,12 @@
-﻿using BeatBlock.Models;
+﻿using BeatBlock.DTOs.Request;
+using BeatBlock.Models;
 
 namespace BeatBlock.Services
 {
     public interface IProjectService
     {
         IEnumerable<Project> GetAllProjects();
+        Task<Project> CreateProjectAsync(CreateProjectRequest projectDto);
+        Task<Project?> GetProjectByIdAsync(int id);
     }
 }

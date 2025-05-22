@@ -16,4 +16,15 @@ public class ProjectRepository : IProjectRepository
     {
         return _context.Project.ToList();
     }
+
+    public async Task AddAsync(Project project)
+    {
+        _context.Project.Add(project);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Project?> GetByIdAsync(int id)
+    {
+        return await _context.Project.FindAsync(id);
+    }
 }

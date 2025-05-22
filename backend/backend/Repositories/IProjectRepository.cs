@@ -5,4 +5,6 @@ namespace BeatBlock.Repositories;
 public interface IProjectRepository
 {
     IEnumerable<Project> GetAllProjects();
+    Task AddAsync(Project project);
+    Task<Project?> GetByIdAsync(int id);
 }
