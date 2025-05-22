@@ -23,7 +23,7 @@ public class ProjectRepositoryTest
 
         _context.Project.Add(new Project
         {
-            ProjectId = 1,
+            Id = 1,
             Name = "Test Project",
             Description = "This is a demo project",
             KeySignature = "C#m",
@@ -53,7 +53,7 @@ public class ProjectRepositoryTest
             Assert.That(projects.Count, Is.EqualTo(1));
             var project = projects[0];
 
-            Assert.That(project.ProjectId, Is.EqualTo(1));
+            Assert.That(project.Id, Is.EqualTo(1));
             Assert.That(project.Name, Is.EqualTo("Test Project"));
             Assert.That(project.Description, Is.EqualTo("This is a demo project"));
             Assert.That(project.KeySignature, Is.EqualTo("C#m"));

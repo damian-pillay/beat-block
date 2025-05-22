@@ -8,5 +8,6 @@ namespace BeatBlock.Services
         IEnumerable<Project> GetAllProjects();
         Task<Project> CreateProjectAsync(CreateProjectRequest projectDto);
         Task<Project?> GetProjectByIdAsync(int id);
+        Task<bool> DeleteProjectAsync(int id);
     }
 }

@@ -40,15 +40,26 @@ public class ProjectController : ControllerBase
         
         var createdProject = await _projectService.CreateProjectAsync(projectDto);
 
-        return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.ProjectId }, createdProject);
+        return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.Id }, createdProject);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
         var project = await _projectService.GetProjectByIdAsync(id);
+
         if (project == null) return NotFound();
 
         return Ok(project);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProject(int id)
+    {
+        var result = await _projectService.DeleteProjectAsync(id);
+
+        if (!result) return NotFound();
+                
+        return NoContent();
     }
 }

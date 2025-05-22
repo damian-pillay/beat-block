@@ -49,6 +49,8 @@ public class ProjectService : IProjectService
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
 
+        await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
         var blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var blobClient = containerClient.GetBlobClient(blobName);
 
@@ -61,5 +63,47 @@ public class ProjectService : IProjectService
     public async Task<Project?> GetProjectByIdAsync(int id)
     {
         return await _repository.GetByIdAsync(id);
+    }
+
+    public async Task<bool> DeleteProjectAsync(int id)
+    {
+        var project = await _repository.GetByIdAsync(id);
+        if (project == null)
+            return false;
+
+        await DeleteBlobAsync(project.FilesUrl);
+        
+        if (!string.IsNullOrEmpty(project.AudioUrl))
+            await DeleteBlobAsync(project.AudioUrl);
+
+        if (!string.IsNullOrEmpty(project.ArtworkUrl))
+            await DeleteBlobAsync(project.ArtworkUrl);
+
+        await _repository.DeleteProject(project);
+
+        return true;
+    }
+
+    private async Task DeleteBlobAsync(string blobPath)
+    {
+        var (containerName, blobName) = ParseBlobPath(blobPath);
+
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        await containerClient.CreateIfNotExistsAsync();
+
+        var blobClient = containerClient.GetBlobClient(blobName);
+
+        await blobClient.DeleteIfExistsAsync();
+    }
+
+    public (string, string) ParseBlobPath(string blobPath)
+    {
+        var uri = new Uri(blobPath);
+        var segments = uri.AbsolutePath.TrimStart('/').Split('/', 3);
+
+        var containerName = segments[1];
+        var blobName = segments[2];
+
+        return (containerName, blobName);
     }
 }
