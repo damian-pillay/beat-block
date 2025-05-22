@@ -2,8 +2,6 @@
 using BeatBlock.Models;
 using BeatBlock.Repositories;
 using Azure.Storage.Blobs;
-using System.ComponentModel;
-using System.Reflection.Metadata;
 
 namespace BeatBlock.Services;
 
@@ -89,7 +87,6 @@ public class ProjectService : IProjectService
     private async Task DeleteBlobAsync(string blobPath)
     {
         var (containerName, blobName) = ParseBlobPath(blobPath);
-        Console.WriteLine($"Deleting blob: container = {containerName}, blob = {blobName}");
 
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
