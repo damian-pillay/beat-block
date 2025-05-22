@@ -1,5 +1,5 @@
 CREATE TABLE [Project] (
-  ProjectId INT PRIMARY KEY IDENTITY(1,1),
+  Id INT PRIMARY KEY IDENTITY(1,1),
   Name VARCHAR(50) NOT NULL,
   Description VARCHAR(100),
   KeySignature VARCHAR(4),
