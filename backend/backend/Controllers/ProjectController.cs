@@ -46,13 +46,9 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
-        Console.WriteLine($"Getting project by ID: {id}");
         var project = await _projectService.GetProjectByIdAsync(id);
-        if (project == null)
-        {
-            Console.WriteLine("Project not found");
-            return NotFound();
-        }
+
+        if (project == null) return NotFound();
 
         return Ok(project);
     }
@@ -60,15 +56,10 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
-        Console.WriteLine($"Deleting project by ID: {id}");
         var result = await _projectService.DeleteProjectAsync(id);
 
-        if (!result)
-        {
-            Console.WriteLine($"Project not found");
-            return NotFound();
-        }
-            
-        return NoContent(); // 204 response
+        if (!result) return NotFound();
+                
+        return NoContent();
     }
 }
