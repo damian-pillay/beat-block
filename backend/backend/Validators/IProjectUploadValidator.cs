@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BeatBlock.Validators
 {
-    public interface ProjectUploadValidator
+    public interface IProjectUploadValidator
     {
         void Validate(CreateProjectRequest request, ModelStateDictionary modelState);
     }

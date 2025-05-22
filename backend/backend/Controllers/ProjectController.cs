@@ -13,9 +13,10 @@ public class ProjectController : ControllerBase
     private readonly IProjectService _projectService;
     private readonly IProjectUploadValidator _uploadValidator;
 
-    public ProjectController(IProjectService projectService)
+    public ProjectController(IProjectService projectService, IProjectUploadValidator uploadValidator)
     {
         _projectService = projectService;
+        _uploadValidator = uploadValidator;
     }
 
     [HttpGet]

@@ -6,6 +6,7 @@ using DotNetEnv;
 using Azure.Storage.Blobs;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using BeatBlock.Validators;
 
 Env.Load();
 
@@ -40,6 +41,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectUploadValidator, ProjectUploadValidator>();
 
 builder.Services.AddCors(options =>
 {
