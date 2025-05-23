@@ -62,4 +62,14 @@ public class ProjectController : ControllerBase
                 
         return NoContent();
     }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest dto)
+    {
+        var updatedProject = await _projectService.UpdateProjectAsync(id, dto);
+        if (updatedProject == null)
+            return NotFound();
+
+        return CreatedAtAction(nameof(GetProjectById), new { id = updatedProject.Id }, updatedProject);
+    }
 }
