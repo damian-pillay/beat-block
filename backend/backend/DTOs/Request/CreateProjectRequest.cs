@@ -10,7 +10,7 @@ public class CreateProjectRequest
     public string? KeySignature { get; set; }
     public byte? Bpm { get; set; }
     public string? Genre { get; set; }
-    
+
     [Required]
     public string Daw { get; set; } = null!;
 
