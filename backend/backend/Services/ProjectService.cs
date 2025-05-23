@@ -10,6 +10,10 @@ public class ProjectService : IProjectService
     private readonly IProjectRepository _repository;
     private readonly BlobServiceClient _blobServiceClient;
 
+    private const string ProjectFilesDir = "project-files";
+    private const string ProjectAudioDir = "project-audio";
+    private const string ProjectArtworkDir = "project-files";
+
     public ProjectService(IProjectRepository repository, BlobServiceClient blobServiceClient)
     {
         _repository = repository;
@@ -23,9 +27,9 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        var zipPath = await UploadFileToBlobAsync(projectDto.ZipFile, "project-files");
-        var mp3Path = projectDto.Mp3File != null ? await UploadFileToBlobAsync(projectDto.Mp3File, "project-audio") : null;
-        var imagePath = projectDto.CoverImage != null ? await UploadFileToBlobAsync(projectDto.CoverImage, "project-artwork") : null;
+        var zipPath = await UploadBlobAsync(projectDto.ZipFile, ProjectFilesDir);
+        var mp3Path = projectDto.Mp3File != null ? await UploadBlobAsync(projectDto.Mp3File, ProjectAudioDir) : null;
+        var imagePath = projectDto.CoverImage != null ? await UploadBlobAsync(projectDto.CoverImage, ProjectArtworkDir) : null;
 
         var project = new Project
         {
@@ -44,7 +48,7 @@ public class ProjectService : IProjectService
         return project;
     }
 
-    private async Task<string> UploadFileToBlobAsync(IFormFile file, string containerName)
+    private async Task<string> UploadBlobAsync(IFormFile file, string containerName)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
@@ -105,5 +109,45 @@ public class ProjectService : IProjectService
         var blobName = segments[2];
 
         return (containerName, blobName);
+    }
+
+    public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto)
+    {
+        var project = await _repository.GetByIdAsync(id);
+        if (project == null)
+            return null;
+
+        if (!string.IsNullOrEmpty(projectDto.Name)) project.Name = projectDto.Name;
+        if (!string.IsNullOrEmpty(projectDto.Description)) project.Description = projectDto.Description;
+
+        if (projectDto.ZipFile != null)
+        {
+            var newFilesUrl = await UploadBlobAsync(projectDto.ZipFile, ProjectFilesDir);
+            await DeleteBlobAsync(project.FilesUrl);
+            project.FilesUrl = newFilesUrl;
+        }
+
+        if (projectDto.Mp3File != null)
+        {
+            var newAudioUrl = await UploadBlobAsync(projectDto.Mp3File, ProjectAudioDir);
+
+            if (!string.IsNullOrEmpty(project.AudioUrl))
+                await DeleteBlobAsync(project.AudioUrl);
+
+            project.AudioUrl = newAudioUrl;
+        }
+
+        if (projectDto.CoverImage != null)
+        {
+            var newArtworkUrl = await UploadBlobAsync(projectDto.CoverImage, ProjectArtworkDir);
+
+            if (!string.IsNullOrEmpty(project.ArtworkUrl))
+                await DeleteBlobAsync(project.ArtworkUrl);
+
+            project.ArtworkUrl = newArtworkUrl;
+        }
+
+        await _repository.UpdateProjectAsync(project); 
+        return project;
     }
 }
