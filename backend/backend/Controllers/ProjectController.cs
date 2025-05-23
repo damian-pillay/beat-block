@@ -37,7 +37,7 @@ public class ProjectController : ControllerBase
         {
             return ValidationProblem(ModelState);
         }
-        
+
         var createdProject = await _projectService.CreateProjectAsync(projectDto);
 
         return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.Id }, createdProject);
@@ -59,7 +59,7 @@ public class ProjectController : ControllerBase
         var result = await _projectService.DeleteProjectAsync(id);
 
         if (!result) return NotFound();
-                
+
         return NoContent();
     }
 

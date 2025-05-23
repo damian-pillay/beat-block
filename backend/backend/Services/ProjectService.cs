@@ -76,7 +76,7 @@ public class ProjectService : IProjectService
             return false;
 
         await DeleteBlobAsync(project.FilesUrl);
-        
+
         if (!string.IsNullOrEmpty(project.AudioUrl))
             await DeleteBlobAsync(project.AudioUrl);
 
@@ -147,7 +147,7 @@ public class ProjectService : IProjectService
             project.ArtworkUrl = newArtworkUrl;
         }
 
-        await _repository.UpdateProjectAsync(project); 
+        await _repository.UpdateProjectAsync(project);
         return project;
     }
 }

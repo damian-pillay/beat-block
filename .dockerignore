@@ -1,0 +1,6 @@
+tests/
+test-data/
+*.md
+.git/
+.github/
+requirements.txt

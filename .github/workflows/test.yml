@@ -1,0 +1,33 @@
+name: Run Unit Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    name: Run Back-end Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: backend/backend
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+        working-directory: backend/backend
+
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
+        working-directory: backend/backend
