@@ -22,9 +22,12 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
+        working-directory: backend/backend
 
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
+        working-directory: backend/backend
 
       - name: Run tests
         run: dotnet test --no-build --configuration Release --verbosity normal
+        working-directory: backend/backend
