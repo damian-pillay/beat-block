@@ -54,7 +54,7 @@ services:
     depends_on:
       db-init:
         condition: service_completed_successfully
-    entrypoint: ["flyway", "-url=jdbc:sqlserver://host.docker.internal:${SQL_PORT};databaseName=${SQL_DB};trustServerCertificate=true", "-user=sa", "-password=${SQL_PASSWORD}", "migrate"] 
+    entrypoint: ["flyway", "-url=jdbc:sqlserver://sqlserver:${SQL_PORT};databaseName=${SQL_DB};trustServerCertificate=true", "-user=sa", "-password=${SQL_PASSWORD}", "migrate"] 
     volumes:
       - ./db/sql/migrations:/flyway/sql
     networks:
