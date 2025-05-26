@@ -10,6 +10,12 @@ jobs:
       
       - name: Start backend container(s)
         run: docker compose up -d --build
+        env:
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_DB: ${{ secrets.SQL_DB }}
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_PORT: ${{ secrets.SQL_PORT }}
+          AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
       
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
