@@ -26,7 +26,8 @@ jobs:
           AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
           
       - name: Run EF Core database update
-        run: dotnet ef database update --project BeatBlock.csproj
+        working-directory: ./backend/backend
+        run: dotnet ef database update
         env:
           SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
           SQL_DB: ${{ secrets.SQL_DB }}
