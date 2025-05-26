@@ -7,6 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install EF Tools
+        run: dotnet tool install --global dotnet-ef
       
       - name: Start backend container(s)
         run: docker compose up -d --build
@@ -25,6 +33,15 @@ jobs:
             echo "Retrying in 3s..."
             sleep 3
           done
+
+      - name: Run EF Core database update
+        run: dotnet ef database update --project BeatBlock.csproj
+        env:
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_DB: ${{ secrets.SQL_DB }}
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_PORT: ${{ secrets.SQL_PORT }}
+          AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
           
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
