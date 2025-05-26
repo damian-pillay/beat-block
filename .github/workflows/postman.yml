@@ -9,8 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Start backend container(s)
-        run: | 
-          docker compose up -d --build > docker_output.log 2>&1 || (cat docker_output.log && exit 1)
+        run: docker compose up -d --build
         env:
           SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
           SQL_DB: ${{ secrets.SQL_DB }}
