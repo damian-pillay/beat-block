@@ -10,7 +10,7 @@ jobs:
       
       - name: Start backend container(s)
         run: | 
-          docker compose --quiet-pull up -d --build > docker_output.log 2>&1 || (cat docker_output.log && exit 1)
+          docker compose up -d --build > docker_output.log 2>&1 || (cat docker_output.log && exit 1)
         env:
           SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
           SQL_DB: ${{ secrets.SQL_DB }}
