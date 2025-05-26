@@ -7,14 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
-
-      - name: Install EF Tools
-        run: dotnet tool install --global dotnet-ef
       
       - name: Start backend container(s)
         run: docker compose up -d --build
