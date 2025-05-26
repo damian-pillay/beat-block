@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "Waiting for SQL Server..."
           for i in {1..20}; do
-            docker exec beat-block-api-1 /bin/bash -c "dotnet ef database update" && break
+            docker exec beat-block-beatblock-api-1 /bin/bash -c "dotnet ef database update" && break
             echo "Retrying in 3s..."
             sleep 3
           done
