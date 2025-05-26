@@ -25,16 +25,6 @@ jobs:
           SQL_PORT: ${{ secrets.SQL_PORT }}
           AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
           
-      - name: Run EF Core database update
-        working-directory: ./backend/backend
-        run: dotnet ef database update
-        env:
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-          SQL_DB: ${{ secrets.SQL_DB }}
-          SQL_SERVER: ${{ secrets.SQL_SERVER }}
-          SQL_PORT: ${{ secrets.SQL_PORT }}
-          AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
-          
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       
