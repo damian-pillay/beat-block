@@ -81,6 +81,49 @@ public class ProjectServiceTest
     }
 
     [Test]
+    public async Task GIVEN_NullOptionalFiles_USING_CreateProjectAsync_RETURNS_ProjectWithoutUrls()
+    {
+        // Arrange
+        var zipName = "project.zip";
+        var zipContainer = "project-files";
+        var zipFile = FormFileHelper.CreateFakeFormFile("ZIP DATA", zipName);
+
+
+        var request = new CreateProjectRequest
+        {
+            Name = "Test Project",
+            Daw = "FL Studio",
+            ZipFile = zipFile
+        };
+
+        var expectedZipPath = $"{zipContainer}/{zipName}";
+
+        _blobStorageServiceMock.UploadAsync(Arg.Any<IFormFile>(), zipContainer).Returns(expectedZipPath);
+
+        // Act
+        var result = await _projectService.CreateProjectAsync(request);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Name, Is.EqualTo(request.Name));
+            Assert.That(result.Description, Is.Null);
+            Assert.That(result.KeySignature, Is.Null);
+            Assert.That(result.Bpm, Is.Null);
+            Assert.That(result.Genre, Is.Null);
+            Assert.That(result.Daw, Is.EqualTo(request.Daw));
+            Assert.That(result.FilesUrl, Is.EqualTo(expectedZipPath));
+            Assert.That(result.AudioUrl, Is.Null);
+            Assert.That(result.ArtworkUrl, Is.Null);
+        });
+
+        await _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
+        await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), "project-audio");
+        await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), "project-images");
+    }
+
+    [Test]
     public async Task GIVEN_NonExistentProjectId_USING_DeleteProjectAsync_RETURNS_FalseAndDoesNotDelete()
     {
         // Arrange
