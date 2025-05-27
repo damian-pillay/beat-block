@@ -75,9 +75,9 @@ public class ProjectServiceTest
             Assert.That(result.FilesUrl, Is.EqualTo(expectedZipPath));
             Assert.That(result.AudioUrl, Is.EqualTo(expectedMp3Path));
             Assert.That(result.ArtworkUrl, Is.EqualTo(expectedImagePath));
-
-            _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
         });
+
+        await _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         // Assert
-        
+
         Assert.That(result, Is.False);
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
         await _projectRepositoryMock.DidNotReceive().DeleteProject(Arg.Any<Project>());
@@ -121,6 +121,30 @@ public class ProjectServiceTest
         await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
         await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioUrl);
         await _blobStorageServiceMock.Received(1).DeleteAsync(project.ArtworkUrl);
+        await _projectRepositoryMock.Received(1).DeleteProject(project);
+    }
+
+    [Test]
+    public async Task GIVEN_ExistingProjectWithMissingFilePaths_USING_DeleteProjectAsync_DeletesOnlyPresentFilePathsAndReturnsTrue()
+    {
+        var projectId = 1;
+        var project = new Project
+        {
+            Name = "Test Project",
+            Daw = "FL Studio",
+            FilesUrl = "files/url.zip",
+            AudioUrl = null,
+            ArtworkUrl = null
+        };
+
+        _projectRepositoryMock.GetByIdAsync(projectId).Returns(Task.FromResult<Project?>(project));
+
+        var result = await _projectService.DeleteProjectAsync(projectId);
+
+        Assert.That(result, Is.True);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioUrl!);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ArtworkUrl!);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 }
