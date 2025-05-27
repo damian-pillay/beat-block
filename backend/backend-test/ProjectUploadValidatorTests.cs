@@ -39,7 +39,7 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            CoverImage = FormFileHelper.CreateFakeFormFile(new string('a', 6 * 1024 * 1024), "cover.jpg")      
+            CoverImage = FormFileHelper.CreateFakeFormFile(new string('a', 6 * 1024 * 1024), "cover.jpg")
         };
 
         _validator.Validate(request, _modelState);
