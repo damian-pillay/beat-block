@@ -79,4 +79,24 @@ public class ProjectServiceTest
             _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
         });
     }
+
+    [Test]
+    public async Task GIVEN_NonExistentProjectId_USING_DeleteProjectAsync_RETURNS_FalseAndDoesNotDelete()
+    {
+        // Arrange
+        int projectId = 1;
+
+        _projectRepositoryMock
+            .GetByIdAsync(projectId)
+            .Returns(Task.FromResult<Project?>(null));
+
+        // Act
+        var result = await _projectService.DeleteProjectAsync(projectId);
+
+        // Assert
+        
+        Assert.That(result, Is.False);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _projectRepositoryMock.DidNotReceive().DeleteProject(Arg.Any<Project>());
+    }
 }
