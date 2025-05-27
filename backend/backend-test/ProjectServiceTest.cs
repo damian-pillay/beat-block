@@ -34,9 +34,9 @@ public class ProjectServiceTest
         var audioContainer = "project-audio";
         var imageContainer = "project-images";
 
-        var zipFile = FormFileHelper.CreateFakeFormFile("ZIP DATA", zipName);
-        var mp3File = FormFileHelper.CreateFakeFormFile("MP3 DATA", mp3Name, "audio/mpeg");
-        var imageFile = FormFileHelper.CreateFakeFormFile("IMAGE DATA", imageName, "image/jpeg");
+        var zipFile = Substitute.For<IFormFile>();
+        var mp3File = Substitute.For<IFormFile>();
+        var imageFile = Substitute.For<IFormFile>();
 
         var request = new CreateProjectRequest
         {
@@ -86,7 +86,7 @@ public class ProjectServiceTest
         // Arrange
         var zipName = "project.zip";
         var zipContainer = "project-files";
-        var zipFile = FormFileHelper.CreateFakeFormFile("ZIP DATA", zipName);
+        var zipFile = Substitute.For<IFormFile>();
 
 
         var request = new CreateProjectRequest
@@ -221,7 +221,7 @@ public class ProjectServiceTest
             Id = projectId,
             Name = "Test Project",
             Daw = "FL Studio",
-            FilesUrl = "old/file.zip"
+            FilesUrl = oldFilesUrl,
         };
 
         var zipContainer = "project-files";
