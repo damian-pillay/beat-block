@@ -4,7 +4,6 @@ using BeatBlock.Repositories;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using System.Reflection.Metadata;
 
 namespace BeatBlock.UnitTests;
 
@@ -241,6 +240,53 @@ public class ProjectServiceTest
         Assert.That(result!.FilesUrl, Is.EqualTo(expectedFilePath));
         await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl);
         await _blobStorageServiceMock.Received(1).UploadAsync(zipMock, zipContainer);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+    }
+
+    [Test]
+    public async Task GIVEN_ExistingProjectWithOnlyBasicData_USING_UpdateProjectAsync_UpdatesBasicFieldsAndSkipsFileHandling()
+    {
+        // Arrange
+        var project = new Project
+        {
+            Id = 1,
+            Name = "Old",
+            Description = "Old Desc",
+            Daw = "FL Studio",
+            Genre = "Hip-Hop",
+            Bpm = 100,
+            KeySignature = "Cm"
+        };
+
+        var updateDto = new UpdateProjectRequest
+        {
+            Name = "New",
+            Description = "New Desc",
+            Daw = "Ableton",
+            Genre = "Trap",
+            Bpm = 120,
+            KeySignature = "Am"
+        };
+
+        _projectRepositoryMock.GetByIdAsync(1).Returns(project);
+
+        // Act
+        var result = await _projectService.UpdateProjectAsync(1, updateDto);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Name, Is.EqualTo("New"));
+            Assert.That(result.Description, Is.EqualTo("New Desc"));
+            Assert.That(result.Daw, Is.EqualTo("Ableton"));
+            Assert.That(result.Genre, Is.EqualTo("Trap"));
+            Assert.That(result.Bpm, Is.EqualTo(120));
+            Assert.That(result.KeySignature, Is.EqualTo("Am"));
+        });
+
+        await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
 }
