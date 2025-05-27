@@ -99,4 +99,28 @@ public class ProjectServiceTest
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
         await _projectRepositoryMock.DidNotReceive().DeleteProject(Arg.Any<Project>());
     }
+
+    [Test]
+    public async Task GIVEN_ExistingProjectWithUrls_USING_DeleteProjectAsync_DeletesFilesAndReturnsTrue()
+    {
+        var projectId = 1;
+        var project = new Project
+        {
+            Name = "Test Project",
+            Daw = "FL Studio",
+            FilesUrl = "files/url.zip",
+            AudioUrl = "audio/url.mp3",
+            ArtworkUrl = "artwork/url.jpg"
+        };
+
+        _projectRepositoryMock.GetByIdAsync(projectId).Returns(Task.FromResult<Project?>(project));
+
+        var result = await _projectService.DeleteProjectAsync(projectId);
+
+        Assert.That(result, Is.True);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioUrl);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ArtworkUrl);
+        await _projectRepositoryMock.Received(1).DeleteProject(project);
+    }
 }
