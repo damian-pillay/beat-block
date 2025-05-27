@@ -11,7 +11,7 @@ public class ProjectService : IProjectService
 
     private const string ProjectFilesDir = "project-files";
     private const string ProjectAudioDir = "project-audio";
-    private const string ProjectArtworkDir = "project-files";
+    private const string ProjectArtworkDir = "project-images";
 
     public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService)
     {
