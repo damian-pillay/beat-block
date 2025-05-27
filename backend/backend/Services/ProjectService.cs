@@ -55,16 +55,23 @@ public class ProjectService : IProjectService
     public async Task<bool> DeleteProjectAsync(int id)
     {
         var project = await _repository.GetByIdAsync(id);
+
         if (project == null)
+        {
             return false;
+        }
 
         await _blobStorageService.DeleteAsync(project.FilesUrl);
 
         if (!string.IsNullOrEmpty(project.AudioUrl))
+        {
             await _blobStorageService.DeleteAsync(project.AudioUrl);
+        }
 
         if (!string.IsNullOrEmpty(project.ArtworkUrl))
+        {
             await _blobStorageService.DeleteAsync(project.ArtworkUrl);
+        }
 
         await _repository.DeleteProject(project);
 
@@ -74,12 +81,54 @@ public class ProjectService : IProjectService
     public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto)
     {
         var project = await _repository.GetByIdAsync(id);
+
         if (project == null)
+        {
             return null;
+        }
 
-        if (!string.IsNullOrEmpty(projectDto.Name)) project.Name = projectDto.Name;
-        if (!string.IsNullOrEmpty(projectDto.Description)) project.Description = projectDto.Description;
+        UpdateBasicProjectData(project, projectDto);
+        await UpdateFileProjectData(project, projectDto);
 
+        await _repository.UpdateProjectAsync(project);
+        return project;
+    }
+
+    private void UpdateBasicProjectData(Project project, UpdateProjectRequest projectDto)
+    {
+        if (!string.IsNullOrEmpty(projectDto.Name))
+        {
+            project.Name = projectDto.Name;
+        }
+
+        if (!string.IsNullOrEmpty(projectDto.Description))
+        {
+            project.Description = projectDto.Description;
+        }
+
+        if (!string.IsNullOrEmpty(projectDto.Daw))
+        {
+            project.Daw = projectDto.Daw;
+        }
+
+        if (!string.IsNullOrEmpty(projectDto.Genre))
+        {
+            project.Genre = projectDto.Genre;
+        }
+
+        if (projectDto.Bpm.HasValue)
+        {
+            project.Bpm = projectDto.Bpm.Value;
+        }
+
+        if (!string.IsNullOrEmpty(projectDto.KeySignature))
+        {
+            project.KeySignature = projectDto.KeySignature;
+        }
+    }
+
+    private async Task UpdateFileProjectData(Project project, UpdateProjectRequest projectDto)
+    {
         if (projectDto.ZipFile != null)
         {
             var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
@@ -106,8 +155,5 @@ public class ProjectService : IProjectService
 
             project.ArtworkUrl = newArtworkUrl;
         }
-
-        await _repository.UpdateProjectAsync(project);
-        return project;
     }
 }
