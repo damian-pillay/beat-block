@@ -4,6 +4,7 @@ using BeatBlock.Repositories;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using System.Reflection.Metadata;
 
 namespace BeatBlock.UnitTests;
 
@@ -208,5 +209,38 @@ public class ProjectServiceTest
         await _projectRepositoryMock.DidNotReceive().UpdateProjectAsync(Arg.Any<Project>());
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+    }
+
+    [Test]
+    public async Task GIVEN_ExistingProjectWithZipFile_USING_UpdateProjectAsync_UpdatesFileAndDeletesOldFile()
+    {
+        // Arrange
+        var projectId = 1;
+        var oldFilesUrl = "old/file.zip";
+        var project = new Project
+        {
+            Id = projectId,
+            Name = "Test Project",
+            Daw = "FL Studio",
+            FilesUrl = "old/file.zip"
+        };
+
+        var zipContainer = "project-files";
+        var expectedFilePath = "project-files/file.zip";
+
+        var zipMock = Substitute.For<IFormFile>();
+        var updateDto = new UpdateProjectRequest { ZipFile = zipMock };
+
+        _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
+        _blobStorageServiceMock.UploadAsync(zipMock, zipContainer).Returns(expectedFilePath);
+
+        // Act
+        var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
+
+        // Assert
+        Assert.That(result!.FilesUrl, Is.EqualTo(expectedFilePath));
+        await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl);
+        await _blobStorageServiceMock.Received(1).UploadAsync(zipMock, zipContainer);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
 }
