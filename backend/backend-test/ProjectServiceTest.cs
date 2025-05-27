@@ -244,6 +244,39 @@ public class ProjectServiceTest
     }
 
     [Test]
+    public async Task GIVEN_ExistingProjectWithoutAudio_USING_UpdateProjectAsync_UpdatesFileAndDeletesNothing()
+    {
+        // Arrange
+        var projectId = 1;
+        var oldAudioUrl = (string?)null;
+        var project = new Project
+        {
+            Id = projectId,
+            Name = "Test Project",
+            Daw = "FL Studio",
+            AudioUrl = oldAudioUrl!
+        };
+
+        var audioContainer = "project-audio";
+        var expectedAudioPath = "project-audio/audio.mp3";
+
+        var audioMock = Substitute.For<IFormFile>();
+        var updateDto = new UpdateProjectRequest { Mp3File = audioMock };
+
+        _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
+        _blobStorageServiceMock.UploadAsync(audioMock, audioContainer).Returns(expectedAudioPath);
+
+        // Act
+        var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
+
+        // Assert
+        Assert.That(result!.AudioUrl, Is.EqualTo(expectedAudioPath));
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.Received(1).UploadAsync(audioMock, audioContainer);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+    }
+
+    [Test]
     public async Task GIVEN_ExistingProjectWithOnlyBasicData_USING_UpdateProjectAsync_UpdatesBasicFieldsAndSkipsFileHandling()
     {
         // Arrange
