@@ -190,4 +190,23 @@ public class ProjectServiceTest
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ArtworkUrl!);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
+
+    [Test]
+    public async Task GIVEN_NonExistentProject_USING_UpdateProjectAsync_REturnsNullAndSkipsUpdates()
+    {
+        // Arrange
+        var invalidId = 999;
+        var request = new UpdateProjectRequest();
+
+        _projectRepositoryMock.GetByIdAsync(invalidId).Returns((Project?)null);
+
+        // Act
+        var result = await _projectService.UpdateProjectAsync(invalidId, request);
+
+        // Assert
+        Assert.That(result, Is.Null);
+        await _projectRepositoryMock.DidNotReceive().UpdateProjectAsync(Arg.Any<Project>());
+        await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+    }
 }
