@@ -78,6 +78,6 @@ public class ProjectServiceTest
             Assert.That(result.ArtworkUrl, Is.EqualTo(expectedImagePath));
 
             _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
-        });    
+        });
     }
 }

@@ -1,5 +1,5 @@
-﻿using BeatBlock.DTOs.Request;
-using BeatBlock.DTOs.Response;
+﻿using BeatBlock.Models.DTOs.Request;
+using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
 using BeatBlock.Validators;
 using Microsoft.AspNetCore.Mvc;
