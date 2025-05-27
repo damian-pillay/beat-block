@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using BeatBlock.DTOs.Request;
+﻿using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models;
 using BeatBlock.Repositories;
 using BeatBlock.Services;

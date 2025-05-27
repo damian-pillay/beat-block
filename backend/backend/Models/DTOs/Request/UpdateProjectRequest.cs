@@ -1,4 +1,4 @@
-﻿namespace BeatBlock.DTOs.Request;
+﻿namespace BeatBlock.Models.DTOs.Request;
 
 public record UpdateProjectRequest
 {

@@ -1,5 +1,5 @@
-﻿using BeatBlock.DTOs.Request;
-using BeatBlock.Models;
+﻿using BeatBlock.Models;
+using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Repositories;
 
 namespace BeatBlock.Services;
