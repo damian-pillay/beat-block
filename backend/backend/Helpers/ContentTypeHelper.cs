@@ -1,8 +1,10 @@
-﻿namespace BeatBlock.Helpers;
+﻿using System.Collections.Frozen;
+
+namespace BeatBlock.Helpers;
 
 public static class ContentTypeHelper
 {
-    private static readonly Dictionary<string, string> ContentTypes = new()
+    public static readonly FrozenDictionary<string, string> ContentTypes = new Dictionary<string, string>
     {
         { "zip", "application/zip" },
         { "rar", "application/vnd.rar" },
@@ -10,16 +12,5 @@ public static class ContentTypeHelper
         { "jpg", "image/jpeg" },
         { "jpeg", "image/jpeg" },
         { "png", "image/png" }
-    };
-
-    public static string GetContentType(string? fileName)
-    {
-        if (string.IsNullOrWhiteSpace(fileName))
-            return "application/octet-stream";
-
-        var extension = fileName.TrimStart('.').ToLowerInvariant();
-        return ContentTypes.TryGetValue(extension, out var type)
-            ? type
-            : "application/octet-stream";
-    }
+    }.ToFrozenDictionary();
 }
