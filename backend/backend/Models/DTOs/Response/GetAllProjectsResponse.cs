@@ -1,6 +1,6 @@
 ﻿using BeatBlock.Models;
 
-namespace BeatBlock.DTOs.Response
+namespace BeatBlock.Models.DTOs.Response
 {
     public record GetAllProjectsResponse(IEnumerable<Project> Projects);
 }

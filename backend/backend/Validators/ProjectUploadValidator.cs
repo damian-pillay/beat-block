@@ -1,4 +1,4 @@
-﻿using BeatBlock.DTOs.Request;
+﻿using BeatBlock.Models.DTOs.Request;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BeatBlock.Validators;
