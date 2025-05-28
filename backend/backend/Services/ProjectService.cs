@@ -1,4 +1,5 @@
-﻿using BeatBlock.Models;
+﻿using BeatBlock.Helpers;
+using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Repositories;
@@ -13,6 +14,10 @@ public class ProjectService : IProjectService
     private const string ProjectFilesDir = "project-files";
     private const string ProjectAudioDir = "project-audio";
     private const string ProjectArtworkDir = "project-images";
+
+    private const string CompressedFileType = "files";
+    private const string AudioFileType = "audio";
+    private const string ImageFileType = "image";
 
     public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService)
     {
@@ -97,18 +102,34 @@ public class ProjectService : IProjectService
 
     public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType)
     {
-        var blobPath = await _repository.GetBlobPathByTypeAsync(id, fileType);
-        if (blobPath == null) return null;
+        var blobPath = fileType switch
+        {
+            CompressedFileType => await _repository.GetZipFilePathAsync(id),
+            AudioFileType => await _repository.GetAudioFilePathAsync(id),
+            ImageFileType => await _repository.GetImageFilePathAsync(id),
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(blobPath))
+        {
+            return null;
+        }
 
         var (container, blobName) = _blobStorageService.ParseBlobPath(blobPath);
-
         var stream = await _blobStorageService.GetBlobStreamAsync(blobPath);
-        if (stream == null) return null;
+        
+        if (stream == null)
+        {
+            return null;
+        }
+
+        var contentType = ContentTypeHelper.GetContentType(blobName);
 
         return new FileDownloadResponse
         {
             FileStream = stream,
-            FileName = blobName
+            FileName = blobName,
+            ContentType = contentType
         };
     }
 
