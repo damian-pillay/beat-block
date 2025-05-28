@@ -1,4 +1,5 @@
-﻿using BeatBlock.Models.DTOs.Request;
+﻿using BeatBlock.Helpers;
+using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
 using BeatBlock.Validators;
@@ -41,7 +42,7 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}/{fileType}")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
-        var result = await _projectService.GetProjectFileStreamAsync(id, fileType.ToLower());
+        var result = await _projectService.GetProjectFileStreamAsync(id, fileType.ToLower(), ContentTypeHelper.ContentTypes);
 
         if (result == null)
         {
