@@ -1,5 +1,4 @@
 ﻿using System.Collections.Frozen;
-using BeatBlock.Helpers;
 using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
@@ -118,7 +117,7 @@ public class ProjectService : IProjectService
 
         var (container, blobName) = _blobStorageService.ParseBlobPath(blobPath);
         var stream = await _blobStorageService.GetBlobStreamAsync(blobPath);
-        
+
         if (stream == null)
         {
             return null;
