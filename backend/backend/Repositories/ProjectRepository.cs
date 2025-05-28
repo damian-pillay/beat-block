@@ -41,26 +41,27 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<string?> GetBlobPathByTypeAsync(int projectId, string fileType)
+    public async Task<string?> GetImageFilePathAsync(int projectId)
     {
-        var project = await _context.Project
+        return await _context.Project
             .Where(p => p.Id == projectId)
-            .Select(p => new
-            {
-                ZipPath = p.FilesUrl,
-                Mp3Path = p.AudioUrl,
-                ImagePath = p.ArtworkUrl
-            })
+            .Select(p => p.ArtworkUrl)
             .FirstOrDefaultAsync();
+    }
 
-        if (project == null) return null;
+    public async Task<string?> GetZipFilePathAsync(int projectId)
+    {
+        return await _context.Project
+            .Where(p => p.Id == projectId)
+            .Select(p => p.FilesUrl)
+            .FirstOrDefaultAsync();
+    }
 
-        return fileType switch
-        {
-            "zip" => project.ZipPath,
-            "mp3" => project.Mp3Path,
-            "image" => project.ImagePath,
-            _ => null
-        };
+    public async Task<string?> GetAudioFilePathAsync(int projectId)
+    {
+        return await _context.Project
+            .Where(p => p.Id == projectId)
+            .Select(p => p.AudioUrl)
+            .FirstOrDefaultAsync();
     }
 }
