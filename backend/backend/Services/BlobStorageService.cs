@@ -40,7 +40,23 @@ public class BlobStorageService : IBlobStorageService
         return blobClient.Uri.ToString();
     }
 
-    private (string, string) ParseBlobPath(string blobPath)
+    public async Task<Stream?> GetBlobStreamAsync(string blobPath)
+    {
+        var (containerName, blobName) = ParseBlobPath(blobPath);
+
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        var blobClient = containerClient.GetBlobClient(blobName);
+
+        if (await blobClient.ExistsAsync())
+        {
+            var response = await blobClient.DownloadStreamingAsync();
+            return response.Value.Content;
+        }
+
+        return null;
+    }
+
+    public (string, string) ParseBlobPath(string blobPath)
     {
         var uri = new Uri(blobPath);
         var segments = uri.AbsolutePath.TrimStart('/').Split('/', 3);
