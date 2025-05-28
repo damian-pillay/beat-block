@@ -50,9 +50,9 @@ public class ProjectServiceTest
             Bpm = 140,
             Genre = "Trap",
             Daw = "FL Studio",
-            ZipFile = zipFile,
-            Mp3File = mp3File,
-            CoverImage = imageFile
+            CompressedFile = zipFile,
+            AudioFile = mp3File,
+            ImageFile = imageFile
         };
 
         var expectedZipPath = $"{zipContainer}/{zipName}";
@@ -97,7 +97,7 @@ public class ProjectServiceTest
         {
             Name = "Test Project",
             Daw = "FL Studio",
-            ZipFile = zipFile
+            CompressedFile = zipFile
         };
 
         var expectedZipPath = $"{zipContainer}/{zipName}";
@@ -232,7 +232,7 @@ public class ProjectServiceTest
         var expectedFilePath = "project-files/file.zip";
 
         var zipMock = Substitute.For<IFormFile>();
-        var updateDto = new UpdateProjectRequest { ZipFile = zipMock };
+        var updateDto = new UpdateProjectRequest { CompressedFile = zipMock };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
         _blobStorageServiceMock.UploadAsync(zipMock, zipContainer).Returns(expectedFilePath);
@@ -265,7 +265,7 @@ public class ProjectServiceTest
         var expectedAudioPath = "project-audio/audio.mp3";
 
         var audioMock = Substitute.For<IFormFile>();
-        var updateDto = new UpdateProjectRequest { Mp3File = audioMock };
+        var updateDto = new UpdateProjectRequest { AudioFile = audioMock };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
         _blobStorageServiceMock.UploadAsync(audioMock, audioContainer).Returns(expectedAudioPath);

@@ -19,9 +19,9 @@ public record CreateProjectRequest
     public string Daw { get; init; } = null!;
 
     [Required]
-    public IFormFile ZipFile { get; init; } = null!;
+    public IFormFile CompressedFile { get; init; } = null!;
 
-    public IFormFile? Mp3File { get; init; }
+    public IFormFile? AudioFile { get; init; }
 
-    public IFormFile? CoverImage { get; init; }
+    public IFormFile? ImageFile { get; init; }
 }

@@ -34,9 +34,9 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        var zipName = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-        var mp3Name = projectDto.Mp3File != null ? await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir) : null;
-        var imageName = projectDto.CoverImage != null ? await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir) : null;
+        var zipName = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
+        var mp3Name = projectDto.AudioFile != null ? await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir) : null;
+        var imageName = projectDto.ImageFile != null ? await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir) : null;
 
         var project = new Project
         {
@@ -180,16 +180,16 @@ public class ProjectService : IProjectService
 
     private async Task UpdateFileProjectData(Project project, UpdateProjectRequest projectDto)
     {
-        if (projectDto.ZipFile != null)
+        if (projectDto.CompressedFile != null)
         {
-            var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
+            var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
             await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
             project.FilePath = newFilesUrl;
         }
 
-        if (projectDto.Mp3File != null)
+        if (projectDto.AudioFile != null)
         {
-            var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir);
+            var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
 
             if (!string.IsNullOrEmpty(project.AudioPath))
                 await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
@@ -197,9 +197,9 @@ public class ProjectService : IProjectService
             project.AudioPath = newAudioUrl;
         }
 
-        if (projectDto.CoverImage != null)
+        if (projectDto.ImageFile != null)
         {
-            var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir);
+            var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir);
 
             if (!string.IsNullOrEmpty(project.ImagePath))
                 await _blobStorageService.DeleteAsync(project.ImagePath, ProjectArtworkDir);
