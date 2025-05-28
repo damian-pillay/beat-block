@@ -38,6 +38,31 @@ public class ProjectController : ControllerBase
         return Ok(project);
     }
 
+    [HttpGet("{id}/{fileType}")]
+    public async Task<IActionResult> GetProjectFile(int id, string fileType)
+    {
+        var result = await _projectService.GetProjectFileStreamAsync(id, fileType.ToLower());
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        var contentType = fileType switch
+        {
+            "zip" => "application/zip",
+            "mp3" => "audio/mpeg",
+            "image" => "image/jpeg",
+            _ => "application/octet-stream"
+        };
+
+        var fileName = result.FileName;
+
+        Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
+
+        return File(result.FileStream, contentType);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
