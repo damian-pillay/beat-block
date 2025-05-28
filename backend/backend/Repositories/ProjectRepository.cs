@@ -1,5 +1,6 @@
 ﻿using BeatBlock.Data;
 using BeatBlock.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeatBlock.Repositories;
 
@@ -38,5 +39,28 @@ public class ProjectRepository : IProjectRepository
     {
         _context.Project.Update(project);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<string?> GetBlobPathByTypeAsync(int projectId, string fileType)
+    {
+        var project = await _context.Project
+            .Where(p => p.Id == projectId)
+            .Select(p => new
+            {
+                ZipPath = p.FilesUrl,
+                Mp3Path = p.AudioUrl,
+                ImagePath = p.ArtworkUrl
+            })
+            .FirstOrDefaultAsync();
+
+        if (project == null) return null;
+
+        return fileType switch
+        {
+            "zip" => project.ZipPath,
+            "mp3" => project.Mp3Path,
+            "image" => project.ImagePath,
+            _ => null
+        };
     }
 }
