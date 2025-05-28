@@ -12,10 +12,8 @@ public class BlobStorageService : IBlobStorageService
         _blobServiceClient = blobServiceClient;
     }
 
-    public async Task DeleteAsync(string blobPath)
+    public async Task DeleteAsync(string blobName, string containerName)
     {
-        var (containerName, blobName) = ParseBlobPath(blobPath);
-
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
 
@@ -37,13 +35,11 @@ public class BlobStorageService : IBlobStorageService
         using var stream = file.OpenReadStream();
         await blobClient.UploadAsync(stream);
 
-        return blobClient.Uri.ToString();
+        return blobName;
     }
 
-    public async Task<Stream?> GetBlobStreamAsync(string blobPath)
+    public async Task<Stream?> GetBlobStreamAsync(string blobName, string containerName)
     {
-        var (containerName, blobName) = ParseBlobPath(blobPath);
-
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = containerClient.GetBlobClient(blobName);
 
@@ -54,16 +50,5 @@ public class BlobStorageService : IBlobStorageService
         }
 
         return null;
-    }
-
-    public (string, string) ParseBlobPath(string blobPath)
-    {
-        var uri = new Uri(blobPath);
-        var segments = uri.AbsolutePath.TrimStart('/').Split('/', 3);
-
-        var containerName = segments[1];
-        var blobName = segments[2];
-
-        return (containerName, blobName);
     }
 }

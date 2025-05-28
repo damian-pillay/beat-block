@@ -13,6 +13,10 @@ public class ProjectServiceTest
     private IBlobStorageService _blobStorageServiceMock;
     private IProjectService _projectService = null!;
 
+    private const string zipContainer = "project-files";
+    private const string audioContainer = "project-audio";
+    private const string imageContainer = "project-images";
+
     [SetUp]
     public void Setup()
     {
@@ -139,7 +143,7 @@ public class ProjectServiceTest
         // Assert
 
         Assert.That(result, Is.False);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _projectRepositoryMock.DidNotReceive().DeleteProject(Arg.Any<Project>());
     }
 
@@ -161,9 +165,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioUrl);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ArtworkUrl);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl, zipContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioUrl, audioContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ArtworkUrl, imageContainer);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -185,9 +189,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioUrl!);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ArtworkUrl!);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl, zipContainer);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioUrl!, audioContainer);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ArtworkUrl!, imageContainer);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -207,7 +211,7 @@ public class ProjectServiceTest
         Assert.That(result, Is.Null);
         await _projectRepositoryMock.DidNotReceive().UpdateProjectAsync(Arg.Any<Project>());
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
     }
 
     [Test]
@@ -238,7 +242,7 @@ public class ProjectServiceTest
 
         // Assert
         Assert.That(result!.FilesUrl, Is.EqualTo(expectedFilePath));
-        await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl, zipContainer);
         await _blobStorageServiceMock.Received(1).UploadAsync(zipMock, zipContainer);
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
@@ -271,7 +275,7 @@ public class ProjectServiceTest
 
         // Assert
         Assert.That(result!.AudioUrl, Is.EqualTo(expectedAudioPath));
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _blobStorageServiceMock.Received(1).UploadAsync(audioMock, audioContainer);
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
@@ -319,7 +323,7 @@ public class ProjectServiceTest
         });
 
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
 }

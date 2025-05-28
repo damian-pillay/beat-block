@@ -19,6 +19,8 @@ public class ProjectService : IProjectService
     private const string AudioFileType = "audio";
     private const string ImageFileType = "image";
 
+    private const string DefaultContentType = "application/octet-stream";
+
     public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService)
     {
         _repository = repository;
@@ -32,9 +34,9 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        var zipPath = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-        var mp3Path = projectDto.Mp3File != null ? await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir) : null;
-        var imagePath = projectDto.CoverImage != null ? await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir) : null;
+        var zipName = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
+        var mp3Name = projectDto.Mp3File != null ? await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir) : null;
+        var imageName = projectDto.CoverImage != null ? await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir) : null;
 
         var project = new Project
         {
@@ -44,9 +46,9 @@ public class ProjectService : IProjectService
             Bpm = projectDto.Bpm,
             Genre = projectDto.Genre,
             Daw = projectDto.Daw,
-            FilesUrl = zipPath,
-            AudioUrl = mp3Path,
-            ArtworkUrl = imagePath
+            FilesUrl = zipName,
+            AudioUrl = mp3Name,
+            ArtworkUrl = imageName
         };
 
         await _repository.AddAsync(project);
@@ -67,16 +69,16 @@ public class ProjectService : IProjectService
             return false;
         }
 
-        await _blobStorageService.DeleteAsync(project.FilesUrl);
+        await _blobStorageService.DeleteAsync(project.FilesUrl, ProjectFilesDir);
 
         if (!string.IsNullOrEmpty(project.AudioUrl))
         {
-            await _blobStorageService.DeleteAsync(project.AudioUrl);
+            await _blobStorageService.DeleteAsync(project.AudioUrl, ProjectAudioDir);
         }
 
         if (!string.IsNullOrEmpty(project.ArtworkUrl))
         {
-            await _blobStorageService.DeleteAsync(project.ArtworkUrl);
+            await _blobStorageService.DeleteAsync(project.ArtworkUrl, ProjectArtworkDir);
         }
 
         await _repository.DeleteProject(project);
@@ -102,7 +104,7 @@ public class ProjectService : IProjectService
 
     public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes)
     {
-        var blobPath = fileType switch
+        var blobName = fileType switch
         {
             CompressedFileType => await _repository.GetZipFilePathAsync(id),
             AudioFileType => await _repository.GetAudioFilePathAsync(id),
@@ -110,13 +112,20 @@ public class ProjectService : IProjectService
             _ => null
         };
 
-        if (string.IsNullOrEmpty(blobPath))
+        var blobContainer = fileType switch
+        {
+            CompressedFileType => ProjectFilesDir,
+            AudioFileType => ProjectAudioDir,
+            ImageFileType => ProjectArtworkDir,
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(blobName))
         {
             return null;
         }
 
-        var (container, blobName) = _blobStorageService.ParseBlobPath(blobPath);
-        var stream = await _blobStorageService.GetBlobStreamAsync(blobPath);
+        var stream = await _blobStorageService.GetBlobStreamAsync(blobName, blobContainer!);
 
         if (stream == null)
         {
@@ -125,7 +134,7 @@ public class ProjectService : IProjectService
 
         var extension = blobName.Split(".")[1];
         Console.WriteLine(extension);
-        var contentType = ContentTypes.GetValueOrDefault(extension, "application/octet-stream");
+        var contentType = ContentTypes.GetValueOrDefault(extension, DefaultContentType);
         Console.WriteLine(contentType);
 
         return new FileDownloadResponse
@@ -174,7 +183,7 @@ public class ProjectService : IProjectService
         if (projectDto.ZipFile != null)
         {
             var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-            await _blobStorageService.DeleteAsync(project.FilesUrl);
+            await _blobStorageService.DeleteAsync(project.FilesUrl, ProjectFilesDir);
             project.FilesUrl = newFilesUrl;
         }
 
@@ -183,7 +192,7 @@ public class ProjectService : IProjectService
             var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir);
 
             if (!string.IsNullOrEmpty(project.AudioUrl))
-                await _blobStorageService.DeleteAsync(project.AudioUrl);
+                await _blobStorageService.DeleteAsync(project.AudioUrl, ProjectAudioDir);
 
             project.AudioUrl = newAudioUrl;
         }
@@ -193,7 +202,7 @@ public class ProjectService : IProjectService
             var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir);
 
             if (!string.IsNullOrEmpty(project.ArtworkUrl))
-                await _blobStorageService.DeleteAsync(project.ArtworkUrl);
+                await _blobStorageService.DeleteAsync(project.ArtworkUrl, ProjectArtworkDir);
 
             project.ArtworkUrl = newArtworkUrl;
         }
