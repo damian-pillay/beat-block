@@ -123,8 +123,10 @@ public class ProjectService : IProjectService
             return null;
         }
 
-        var extension = blobName.TrimStart('.').ToLowerInvariant();
+        var extension = blobName.Split(".")[1];
+        Console.WriteLine(extension);
         var contentType = ContentTypes.GetValueOrDefault(extension, "application/octet-stream");
+        Console.WriteLine(contentType);
 
         return new FileDownloadResponse
         {
