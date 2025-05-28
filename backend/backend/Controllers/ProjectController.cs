@@ -48,19 +48,9 @@ public class ProjectController : ControllerBase
             return NotFound();
         }
 
-        var contentType = fileType switch
-        {
-            "zip" => "application/zip",
-            "mp3" => "audio/mpeg",
-            "image" => "image/jpeg",
-            _ => "application/octet-stream"
-        };
+        Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");
 
-        var fileName = result.FileName;
-
-        Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
-
-        return File(result.FileStream, contentType);
+        return File(result.FileStream, result.ContentType);
     }
 
     [HttpPost]
