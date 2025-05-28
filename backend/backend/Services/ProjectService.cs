@@ -1,5 +1,6 @@
 ﻿using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
+using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Repositories;
 
 namespace BeatBlock.Services;
@@ -92,6 +93,23 @@ public class ProjectService : IProjectService
 
         await _repository.UpdateProjectAsync(project);
         return project;
+    }
+
+    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType)
+    {
+        var blobPath = await _repository.GetBlobPathByTypeAsync(id, fileType);
+        if (blobPath == null) return null;
+
+        var (container, blobName) = _blobStorageService.ParseBlobPath(blobPath);
+
+        var stream = await _blobStorageService.GetBlobStreamAsync(blobPath);
+        if (stream == null) return null;
+
+        return new FileDownloadResponse
+        {
+            FileStream = stream,
+            FileName = blobName
+        };
     }
 
     private void UpdateBasicProjectData(Project project, UpdateProjectRequest projectDto)

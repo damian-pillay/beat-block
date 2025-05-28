@@ -1,5 +1,6 @@
 ﻿using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
+using BeatBlock.Models.DTOs.Response;
 
 namespace BeatBlock.Services
 {
@@ -10,5 +11,6 @@ namespace BeatBlock.Services
         Task<Project?> GetProjectByIdAsync(int id);
         Task<bool> DeleteProjectAsync(int id);
         Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto);
+        Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType);
     }
 }
