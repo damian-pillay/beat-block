@@ -1,4 +1,5 @@
-﻿using BeatBlock.Helpers;
+﻿using System.Collections.Frozen;
+using BeatBlock.Helpers;
 using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
@@ -100,7 +101,7 @@ public class ProjectService : IProjectService
         return project;
     }
 
-    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType)
+    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes)
     {
         var blobPath = fileType switch
         {
@@ -123,7 +124,8 @@ public class ProjectService : IProjectService
             return null;
         }
 
-        var contentType = ContentTypeHelper.GetContentType(blobName);
+        var extension = blobName.TrimStart('.').ToLowerInvariant();
+        var contentType = ContentTypes.GetValueOrDefault(extension, "application/octet-stream");
 
         return new FileDownloadResponse
         {
