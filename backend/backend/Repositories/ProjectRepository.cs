@@ -45,7 +45,7 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Project
             .Where(p => p.Id == projectId)
-            .Select(p => p.ArtworkUrl)
+            .Select(p => p.ImagePath)
             .FirstOrDefaultAsync();
     }
 
@@ -53,7 +53,7 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Project
             .Where(p => p.Id == projectId)
-            .Select(p => p.FilesUrl)
+            .Select(p => p.FilePath)
             .FirstOrDefaultAsync();
     }
 
@@ -61,7 +61,7 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Project
             .Where(p => p.Id == projectId)
-            .Select(p => p.AudioUrl)
+            .Select(p => p.AudioPath)
             .FirstOrDefaultAsync();
     }
 }

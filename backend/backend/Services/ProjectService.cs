@@ -46,9 +46,9 @@ public class ProjectService : IProjectService
             Bpm = projectDto.Bpm,
             Genre = projectDto.Genre,
             Daw = projectDto.Daw,
-            FilesUrl = zipName,
-            AudioUrl = mp3Name,
-            ArtworkUrl = imageName
+            FilePath = zipName,
+            AudioPath = mp3Name,
+            ImagePath = imageName
         };
 
         await _repository.AddAsync(project);
@@ -69,16 +69,16 @@ public class ProjectService : IProjectService
             return false;
         }
 
-        await _blobStorageService.DeleteAsync(project.FilesUrl, ProjectFilesDir);
+        await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
 
-        if (!string.IsNullOrEmpty(project.AudioUrl))
+        if (!string.IsNullOrEmpty(project.AudioPath))
         {
-            await _blobStorageService.DeleteAsync(project.AudioUrl, ProjectAudioDir);
+            await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
         }
 
-        if (!string.IsNullOrEmpty(project.ArtworkUrl))
+        if (!string.IsNullOrEmpty(project.ImagePath))
         {
-            await _blobStorageService.DeleteAsync(project.ArtworkUrl, ProjectArtworkDir);
+            await _blobStorageService.DeleteAsync(project.ImagePath, ProjectArtworkDir);
         }
 
         await _repository.DeleteProject(project);
@@ -183,28 +183,28 @@ public class ProjectService : IProjectService
         if (projectDto.ZipFile != null)
         {
             var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-            await _blobStorageService.DeleteAsync(project.FilesUrl, ProjectFilesDir);
-            project.FilesUrl = newFilesUrl;
+            await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
+            project.FilePath = newFilesUrl;
         }
 
         if (projectDto.Mp3File != null)
         {
             var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir);
 
-            if (!string.IsNullOrEmpty(project.AudioUrl))
-                await _blobStorageService.DeleteAsync(project.AudioUrl, ProjectAudioDir);
+            if (!string.IsNullOrEmpty(project.AudioPath))
+                await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
 
-            project.AudioUrl = newAudioUrl;
+            project.AudioPath = newAudioUrl;
         }
 
         if (projectDto.CoverImage != null)
         {
             var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir);
 
-            if (!string.IsNullOrEmpty(project.ArtworkUrl))
-                await _blobStorageService.DeleteAsync(project.ArtworkUrl, ProjectArtworkDir);
+            if (!string.IsNullOrEmpty(project.ImagePath))
+                await _blobStorageService.DeleteAsync(project.ImagePath, ProjectArtworkDir);
 
-            project.ArtworkUrl = newArtworkUrl;
+            project.ImagePath = newArtworkUrl;
         }
     }
 }
