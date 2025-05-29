@@ -35,6 +35,9 @@ jobs:
       - name: Ensure test-artifacts directory exists
         run: mkdir -p backend/test-artifacts/
 
+      - name: Create an empty artefacts.txt file
+        run: touch backend/test-artifacts/artefacts.txt
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
