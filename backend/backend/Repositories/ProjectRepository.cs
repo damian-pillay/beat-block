@@ -49,7 +49,7 @@ public class ProjectRepository : IProjectRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<string?> GetZipFilePathAsync(int projectId)
+    public async Task<string?> GetCompressedFilePathAsync(int projectId)
     {
         return await _context.Project
             .Where(p => p.Id == projectId)
