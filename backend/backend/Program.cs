@@ -6,7 +6,7 @@ using DotNetEnv;
 using Azure.Storage.Blobs;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using BeatBlock.Validators;
+using BeatBlock.Services.Validators;
 
 Env.Load();
 

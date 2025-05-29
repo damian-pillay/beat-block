@@ -2,7 +2,7 @@
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
-using BeatBlock.Validators;
+using BeatBlock.Services.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeatBlock.Controllers;

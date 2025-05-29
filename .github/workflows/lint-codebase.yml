@@ -6,6 +6,7 @@ on:
       - "backend/**"
       - "db/**"
       - ".dockerignore"
+  pull_request:
 
 jobs:
   super-lint:

@@ -1,7 +1,7 @@
 ﻿using BeatBlock.Models.DTOs.Request;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace BeatBlock.Validators;
+namespace BeatBlock.Services.Validators;
 
 public class ProjectUploadValidator : IProjectUploadValidator
 {

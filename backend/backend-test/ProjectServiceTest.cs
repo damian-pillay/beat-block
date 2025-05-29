@@ -4,6 +4,7 @@ using BeatBlock.Repositories;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using BeatBlock.Helpers;
 
 namespace BeatBlock.UnitTests;
 
@@ -13,9 +14,9 @@ public class ProjectServiceTest
     private IBlobStorageService _blobStorageServiceMock;
     private IProjectService _projectService = null!;
 
-    private const string zipContainer = "project-files";
-    private const string audioContainer = "project-audio";
-    private const string imageContainer = "project-images";
+    private const string ProjectFilesDir = "project-files";
+    private const string ProjectAudioDir = "project-audio";
+    private const string ProjectImageDir = "project-images";
 
     [SetUp]
     public void Setup()
@@ -165,9 +166,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, zipContainer);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioPath, audioContainer);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ImagePath, imageContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, ProjectFilesDir);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioPath, ProjectAudioDir);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ImagePath, ProjectImageDir);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -189,9 +190,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, zipContainer);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioPath!, audioContainer);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ImagePath!, imageContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, ProjectFilesDir);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioPath!, ProjectAudioDir);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ImagePath!, ProjectImageDir);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -325,5 +326,39 @@ public class ProjectServiceTest
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+    }
+
+    [Test]
+    public async Task GIVEN_NoBlobPathInRepository_USING_GetProjectFileStreamAsync_ReturnsNull()
+    {
+        // Arrange
+        int projectId = 1;
+        string fileType = "files";
+
+        _projectRepositoryMock.GetCompressedFilePathAsync(projectId).Returns((string?)null);
+
+        // Act
+        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes);
+
+        // Assert
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
+    public async Task GIVEN_BlobPathButNullStream_USING_GetProjectFileStreamAsync_ReturnsNull()
+    {
+        // Arrange
+        int projectId = 1;
+        string fileType = "audio";
+        string blobPath = "music.mp3";
+
+        _projectRepositoryMock.GetAudioFilePathAsync(projectId).Returns(blobPath);
+        _blobStorageServiceMock.GetBlobStreamAsync(blobPath, ProjectAudioDir).Returns((Stream?)null);
+
+        // Act
+        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes);
+
+        // Assert
+        Assert.That(result, Is.Null);
     }
 }

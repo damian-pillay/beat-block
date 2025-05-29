@@ -1,5 +1,5 @@
 ﻿using BeatBlock.Models.DTOs.Request;
-using BeatBlock.Validators;
+using BeatBlock.Services.Validators;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BeatBlock.UnitTests;
