@@ -15,11 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use user-local .NET SDK
-        run: |
-          echo "DOTNET_ROOT=$HOME/.dotnet" >> $GITHUB_ENV
-          echo "$HOME/.dotnet" >> $GITHUB_PATH
-
       - name: Restore dependencies
         run: dotnet restore
         working-directory: backend/backend
