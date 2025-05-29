@@ -1,13 +1,11 @@
-name: Super-Linter
+name: Lint Code Base with Super-Linter
 
-on: 
+on:
   push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
-  
+    paths:
+      - "backend/**"
+      - "db/**"
+      - ".dockerignore"
 
 jobs:
   super-lint:
