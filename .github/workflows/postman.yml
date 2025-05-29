@@ -10,7 +10,7 @@ on:
 
 jobs:
   automated-api-tests:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Run API tests with Postman CLI
     steps:
       - uses: actions/checkout@v4
