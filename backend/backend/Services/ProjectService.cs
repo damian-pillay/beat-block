@@ -1,5 +1,7 @@
-﻿using BeatBlock.Models;
+﻿using System.Collections.Frozen;
+using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
+using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Repositories;
 
 namespace BeatBlock.Services;
@@ -12,6 +14,12 @@ public class ProjectService : IProjectService
     private const string ProjectFilesDir = "project-files";
     private const string ProjectAudioDir = "project-audio";
     private const string ProjectArtworkDir = "project-images";
+
+    private const string CompressedFileType = "files";
+    private const string AudioFileType = "audio";
+    private const string ImageFileType = "image";
+
+    private const string DefaultContentType = "application/octet-stream";
 
     public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService)
     {
@@ -26,9 +34,9 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        var zipPath = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-        var mp3Path = projectDto.Mp3File != null ? await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir) : null;
-        var imagePath = projectDto.CoverImage != null ? await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir) : null;
+        var filePath = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
+        var audioPath = projectDto.AudioFile != null ? await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir) : null;
+        var imagePath = projectDto.ImageFile != null ? await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir) : null;
 
         var project = new Project
         {
@@ -38,9 +46,9 @@ public class ProjectService : IProjectService
             Bpm = projectDto.Bpm,
             Genre = projectDto.Genre,
             Daw = projectDto.Daw,
-            FilesUrl = zipPath,
-            AudioUrl = mp3Path,
-            ArtworkUrl = imagePath
+            FilePath = filePath,
+            AudioPath = audioPath,
+            ImagePath = imagePath
         };
 
         await _repository.AddAsync(project);
@@ -61,16 +69,16 @@ public class ProjectService : IProjectService
             return false;
         }
 
-        await _blobStorageService.DeleteAsync(project.FilesUrl);
+        await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
 
-        if (!string.IsNullOrEmpty(project.AudioUrl))
+        if (!string.IsNullOrEmpty(project.AudioPath))
         {
-            await _blobStorageService.DeleteAsync(project.AudioUrl);
+            await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
         }
 
-        if (!string.IsNullOrEmpty(project.ArtworkUrl))
+        if (!string.IsNullOrEmpty(project.ImagePath))
         {
-            await _blobStorageService.DeleteAsync(project.ArtworkUrl);
+            await _blobStorageService.DeleteAsync(project.ImagePath, ProjectArtworkDir);
         }
 
         await _repository.DeleteProject(project);
@@ -92,6 +100,49 @@ public class ProjectService : IProjectService
 
         await _repository.UpdateProjectAsync(project);
         return project;
+    }
+
+    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes)
+    {
+        var blobName = fileType switch
+        {
+            CompressedFileType => await _repository.GetZipFilePathAsync(id),
+            AudioFileType => await _repository.GetAudioFilePathAsync(id),
+            ImageFileType => await _repository.GetImageFilePathAsync(id),
+            _ => null
+        };
+
+        var blobContainer = fileType switch
+        {
+            CompressedFileType => ProjectFilesDir,
+            AudioFileType => ProjectAudioDir,
+            ImageFileType => ProjectArtworkDir,
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(blobName))
+        {
+            return null;
+        }
+
+        var stream = await _blobStorageService.GetBlobStreamAsync(blobName, blobContainer!);
+
+        if (stream == null)
+        {
+            return null;
+        }
+
+        var extension = blobName.Split(".")[1];
+        Console.WriteLine(extension);
+        var contentType = ContentTypes.GetValueOrDefault(extension, DefaultContentType);
+        Console.WriteLine(contentType);
+
+        return new FileDownloadResponse
+        {
+            FileStream = stream,
+            FileName = blobName,
+            ContentType = contentType
+        };
     }
 
     private void UpdateBasicProjectData(Project project, UpdateProjectRequest projectDto)
@@ -129,31 +180,31 @@ public class ProjectService : IProjectService
 
     private async Task UpdateFileProjectData(Project project, UpdateProjectRequest projectDto)
     {
-        if (projectDto.ZipFile != null)
+        if (projectDto.CompressedFile != null)
         {
-            var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.ZipFile, ProjectFilesDir);
-            await _blobStorageService.DeleteAsync(project.FilesUrl);
-            project.FilesUrl = newFilesUrl;
+            var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
+            await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
+            project.FilePath = newFilesUrl;
         }
 
-        if (projectDto.Mp3File != null)
+        if (projectDto.AudioFile != null)
         {
-            var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.Mp3File, ProjectAudioDir);
+            var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
 
-            if (!string.IsNullOrEmpty(project.AudioUrl))
-                await _blobStorageService.DeleteAsync(project.AudioUrl);
+            if (!string.IsNullOrEmpty(project.AudioPath))
+                await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
 
-            project.AudioUrl = newAudioUrl;
+            project.AudioPath = newAudioUrl;
         }
 
-        if (projectDto.CoverImage != null)
+        if (projectDto.ImageFile != null)
         {
-            var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.CoverImage, ProjectArtworkDir);
+            var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir);
 
-            if (!string.IsNullOrEmpty(project.ArtworkUrl))
-                await _blobStorageService.DeleteAsync(project.ArtworkUrl);
+            if (!string.IsNullOrEmpty(project.ImagePath))
+                await _blobStorageService.DeleteAsync(project.ImagePath, ProjectArtworkDir);
 
-            project.ArtworkUrl = newArtworkUrl;
+            project.ImagePath = newArtworkUrl;
         }
     }
 }

@@ -13,6 +13,10 @@ public class ProjectServiceTest
     private IBlobStorageService _blobStorageServiceMock;
     private IProjectService _projectService = null!;
 
+    private const string zipContainer = "project-files";
+    private const string audioContainer = "project-audio";
+    private const string imageContainer = "project-images";
+
     [SetUp]
     public void Setup()
     {
@@ -46,9 +50,9 @@ public class ProjectServiceTest
             Bpm = 140,
             Genre = "Trap",
             Daw = "FL Studio",
-            ZipFile = zipFile,
-            Mp3File = mp3File,
-            CoverImage = imageFile
+            CompressedFile = zipFile,
+            AudioFile = mp3File,
+            ImageFile = imageFile
         };
 
         var expectedZipPath = $"{zipContainer}/{zipName}";
@@ -72,9 +76,9 @@ public class ProjectServiceTest
             Assert.That(result.Bpm, Is.EqualTo(request.Bpm));
             Assert.That(result.Genre, Is.EqualTo(request.Genre));
             Assert.That(result.Daw, Is.EqualTo(request.Daw));
-            Assert.That(result.FilesUrl, Is.EqualTo(expectedZipPath));
-            Assert.That(result.AudioUrl, Is.EqualTo(expectedMp3Path));
-            Assert.That(result.ArtworkUrl, Is.EqualTo(expectedImagePath));
+            Assert.That(result.FilePath, Is.EqualTo(expectedZipPath));
+            Assert.That(result.AudioPath, Is.EqualTo(expectedMp3Path));
+            Assert.That(result.ImagePath, Is.EqualTo(expectedImagePath));
         });
 
         await _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
@@ -93,7 +97,7 @@ public class ProjectServiceTest
         {
             Name = "Test Project",
             Daw = "FL Studio",
-            ZipFile = zipFile
+            CompressedFile = zipFile
         };
 
         var expectedZipPath = $"{zipContainer}/{zipName}";
@@ -113,9 +117,9 @@ public class ProjectServiceTest
             Assert.That(result.Bpm, Is.Null);
             Assert.That(result.Genre, Is.Null);
             Assert.That(result.Daw, Is.EqualTo(request.Daw));
-            Assert.That(result.FilesUrl, Is.EqualTo(expectedZipPath));
-            Assert.That(result.AudioUrl, Is.Null);
-            Assert.That(result.ArtworkUrl, Is.Null);
+            Assert.That(result.FilePath, Is.EqualTo(expectedZipPath));
+            Assert.That(result.AudioPath, Is.Null);
+            Assert.That(result.ImagePath, Is.Null);
         });
 
         await _projectRepositoryMock.Received(1).AddAsync(Arg.Any<Project>());
@@ -139,7 +143,7 @@ public class ProjectServiceTest
         // Assert
 
         Assert.That(result, Is.False);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _projectRepositoryMock.DidNotReceive().DeleteProject(Arg.Any<Project>());
     }
 
@@ -151,9 +155,9 @@ public class ProjectServiceTest
         {
             Name = "Test Project",
             Daw = "FL Studio",
-            FilesUrl = "files/url.zip",
-            AudioUrl = "audio/url.mp3",
-            ArtworkUrl = "artwork/url.jpg"
+            FilePath = "files/url.zip",
+            AudioPath = "audio/url.mp3",
+            ImagePath = "artwork/url.jpg"
         };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(Task.FromResult<Project?>(project));
@@ -161,9 +165,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioUrl);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ArtworkUrl);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, zipContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.AudioPath, audioContainer);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.ImagePath, imageContainer);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -175,9 +179,9 @@ public class ProjectServiceTest
         {
             Name = "Test Project",
             Daw = "FL Studio",
-            FilesUrl = "files/url.zip",
-            AudioUrl = null,
-            ArtworkUrl = null
+            FilePath = "files/url.zip",
+            AudioPath = null,
+            ImagePath = null
         };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(Task.FromResult<Project?>(project));
@@ -185,9 +189,9 @@ public class ProjectServiceTest
         var result = await _projectService.DeleteProjectAsync(projectId);
 
         Assert.That(result, Is.True);
-        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilesUrl);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioUrl!);
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ArtworkUrl!);
+        await _blobStorageServiceMock.Received(1).DeleteAsync(project.FilePath, zipContainer);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.AudioPath!, audioContainer);
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(project.ImagePath!, imageContainer);
         await _projectRepositoryMock.Received(1).DeleteProject(project);
     }
 
@@ -207,7 +211,7 @@ public class ProjectServiceTest
         Assert.That(result, Is.Null);
         await _projectRepositoryMock.DidNotReceive().UpdateProjectAsync(Arg.Any<Project>());
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
     }
 
     [Test]
@@ -221,14 +225,14 @@ public class ProjectServiceTest
             Id = projectId,
             Name = "Test Project",
             Daw = "FL Studio",
-            FilesUrl = oldFilesUrl,
+            FilePath = oldFilesUrl,
         };
 
         var zipContainer = "project-files";
         var expectedFilePath = "project-files/file.zip";
 
         var zipMock = Substitute.For<IFormFile>();
-        var updateDto = new UpdateProjectRequest { ZipFile = zipMock };
+        var updateDto = new UpdateProjectRequest { CompressedFile = zipMock };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
         _blobStorageServiceMock.UploadAsync(zipMock, zipContainer).Returns(expectedFilePath);
@@ -237,8 +241,8 @@ public class ProjectServiceTest
         var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
 
         // Assert
-        Assert.That(result!.FilesUrl, Is.EqualTo(expectedFilePath));
-        await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl);
+        Assert.That(result!.FilePath, Is.EqualTo(expectedFilePath));
+        await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl, zipContainer);
         await _blobStorageServiceMock.Received(1).UploadAsync(zipMock, zipContainer);
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
@@ -254,14 +258,14 @@ public class ProjectServiceTest
             Id = projectId,
             Name = "Test Project",
             Daw = "FL Studio",
-            AudioUrl = oldAudioUrl!
+            AudioPath = oldAudioUrl!
         };
 
         var audioContainer = "project-audio";
         var expectedAudioPath = "project-audio/audio.mp3";
 
         var audioMock = Substitute.For<IFormFile>();
-        var updateDto = new UpdateProjectRequest { Mp3File = audioMock };
+        var updateDto = new UpdateProjectRequest { AudioFile = audioMock };
 
         _projectRepositoryMock.GetByIdAsync(projectId).Returns(project);
         _blobStorageServiceMock.UploadAsync(audioMock, audioContainer).Returns(expectedAudioPath);
@@ -270,8 +274,8 @@ public class ProjectServiceTest
         var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
 
         // Assert
-        Assert.That(result!.AudioUrl, Is.EqualTo(expectedAudioPath));
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        Assert.That(result!.AudioPath, Is.EqualTo(expectedAudioPath));
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _blobStorageServiceMock.Received(1).UploadAsync(audioMock, audioContainer);
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
@@ -319,7 +323,7 @@ public class ProjectServiceTest
         });
 
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
-        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>());
+        await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
     }
 }

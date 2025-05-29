@@ -9,9 +9,9 @@
         public byte? Bpm { get; set; }
         public string? Genre { get; set; }
         public string Daw { get; set; } = null!;
-        public string FilesUrl { get; set; } = null!;
-        public string? AudioUrl { get; set; }
-        public string? ArtworkUrl { get; set; }
+        public string FilePath { get; set; } = null!;
+        public string? AudioPath { get; set; }
+        public string? ImagePath { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

@@ -8,7 +8,7 @@ public record UpdateProjectRequest
     public byte? Bpm { get; init; }
     public string? Genre { get; init; }
     public string? Daw { get; init; }
-    public IFormFile? ZipFile { get; init; }
-    public IFormFile? Mp3File { get; init; }
-    public IFormFile? CoverImage { get; init; }
+    public IFormFile? CompressedFile { get; init; }
+    public IFormFile? AudioFile { get; init; }
+    public IFormFile? ImageFile { get; init; }
 }

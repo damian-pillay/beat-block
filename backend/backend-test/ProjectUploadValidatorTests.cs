@@ -22,9 +22,9 @@ public class ProjectUploadValidatorTests
         // Arrange
         var request = new CreateProjectRequest
         {
-            Mp3File = FormFileHelper.CreateFakeFormFile("audio content", "track.mp3"),
-            CoverImage = FormFileHelper.CreateFakeFormFile("image content", "cover.jpg"),
-            ZipFile = FormFileHelper.CreateFakeFormFile("zip content", "project.zip")
+            AudioFile = FormFileHelper.CreateFakeFormFile("audio content", "track.mp3"),
+            ImageFile = FormFileHelper.CreateFakeFormFile("image content", "cover.jpg"),
+            CompressedFile = FormFileHelper.CreateFakeFormFile("zip content", "project.zip")
         };
 
         // Act
@@ -39,15 +39,15 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            CoverImage = FormFileHelper.CreateFakeFormFile(new string('a', 6 * 1024 * 1024), "cover.jpg")
+            ImageFile = FormFileHelper.CreateFakeFormFile(new string('a', 6 * 1024 * 1024), "cover.jpg")
         };
 
         _validator.Validate(request, _modelState);
 
         Assert.Multiple(() =>
         {
-            Assert.That(_modelState.ContainsKey(nameof(request.CoverImage)), Is.True);
-            Assert.That(_modelState[nameof(request.CoverImage)].Errors[0].ErrorMessage, Does.Contain("5MB"));
+            Assert.That(_modelState.ContainsKey(nameof(request.ImageFile)), Is.True);
+            Assert.That(_modelState[nameof(request.ImageFile)].Errors[0].ErrorMessage, Does.Contain("5MB"));
         });
     }
 
@@ -58,7 +58,7 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            CoverImage = FormFileHelper.CreateFakeFormFile("image content", fileName)
+            ImageFile = FormFileHelper.CreateFakeFormFile("image content", fileName)
         };
 
         _validator.Validate(request, _modelState);
@@ -71,13 +71,13 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            CoverImage = FormFileHelper.CreateFakeFormFile("image content", "cover.bmp")
+            ImageFile = FormFileHelper.CreateFakeFormFile("image content", "cover.bmp")
         };
 
         _validator.Validate(request, _modelState);
 
-        Assert.That(_modelState.ContainsKey(nameof(request.CoverImage)), Is.True);
-        Assert.That(_modelState[nameof(request.CoverImage)].Errors[0].ErrorMessage, Does.Contain(".jpg"));
+        Assert.That(_modelState.ContainsKey(nameof(request.ImageFile)), Is.True);
+        Assert.That(_modelState[nameof(request.ImageFile)].Errors[0].ErrorMessage, Does.Contain(".jpg"));
     }
 
     [Test]
@@ -85,13 +85,13 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            ZipFile = FormFileHelper.CreateFakeFormFile("zip content", "project.rar")
+            CompressedFile = FormFileHelper.CreateFakeFormFile("zip content", "project.rar")
         };
 
         _validator.Validate(request, _modelState);
 
-        Assert.That(_modelState.ContainsKey(nameof(request.ZipFile)), Is.True);
-        Assert.That(_modelState[nameof(request.ZipFile)].Errors[0].ErrorMessage, Does.Contain(".zip"));
+        Assert.That(_modelState.ContainsKey(nameof(request.CompressedFile)), Is.True);
+        Assert.That(_modelState[nameof(request.CompressedFile)].Errors[0].ErrorMessage, Does.Contain(".zip"));
     }
 
     [Test]
@@ -99,12 +99,12 @@ public class ProjectUploadValidatorTests
     {
         var request = new CreateProjectRequest
         {
-            Mp3File = FormFileHelper.CreateFakeFormFile("audio content", "track.wav", "audio/wav")
+            AudioFile = FormFileHelper.CreateFakeFormFile("audio content", "track.wav", "audio/wav")
         };
 
         _validator.Validate(request, _modelState);
 
-        Assert.That(_modelState.ContainsKey(nameof(request.Mp3File)), Is.True);
-        Assert.That(_modelState[nameof(request.Mp3File)].Errors[0].ErrorMessage, Does.Contain(".mp3"));
+        Assert.That(_modelState.ContainsKey(nameof(request.AudioFile)), Is.True);
+        Assert.That(_modelState[nameof(request.AudioFile)].Errors[0].ErrorMessage, Does.Contain(".mp3"));
     }
 }

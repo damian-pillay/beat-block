@@ -1,4 +1,5 @@
-﻿using BeatBlock.Models.DTOs.Request;
+﻿using BeatBlock.Helpers;
+using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
 using BeatBlock.Validators;
@@ -28,6 +29,31 @@ public class ProjectController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProjectById(int id)
+    {
+        var project = await _projectService.GetProjectByIdAsync(id);
+
+        if (project == null) return NotFound();
+
+        return Ok(project);
+    }
+
+    [HttpGet("{id}/{fileType}")]
+    public async Task<IActionResult> GetProjectFile(int id, string fileType)
+    {
+        var result = await _projectService.GetProjectFileStreamAsync(id, fileType.ToLower(), ContentTypeHelper.ContentTypes);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");
+
+        return File(result.FileStream, result.ContentType);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
@@ -43,14 +69,14 @@ public class ProjectController : ControllerBase
         return CreatedAtAction(nameof(GetProjectById), new { id = createdProject.Id }, createdProject);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProjectById(int id)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest dto)
     {
-        var project = await _projectService.GetProjectByIdAsync(id);
+        var updatedProject = await _projectService.UpdateProjectAsync(id, dto);
+        if (updatedProject == null)
+            return NotFound();
 
-        if (project == null) return NotFound();
-
-        return Ok(project);
+        return CreatedAtAction(nameof(GetProjectById), new { id = updatedProject.Id }, updatedProject);
     }
 
     [HttpDelete("{id}")]
@@ -61,15 +87,5 @@ public class ProjectController : ControllerBase
         if (!result) return NotFound();
 
         return NoContent();
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest dto)
-    {
-        var updatedProject = await _projectService.UpdateProjectAsync(id, dto);
-        if (updatedProject == null)
-            return NotFound();
-
-        return CreatedAtAction(nameof(GetProjectById), new { id = updatedProject.Id }, updatedProject);
     }
 }
