@@ -34,9 +34,9 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
     {
-        var zipName = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
-        var mp3Name = projectDto.AudioFile != null ? await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir) : null;
-        var imageName = projectDto.ImageFile != null ? await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir) : null;
+        var filePath = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
+        var audioPath = projectDto.AudioFile != null ? await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir) : null;
+        var imagePath = projectDto.ImageFile != null ? await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectArtworkDir) : null;
 
         var project = new Project
         {
@@ -46,9 +46,9 @@ public class ProjectService : IProjectService
             Bpm = projectDto.Bpm,
             Genre = projectDto.Genre,
             Daw = projectDto.Daw,
-            FilePath = zipName,
-            AudioPath = mp3Name,
-            ImagePath = imageName
+            FilePath = filePath,
+            AudioPath = audioPath,
+            ImagePath = imagePath
         };
 
         await _repository.AddAsync(project);
