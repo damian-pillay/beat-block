@@ -9,16 +9,16 @@ on:
 jobs:
   test:
     name: Run Back-end Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET 9 SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 9.0.x
+      - name: Use user-local .NET SDK
+        run: |
+          echo "DOTNET_ROOT=$HOME/.dotnet" >> $GITHUB_ENV
+          echo "$HOME/.dotnet" >> $GITHUB_PATH
 
       - name: Restore dependencies
         run: dotnet restore
