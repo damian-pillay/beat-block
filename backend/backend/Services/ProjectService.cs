@@ -133,9 +133,7 @@ public class ProjectService : IProjectService
         }
 
         var extension = blobPath.Split(".")[1];
-        Console.WriteLine(extension);
         var contentType = ContentTypes.GetValueOrDefault(extension, DefaultContentType);
-        Console.WriteLine(contentType);
 
         return new FileDownloadResponse
         {
