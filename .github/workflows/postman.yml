@@ -1,6 +1,6 @@
 name: Automated API tests using Postman CLI
 
-on: 
+on:
   push:
     branches:
       - "**"
@@ -10,10 +10,11 @@ on:
 
 jobs:
   automated-api-tests:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    name: Run API tests with Postman CLI
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Start backend container(s)
         run: docker compose up -d --build
         env:
@@ -22,15 +23,15 @@ jobs:
           SQL_SERVER: ${{ secrets.SQL_SERVER }}
           SQL_PORT: ${{ secrets.SQL_PORT }}
           AZURITE_CONNECTION_STRING: ${{ secrets.AZURITE_CONNECTION_STRING }}
-          
+
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-      
+
       - name: Login to Postman CLI
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-      
+
       - name: Run API tests
         run: postman collection run "45312233-8455186b-0b85-45c5-80d1-5bbfb642ad3d" -e "45312233-1b6bf9cb-6e14-40c0-b960-bbee0f004d9c"
-      
+
       - name: Tear down backend container(s)
         run: docker compose down -v
