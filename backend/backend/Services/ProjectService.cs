@@ -149,10 +149,10 @@ public class ProjectService : IProjectService
     {
         project.Name = projectDto.Name ?? project.Name;
         project.Description = projectDto.Description ?? project.Description;
-        project.KeySignature = projectDto.KeySignature ?? projectDto.KeySignature;
+        project.KeySignature = projectDto.KeySignature ?? project.KeySignature;
         project.Daw = projectDto.Daw ?? project.Daw;
-        project.Bpm = projectDto.Bpm ?? projectDto.Bpm;
-        project.Genre = projectDto.Genre ?? projectDto.Genre;
+        project.Bpm = projectDto.Bpm ?? project.Bpm;
+        project.Genre = projectDto.Genre ?? project.Genre;
         project.UpdatedAt = DateTime.UtcNow;
     }
 
