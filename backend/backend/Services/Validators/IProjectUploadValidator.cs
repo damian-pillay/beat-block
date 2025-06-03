@@ -5,6 +5,6 @@ namespace BeatBlock.Services.Validators
 {
     public interface IProjectUploadValidator
     {
-        void Validate(CreateProjectRequest request, ModelStateDictionary modelState);
+        void Validate(IProjectRequest request, ModelStateDictionary modelState);
     }
 }
