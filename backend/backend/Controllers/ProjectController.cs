@@ -47,9 +47,9 @@ public class ProjectController : ControllerBase
     {
         var result = await _projectService
             .GetProjectFileStreamAsync(
-                id, 
-                fileType.ToLower(), 
-                ContentTypeHelper.ContentTypes, 
+                id,
+                fileType.ToLower(),
+                ContentTypeHelper.ContentTypes,
                 ContentTypeHelper.DefaultContentType)
             ;
 
