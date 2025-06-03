@@ -35,7 +35,9 @@ builder.Services.AddSingleton(new BlobServiceClient(blobStorageConnectionString)
 
 const string serviceName = "beat-block-logger";
 
-builder.Logging.AddOpenTelemetry(options =>
+builder.Logging
+    .ClearProviders()
+    .AddOpenTelemetry(options =>
 {
     options
         .SetResourceBuilder(
