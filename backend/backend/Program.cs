@@ -44,13 +44,7 @@ builder.Logging.AddOpenTelemetry(options =>
         .AddConsoleExporter();
 });
 builder.Services.AddOpenTelemetry()
-      .ConfigureResource(resource => resource.AddService(serviceName))
-      .WithTracing(tracing => tracing
-          .AddAspNetCoreInstrumentation()
-          .AddConsoleExporter())
-      .WithMetrics(metrics => metrics
-          .AddAspNetCoreInstrumentation()
-          .AddConsoleExporter());
+      .ConfigureResource(resource => resource.AddService(serviceName));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
