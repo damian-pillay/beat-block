@@ -5,6 +5,8 @@ using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using BeatBlock.Helpers;
+using System.Data;
+using NSubstitute.Core.Arguments;
 
 namespace BeatBlock.UnitTests;
 
@@ -17,6 +19,8 @@ public class ProjectServiceTest
     private const string ProjectFilesDir = "project-files";
     private const string ProjectAudioDir = "project-audio";
     private const string ProjectImageDir = "project-images";
+
+    private readonly DateTime fixedTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
     [SetUp]
     public void Setup()
@@ -226,6 +230,11 @@ public class ProjectServiceTest
             Id = projectId,
             Name = "Test Project",
             Daw = "FL Studio",
+            Genre = "Hip-Hop",
+            Bpm = 100,
+            KeySignature = "Cm",
+            CreatedAt = fixedTime,
+            UpdatedAt = fixedTime,
             FilePath = oldFilesUrl,
         };
 
@@ -242,10 +251,23 @@ public class ProjectServiceTest
         var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
 
         // Assert
-        Assert.That(result!.FilePath, Is.EqualTo(expectedFilePath));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Id, Is.EqualTo(1));
+            Assert.That(result!.Name, Is.EqualTo("Test Project"));
+            Assert.That(result.Daw, Is.EqualTo("FL Studio"));
+            Assert.That(result.Genre, Is.EqualTo("Hip-Hop"));
+            Assert.That(result.Bpm, Is.EqualTo(100));
+            Assert.That(result.KeySignature, Is.EqualTo("Cm"));
+            Assert.That(result.CreatedAt, Is.EqualTo(fixedTime));
+            Assert.That(result.UpdatedAt, Is.Not.EqualTo(fixedTime));
+            Assert.That(result!.FilePath, Is.EqualTo(expectedFilePath));
+        });
+
         await _blobStorageServiceMock.Received(1).DeleteAsync(oldFilesUrl, zipContainer);
         await _blobStorageServiceMock.Received(1).UploadAsync(zipMock, zipContainer);
-        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(Arg.Any<Project>());
     }
 
     [Test]
@@ -259,6 +281,11 @@ public class ProjectServiceTest
             Id = projectId,
             Name = "Test Project",
             Daw = "FL Studio",
+            Genre = "Hip-Hop",
+            Bpm = 100,
+            KeySignature = "Cm",
+            CreatedAt = fixedTime,
+            UpdatedAt = fixedTime,
             AudioPath = oldAudioUrl!
         };
 
@@ -275,17 +302,30 @@ public class ProjectServiceTest
         var result = await _projectService.UpdateProjectAsync(projectId, updateDto);
 
         // Assert
-        Assert.That(result!.AudioPath, Is.EqualTo(expectedAudioPath));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Id, Is.EqualTo(1));
+            Assert.That(result!.Name, Is.EqualTo("Test Project"));
+            Assert.That(result.Daw, Is.EqualTo("FL Studio"));
+            Assert.That(result.Genre, Is.EqualTo("Hip-Hop"));
+            Assert.That(result.Bpm, Is.EqualTo(100));
+            Assert.That(result.KeySignature, Is.EqualTo("Cm"));
+            Assert.That(result.CreatedAt, Is.EqualTo(fixedTime));
+            Assert.That(result.UpdatedAt, Is.Not.EqualTo(fixedTime));
+            Assert.That(result!.AudioPath, Is.EqualTo(expectedAudioPath));
+        });
+
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
         await _blobStorageServiceMock.Received(1).UploadAsync(audioMock, audioContainer);
-        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(Arg.Any<Project>());
     }
 
     [Test]
     public async Task GIVEN_ExistingProjectWithOnlyBasicData_USING_UpdateProjectAsync_UpdatesBasicFieldsAndSkipsFileHandling()
     {
         // Arrange
-        var project = new Project
+        var initialProject = new Project
         {
             Id = 1,
             Name = "Old",
@@ -293,7 +333,9 @@ public class ProjectServiceTest
             Daw = "FL Studio",
             Genre = "Hip-Hop",
             Bpm = 100,
-            KeySignature = "Cm"
+            KeySignature = "Cm",
+            CreatedAt = fixedTime,
+            UpdatedAt = fixedTime
         };
 
         var updateDto = new UpdateProjectRequest
@@ -306,7 +348,7 @@ public class ProjectServiceTest
             KeySignature = "Am"
         };
 
-        _projectRepositoryMock.GetByIdAsync(1).Returns(project);
+        _projectRepositoryMock.GetByIdAsync(1).Returns(initialProject);
 
         // Act
         var result = await _projectService.UpdateProjectAsync(1, updateDto);
@@ -315,17 +357,20 @@ public class ProjectServiceTest
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Id, Is.EqualTo(1));
             Assert.That(result!.Name, Is.EqualTo("New"));
             Assert.That(result.Description, Is.EqualTo("New Desc"));
             Assert.That(result.Daw, Is.EqualTo("Ableton"));
             Assert.That(result.Genre, Is.EqualTo("Trap"));
             Assert.That(result.Bpm, Is.EqualTo(120));
             Assert.That(result.KeySignature, Is.EqualTo("Am"));
+            Assert.That(result.CreatedAt, Is.EqualTo(fixedTime));
+            Assert.That(result.UpdatedAt, Is.Not.EqualTo(fixedTime));
         });
 
         await _blobStorageServiceMock.DidNotReceive().UploadAsync(Arg.Any<IFormFile>(), Arg.Any<string>());
         await _blobStorageServiceMock.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<string>());
-        await _projectRepositoryMock.Received(1).UpdateProjectAsync(project);
+        await _projectRepositoryMock.Received(1).UpdateProjectAsync(Arg.Any<Project>());
     }
 
     [Test]
