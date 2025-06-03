@@ -2,7 +2,7 @@
 
 namespace BeatBlock.Models.DTOs.Request;
 
-public record CreateProjectRequest
+public record CreateProjectRequest : IProjectRequest
 {
     [Required]
     public string Name { get; init; } = null!;

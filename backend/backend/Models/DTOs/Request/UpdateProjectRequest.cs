@@ -1,6 +1,6 @@
 ﻿namespace BeatBlock.Models.DTOs.Request;
 
-public record UpdateProjectRequest
+public record UpdateProjectRequest : IProjectRequest
 {
     public string? Name { get; init; }
     public string? Description { get; init; }
