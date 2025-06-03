@@ -34,7 +34,10 @@ public class ProjectController : ControllerBase
     {
         var project = await _projectService.GetProjectByIdAsync(id);
 
-        if (project == null) return NotFound();
+        if (project == null)
+        {
+            return NotFound();
+        }
 
         return Ok(project);
     }
@@ -42,14 +45,20 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}/{fileType}")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
-        var result = await _projectService.GetProjectFileStreamAsync(id, fileType.ToLower(), ContentTypeHelper.ContentTypes);
+        var result = await _projectService
+            .GetProjectFileStreamAsync(
+                id, 
+                fileType.ToLower(), 
+                ContentTypeHelper.ContentTypes, 
+                ContentTypeHelper.DefaultContentType)
+            ;
 
         if (result == null)
         {
             return NotFound();
         }
 
-        Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");
+        Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");
 
         return File(result.FileStream, result.ContentType);
     }
@@ -70,13 +79,23 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest dto)
+    public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest projectDto)
     {
-        var updatedProject = await _projectService.UpdateProjectAsync(id, dto);
-        if (updatedProject == null)
-            return NotFound();
+        _uploadValidator.Validate(projectDto, ModelState);
 
-        return CreatedAtAction(nameof(GetProjectById), new { id = updatedProject.Id }, updatedProject);
+        if (!ModelState.IsValid)
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        var updatedProject = await _projectService.UpdateProjectAsync(id, projectDto);
+
+        if (updatedProject == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(updatedProject);
     }
 
     [HttpDelete("{id}")]
@@ -84,7 +103,10 @@ public class ProjectController : ControllerBase
     {
         var result = await _projectService.DeleteProjectAsync(id);
 
-        if (!result) return NotFound();
+        if (!result)
+        {
+            return NotFound();
+        }
 
         return NoContent();
     }

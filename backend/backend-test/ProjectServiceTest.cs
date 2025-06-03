@@ -338,7 +338,7 @@ public class ProjectServiceTest
         _projectRepositoryMock.GetCompressedFilePathAsync(projectId).Returns((string?)null);
 
         // Act
-        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes);
+        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes, ContentTypeHelper.DefaultContentType);
 
         // Assert
         Assert.That(result, Is.Null);
@@ -356,7 +356,7 @@ public class ProjectServiceTest
         _blobStorageServiceMock.GetBlobStreamAsync(blobPath, ProjectAudioDir).Returns((Stream?)null);
 
         // Act
-        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes);
+        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes, ContentTypeHelper.DefaultContentType);
 
         // Assert
         Assert.That(result, Is.Null);
