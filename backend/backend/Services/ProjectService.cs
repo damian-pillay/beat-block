@@ -19,8 +19,6 @@ public class ProjectService : IProjectService
     private const string AudioFileType = "audio";
     private const string ImageFileType = "image";
 
-    private const string DefaultContentType = "application/octet-stream";
-
     public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService)
     {
         _repository = repository;
@@ -102,7 +100,11 @@ public class ProjectService : IProjectService
         return project;
     }
 
-    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes)
+    public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(
+        int id,
+        string fileType,
+        FrozenDictionary<string, string> ContentTypes,
+        string DefaultContentType)
     {
         var blobPath = fileType switch
         {
@@ -145,35 +147,13 @@ public class ProjectService : IProjectService
 
     private void UpdateBasicProjectData(Project project, UpdateProjectRequest projectDto)
     {
-        if (!string.IsNullOrEmpty(projectDto.Name))
-        {
-            project.Name = projectDto.Name;
-        }
-
-        if (!string.IsNullOrEmpty(projectDto.Description))
-        {
-            project.Description = projectDto.Description;
-        }
-
-        if (!string.IsNullOrEmpty(projectDto.Daw))
-        {
-            project.Daw = projectDto.Daw;
-        }
-
-        if (!string.IsNullOrEmpty(projectDto.Genre))
-        {
-            project.Genre = projectDto.Genre;
-        }
-
-        if (projectDto.Bpm.HasValue)
-        {
-            project.Bpm = projectDto.Bpm.Value;
-        }
-
-        if (!string.IsNullOrEmpty(projectDto.KeySignature))
-        {
-            project.KeySignature = projectDto.KeySignature;
-        }
+        project.Name = projectDto.Name ?? project.Name;
+        project.Description = projectDto.Description ?? project.Description;
+        project.KeySignature = projectDto.KeySignature ?? projectDto.KeySignature;
+        project.Daw = projectDto.Daw ?? project.Daw;
+        project.Bpm = projectDto.Bpm ?? projectDto.Bpm;
+        project.Genre = projectDto.Genre ?? projectDto.Genre;
+        project.UpdatedAt = DateTime.UtcNow;
     }
 
     private async Task UpdateFileProjectData(Project project, UpdateProjectRequest projectDto)
@@ -190,7 +170,9 @@ public class ProjectService : IProjectService
             var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
 
             if (!string.IsNullOrEmpty(project.AudioPath))
+            {
                 await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
+            }
 
             project.AudioPath = newAudioUrl;
         }
@@ -200,7 +182,9 @@ public class ProjectService : IProjectService
             var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectImageDir);
 
             if (!string.IsNullOrEmpty(project.ImagePath))
+            {
                 await _blobStorageService.DeleteAsync(project.ImagePath, ProjectImageDir);
+            }
 
             project.ImagePath = newArtworkUrl;
         }
