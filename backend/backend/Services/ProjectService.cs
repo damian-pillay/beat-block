@@ -9,7 +9,7 @@ namespace BeatBlock.Services;
 public class ProjectService : IProjectService
 {
     private readonly IProjectRepository _repository;
-    private readonly IBlobStorageRepository _blobStorageService;
+    private readonly IBlobStorageRepository _blobStorageRepository;
     private readonly ILogger<IProjectService> _logger;
 
     private const string ProjectFilesDir = "project-files";
@@ -20,10 +20,10 @@ public class ProjectService : IProjectService
     private const string AudioFileType = "audio";
     private const string ImageFileType = "image";
 
-    public ProjectService(IProjectRepository repository, IBlobStorageRepository blobStorageService, ILogger<IProjectService> logger)
+    public ProjectService(IProjectRepository repository, IBlobStorageRepository blobStorageRepository, ILogger<IProjectService> logger)
     {
         _repository = repository;
-        _blobStorageService = blobStorageService;
+        _blobStorageRepository = blobStorageRepository;
         _logger = logger;
     }
 
@@ -36,20 +36,20 @@ public class ProjectService : IProjectService
     {
         _logger.LogInformation("Creating project: {ProjectName}", projectDto.Name);
 
-        var filePath = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
+        var filePath = await _blobStorageRepository.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
         _logger.LogDebug("Compressed project file uploaded to {FilePath}", filePath);
 
         string? audioPath = null;
         if (projectDto.AudioFile != null)
         {
-            audioPath = await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
+            audioPath = await _blobStorageRepository.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
             _logger.LogDebug("Audio file uploaded to {AudioPath}", audioPath);
         }
 
         string? imagePath = null;
         if (projectDto.ImageFile != null)
         {
-            imagePath = await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectImageDir);
+            imagePath = await _blobStorageRepository.UploadAsync(projectDto.ImageFile, ProjectImageDir);
             _logger.LogDebug("Image file uploaded to {ImagePath}", imagePath);
         }
 
@@ -98,45 +98,23 @@ public class ProjectService : IProjectService
             return false;
         }
 
-        await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
+        await _blobStorageRepository.DeleteAsync(project.FilePath, ProjectFilesDir);
         _logger.LogDebug("Deleted compressed file at {FilePath}", project.FilePath);
 
         if (!string.IsNullOrEmpty(project.AudioPath))
         {
-            await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
+            await _blobStorageRepository.DeleteAsync(project.AudioPath, ProjectAudioDir);
             _logger.LogDebug("Deleted audio file at {AudioPath}", project.AudioPath);
         }
 
         if (!string.IsNullOrEmpty(project.ImagePath))
         {
-            await _blobStorageService.DeleteAsync(project.ImagePath, ProjectImageDir);
+            await _blobStorageRepository.DeleteAsync(project.ImagePath, ProjectImageDir);
             _logger.LogDebug("Deleted image file at {ImagePath}", project.ImagePath);
         }
 
         await _repository.DeleteProject(project);
         return true;
-    }
-
-    public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto)
-    {
-        _logger.LogInformation("Attempting to update project with Id: {ProjectId}", id);
-
-        var project = await _repository.GetByIdAsync(id);
-
-        if (project == null)
-        {
-            _logger.LogWarning("Project with Id: {ProjectId} not found. Update aborted.", id);
-            return null;
-        }
-
-        _logger.LogInformation("Updating basic project data for Id: {ProjectId}", id);
-        UpdateBasicProjectData(project, projectDto);
-
-        _logger.LogInformation("Updating project files for Id: {ProjectId}", id);
-        await UpdateFileProjectData(project, projectDto);
-
-        await _repository.UpdateProjectAsync(project);
-        return project;
     }
 
     public async Task<FileDownloadResponse?> GetProjectFileStreamAsync(
@@ -170,7 +148,7 @@ public class ProjectService : IProjectService
         }
 
         _logger.LogDebug("Retrieving blob stream for path: {BlobPath} in container: {BlobContainer}", blobPath, blobContainer);
-        var stream = await _blobStorageService.GetBlobStreamAsync(blobPath, blobContainer!);
+        var stream = await _blobStorageRepository.GetBlobStreamAsync(blobPath, blobContainer!);
 
         if (stream == null)
         {
@@ -189,49 +167,84 @@ public class ProjectService : IProjectService
             ContentType = contentType
         };
     }
-
-    private void UpdateBasicProjectData(Project project, UpdateProjectRequest projectDto)
+    public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto)
     {
-        project.Name = projectDto.Name ?? project.Name;
-        project.Description = projectDto.Description ?? project.Description;
-        project.KeySignature = projectDto.KeySignature ?? project.KeySignature;
-        project.Daw = projectDto.Daw ?? project.Daw;
-        project.Bpm = projectDto.Bpm ?? project.Bpm;
-        project.Genre = projectDto.Genre ?? project.Genre;
-        project.UpdatedAt = DateTime.UtcNow;
-    }
+        _logger.LogInformation("Starting update for project with ID: {ProjectId}", id);
 
-    private async Task UpdateFileProjectData(Project project, UpdateProjectRequest projectDto)
-    {
-        if (projectDto.CompressedFile != null)
+        var project = await _repository.GetByIdAsync(id);
+
+        if (project == null)
         {
-            var newFilesUrl = await _blobStorageService.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
-            await _blobStorageService.DeleteAsync(project.FilePath, ProjectFilesDir);
-            project.FilePath = newFilesUrl;
+            _logger.LogWarning("Project with ID: {ProjectId} not found. Update aborted.", id);
+            return null;
         }
 
-        if (projectDto.AudioFile != null)
+        var updatedProject = await GetUpdatedProjectDTO(project, requestDto);
+
+        await _repository.UpdateProjectAsync(updatedProject);
+        return updatedProject;
+    }
+
+    private async Task<Project> GetUpdatedProjectDTO(Project project, UpdateProjectRequest requestDto)
+    {
+        var updatedProject = new Project
         {
-            var newAudioUrl = await _blobStorageService.UploadAsync(projectDto.AudioFile, ProjectAudioDir);
+            Id = project.Id,
+            Name = requestDto.Name ?? project.Name,
+            Description = requestDto.Description ?? project.Description,
+            KeySignature = requestDto.KeySignature ?? project.KeySignature,
+            Bpm = requestDto.Bpm ?? project.Bpm,
+            Genre = requestDto.Genre ?? project.Genre,
+            Daw = requestDto.Daw ?? project.Daw,
+            FilePath = project.FilePath,
+            AudioPath = project.AudioPath,
+            ImagePath = project.ImagePath,
+            CreatedAt = project.CreatedAt,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        if (requestDto.CompressedFile != null)
+        {
+            _logger.LogInformation("Uploading new compressed file for project ID: {ProjectId}", project.Id);
+            var newFilesUrl = await _blobStorageRepository.UploadAsync(requestDto.CompressedFile, ProjectFilesDir);
+            _logger.LogDebug("Uploaded compressed file to: {FilePath}", newFilesUrl);
+
+            await _blobStorageRepository.DeleteAsync(project.FilePath, ProjectFilesDir);
+            _logger.LogDebug("Deleted old compressed file from: {FilePath}", project.FilePath);
+
+            updatedProject.FilePath = newFilesUrl;
+        }
+
+        if (requestDto.AudioFile != null)
+        {
+            _logger.LogInformation("Uploading new audio file for project ID: {ProjectId}", project.Id);
+            var newAudioUrl = await _blobStorageRepository.UploadAsync(requestDto.AudioFile, ProjectAudioDir);
+            _logger.LogDebug("Uploaded audio file to: {AudioPath}", newAudioUrl);
 
             if (!string.IsNullOrEmpty(project.AudioPath))
             {
-                await _blobStorageService.DeleteAsync(project.AudioPath, ProjectAudioDir);
+                await _blobStorageRepository.DeleteAsync(project.AudioPath, ProjectAudioDir);
+                _logger.LogDebug("Deleted old audio file from: {AudioPath}", project.AudioPath);
             }
 
-            project.AudioPath = newAudioUrl;
+            updatedProject.AudioPath = newAudioUrl;
         }
 
-        if (projectDto.ImageFile != null)
+        if (requestDto.ImageFile != null)
         {
-            var newArtworkUrl = await _blobStorageService.UploadAsync(projectDto.ImageFile, ProjectImageDir);
+            _logger.LogInformation("Uploading new image file for project ID: {ProjectId}", project.Id);
+            var newArtworkUrl = await _blobStorageRepository.UploadAsync(requestDto.ImageFile, ProjectImageDir);
+            _logger.LogDebug("Uploaded image file to: {ImagePath}", newArtworkUrl);
 
             if (!string.IsNullOrEmpty(project.ImagePath))
             {
-                await _blobStorageService.DeleteAsync(project.ImagePath, ProjectImageDir);
+                await _blobStorageRepository.DeleteAsync(project.ImagePath, ProjectImageDir);
+                _logger.LogDebug("Deleted old image file from: {ImagePath}", project.ImagePath);
             }
 
-            project.ImagePath = newArtworkUrl;
+            updatedProject.ImagePath = newArtworkUrl;
         }
+
+        return updatedProject;
     }
 }
