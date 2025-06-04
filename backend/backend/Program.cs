@@ -11,7 +11,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Logs;
-using BeatBlock;
+using BeatBlock.Middleware;
 
 Env.Load();
 
@@ -62,7 +62,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectUploadValidator, ProjectUploadValidator>();
-builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IBlobStorageRepository, BlobStorageRepository>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddCors(options =>
 {
@@ -86,6 +87,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler(_ => { });
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -13,7 +13,7 @@ namespace BeatBlock.UnitTests;
 public class ProjectServiceTest
 {
     private IProjectRepository _projectRepositoryMock;
-    private IBlobStorageService _blobStorageServiceMock;
+    private IBlobStorageRepository _blobStorageServiceMock;
     private IProjectService _projectService = null!;
     private ILogger<ProjectService> _loggerMock;
 
@@ -27,7 +27,7 @@ public class ProjectServiceTest
     public void Setup()
     {
         _projectRepositoryMock = Substitute.For<IProjectRepository>();
-        _blobStorageServiceMock = Substitute.For<IBlobStorageService>();
+        _blobStorageServiceMock = Substitute.For<IBlobStorageRepository>();
         _loggerMock = Substitute.For<ILogger<ProjectService>>();
 
         _projectService = new ProjectService(_projectRepositoryMock, _blobStorageServiceMock, _loggerMock);

@@ -1,6 +1,6 @@
-﻿namespace BeatBlock.Services;
+﻿namespace BeatBlock.Repositories;
 
-public interface IBlobStorageService
+public interface IBlobStorageRepository
 {
     Task<string> UploadAsync(IFormFile file, string containerName);
     Task DeleteAsync(string blobName, string containerName);

@@ -52,9 +52,20 @@ public class ProjectRepository : IProjectRepository
         _logger.LogInformation("Project with ID {ProjectId} deleted successfully.", project.Id);
     }
 
-    public async Task UpdateProjectAsync(Project project)
+    public async Task UpdateProjectAsync(Project updatedProject)
     {
-        _context.Project.Update(project);
+        var project = _context.Project.First(x => x.Id == updatedProject.Id);
+
+        project.Name = updatedProject.Name;
+        project.Description = updatedProject.Description;
+        project.KeySignature = updatedProject.KeySignature;
+        project.Bpm = updatedProject.Bpm;
+        project.Genre = updatedProject.Genre;
+        project.Daw = updatedProject.Daw;
+        project.FilePath = updatedProject.FilePath;
+        project.AudioPath = updatedProject.AudioPath;
+        project.UpdatedAt = updatedProject.UpdatedAt;
+
         await _context.SaveChangesAsync();
     }
 
