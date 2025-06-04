@@ -89,7 +89,7 @@ public class ProjectService : IProjectService
     public async Task<bool> DeleteProjectAsync(int id)
     {
         _logger.LogInformation("Attempting to delete project with Id: {ProjectId}", id);
-        
+
         var project = await _repository.GetByIdAsync(id);
 
         if (project == null)
