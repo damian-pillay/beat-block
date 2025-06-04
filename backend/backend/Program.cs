@@ -62,7 +62,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectUploadValidator, ProjectUploadValidator>();
-builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IBlobStorageRepository, BlobStorageRepository>();
 
 builder.Services.AddCors(options =>
 {

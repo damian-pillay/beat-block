@@ -9,7 +9,7 @@ namespace BeatBlock.Services;
 public class ProjectService : IProjectService
 {
     private readonly IProjectRepository _repository;
-    private readonly IBlobStorageService _blobStorageService;
+    private readonly IBlobStorageRepository _blobStorageService;
     private readonly ILogger<IProjectService> _logger;
 
     private const string ProjectFilesDir = "project-files";
@@ -20,7 +20,7 @@ public class ProjectService : IProjectService
     private const string AudioFileType = "audio";
     private const string ImageFileType = "image";
 
-    public ProjectService(IProjectRepository repository, IBlobStorageService blobStorageService, ILogger<IProjectService> logger)
+    public ProjectService(IProjectRepository repository, IBlobStorageRepository blobStorageService, ILogger<IProjectService> logger)
     {
         _repository = repository;
         _blobStorageService = blobStorageService;

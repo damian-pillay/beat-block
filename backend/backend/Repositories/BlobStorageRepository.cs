@@ -1,13 +1,13 @@
 ﻿
 using Azure.Storage.Blobs;
 
-namespace BeatBlock.Services;
+namespace BeatBlock.Repositories;
 
-public class BlobStorageService : IBlobStorageService
+public class BlobStorageRepository : IBlobStorageRepository
 {
     private readonly BlobServiceClient _blobServiceClient;
 
-    public BlobStorageService(BlobServiceClient blobServiceClient)
+    public BlobStorageRepository(BlobServiceClient blobServiceClient)
     {
         _blobServiceClient = blobServiceClient;
     }
