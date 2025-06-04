@@ -13,8 +13,8 @@ public class GlobalExceptionHandler : IExceptionHandler
     }
 
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext, 
-        Exception exception, 
+        HttpContext httpContext,
+        Exception exception,
         CancellationToken cancellationToken)
     {
         _logger.LogError(exception, "An unhandled exception occurred.");
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             type = type,
             title = title,
             status = status,
-            detail = detail, 
+            detail = detail,
         };
 
         await httpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
