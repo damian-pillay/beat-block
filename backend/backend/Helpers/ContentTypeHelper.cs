@@ -4,6 +4,8 @@ namespace BeatBlock.Helpers;
 
 public static class ContentTypeHelper
 {
+    public static readonly string DefaultContentType = "application/octet-stream";
+
     public static readonly FrozenDictionary<string, string> ContentTypes = new Dictionary<string, string>
     {
         { "zip", "application/zip" },

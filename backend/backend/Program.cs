@@ -7,6 +7,11 @@ using Azure.Storage.Blobs;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using BeatBlock.Services.Validators;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Logs;
+using BeatBlock;
 
 Env.Load();
 
@@ -28,6 +33,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(dbConnectionString));
 
 builder.Services.AddSingleton(new BlobServiceClient(blobStorageConnectionString));
+
+const string serviceName = "beat-block-logger";
+
+builder.Logging
+    .ClearProviders()
+    .AddOpenTelemetry(options =>
+{
+    options
+        .SetResourceBuilder(
+            ResourceBuilder.CreateDefault()
+                .AddService(serviceName))
+        .AddConsoleExporter();
+});
+builder.Services.AddOpenTelemetry()
+      .ConfigureResource(resource => resource.AddService(serviceName));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -67,11 +87,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

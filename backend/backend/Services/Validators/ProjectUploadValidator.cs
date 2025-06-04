@@ -10,7 +10,7 @@ public class ProjectUploadValidator : IProjectUploadValidator
     private const long MaxAudioSize = 30 * ByteMultiplier;
     private const long MaxImageSize = 5 * ByteMultiplier;
 
-    public void Validate(CreateProjectRequest request, ModelStateDictionary modelState)
+    public void Validate(IProjectRequest request, ModelStateDictionary modelState)
     {
         if (request.AudioFile != null)
         {
