@@ -5,8 +5,8 @@ using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using BeatBlock.Helpers;
-using System.Data;
-using NSubstitute.Core.Arguments;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace BeatBlock.UnitTests;
 
@@ -15,6 +15,7 @@ public class ProjectServiceTest
     private IProjectRepository _projectRepositoryMock;
     private IBlobStorageService _blobStorageServiceMock;
     private IProjectService _projectService = null!;
+    private ILogger<ProjectService> _loggerMock;
 
     private const string ProjectFilesDir = "project-files";
     private const string ProjectAudioDir = "project-audio";
@@ -27,8 +28,9 @@ public class ProjectServiceTest
     {
         _projectRepositoryMock = Substitute.For<IProjectRepository>();
         _blobStorageServiceMock = Substitute.For<IBlobStorageService>();
+        _loggerMock = Substitute.For<ILogger<ProjectService>>();
 
-        _projectService = new ProjectService(_projectRepositoryMock, _blobStorageServiceMock);
+        _projectService = new ProjectService(_projectRepositoryMock, _blobStorageServiceMock, _loggerMock);
     }
 
     [Test]
