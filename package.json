@@ -1,5 +1,11 @@
 {
+  "private": true,
   "dependencies": {
-    "@azure/storage-blob": "^12.27.0"
-  }
+    "@azure/storage-blob": "^12.27.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "tailwindcss": "^4.1.8"
+  },
+  "workspaces": [
+    "frontend"
+  ]
 }
