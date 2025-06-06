@@ -2,13 +2,17 @@
 
 FROM node:20-alpine
 
-WORKDIR /frontend
+WORKDIR /app
 
-COPY package*.json ./
+# Copy root and frontend package files
+COPY ./package*.json ./
+
+# Install all dependencies using npm workspaces
 RUN npm install
 
-COPY . .
+# Copy the rest of the monorepo (adjust context if needed)
+COPY ./ ./
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev"]
