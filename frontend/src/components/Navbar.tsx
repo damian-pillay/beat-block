@@ -1,10 +1,8 @@
-import React from "react";
 import BeatblockLogo from "../assets/BEATBLOCK.svg";
 import MenuIcon from "../assets/menu.svg";
 import UploadIcon from "../assets/upload.svg";
-import GridTexture from "../assets/grid-texture.svg";
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
   return (
     <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#171515] select-none">
       <button className="text-white text-2xl" aria-label="Menu">
@@ -18,6 +16,4 @@ const Navbar: React.FC = () => {
       </button>
     </nav>
   );
-};
-
-export default Navbar;
+}
