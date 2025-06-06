@@ -1,17 +1,32 @@
+import { useState, useEffect } from "react";
+import Header from "../components/Header";
 import Navbar from "../components/Navbar";
+import ProjectViewport from "../components/ProjectViewport";
 import ScreenTexture from "../components/ScreenTexture";
-import SearchBar from "../components/SearchBar";
 
 function Home() {
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("http://localhost:8080/api/project");
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setContent(data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <>
-      <ScreenTexture />
-      <Navbar />
-      <div className="relative overflow-hidden">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-montserrat font-extrabold text-white text-center mt-10">
-          Good Afternoon, Damian.
-        </h1>
-        <SearchBar />
+      <div className="flex flex-col min-h-screen">
+        <ScreenTexture />
+        <Navbar />
+        <Header />
+        <ProjectViewport content={content} />
       </div>
     </>
   );
