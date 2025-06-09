@@ -11,7 +11,7 @@ export default function ActionButton({
 }: ActionButtonProps) {
   return (
     <button
-      className="bg-[#272626] text-white py-2.5 px-3 rounded-full hover:bg-[#3a3a3a] transition focus:outline-none"
+      className="bg-[#272626] text-white py-2.5 px-3 rounded-full hover:bg-[#383737] transition focus:outline-none cursor-pointer"
       aria-label={ariaLabel}
       onClick={onClick}
     >
