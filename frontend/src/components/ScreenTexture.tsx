@@ -35,7 +35,8 @@ export default function ScreenTexture() {
           pointer-events-none 
           select-none
           overflow-hidden
-          opacity-40"
+          opacity-40
+          z-[-1]"
       />
 
       <img
@@ -51,6 +52,7 @@ export default function ScreenTexture() {
           pointer-events-none 
           select-none
           opacity-40
+          z-[-1]
           "
       />
 
@@ -59,7 +61,7 @@ export default function ScreenTexture() {
         alt="Line Texture"
         className="
           absolute 
-          bottom-[2vw]
+          top-[800px]
           left-1/2
           transform 
           -translate-x-1/2
@@ -69,6 +71,7 @@ export default function ScreenTexture() {
           w-15
           pointer-events-none 
           select-none
+          z-[-1]
           "
       />
     </>
