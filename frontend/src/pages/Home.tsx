@@ -22,7 +22,7 @@ function Home() {
   }, []);
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="relative h-screen w-screen overflow-hidden flex flex-col">
         <ScreenTexture />
         <Navbar />
         <Header />
