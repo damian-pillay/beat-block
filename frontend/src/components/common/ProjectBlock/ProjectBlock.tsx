@@ -1,4 +1,4 @@
-import DefaultAudioImage from "../../assets/default-audio-image.svg";
+import { DefaultAudioImage } from "../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";

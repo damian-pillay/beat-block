@@ -1,6 +1,4 @@
-import GridTexture from "../assets/grid-texture.svg";
-import ArrowTexture from "../assets/arrow-texture.svg";
-import LineTexture from "../assets/line-texture.svg";
+import { GridTexture, LineTexture, ArrowTexture } from "../../assets/textures";
 
 export default function ScreenTexture() {
   return (

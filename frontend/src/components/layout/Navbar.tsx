@@ -1,7 +1,9 @@
-import BeatblockLogo from "../assets/BEATBLOCK.svg";
-import BeatblockLogoSmall from "../assets/beatblock-icon-only.svg";
-import MenuIcon from "../assets/menu.svg";
-import UploadIcon from "../assets/upload.svg";
+import {
+  BeatblockLogo,
+  BeatblockLogoSmall,
+  MenuIcon,
+  UploadIcon,
+} from "../../assets/icons";
 
 export default function Navbar() {
   return (

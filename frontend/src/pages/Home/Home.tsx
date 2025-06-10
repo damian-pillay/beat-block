@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import ProjectViewport from "../components/ProjectViewport";
-import ScreenTexture from "../components/ScreenTexture";
+import Header from "./Header/Header";
+import Navbar from "../../components/layout/Navbar";
+import ProjectViewport from "./ProjectViewport";
+import ScreenTexture from "../../components/layout/ScreenTexture";
 
 function Home() {
   const [content, setContent] = useState(null);

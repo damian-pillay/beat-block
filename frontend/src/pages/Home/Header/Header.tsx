@@ -1,4 +1,4 @@
-import ActionButton from "./Buttons/ActionButton";
+import ActionButton from "../../../components/common/Buttons/ActionButton";
 import SearchBar from "./SearchBar";
 import GreetingMessage from "./GreetingMessage";
 

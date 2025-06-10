@@ -1,4 +1,4 @@
-import ProjectBlock from "./ProjectBlock/ProjectBlock";
+import ProjectBlock from "../../components/common/ProjectBlock/ProjectBlock";
 
 type ProjectViewportProps = {
   content: any;

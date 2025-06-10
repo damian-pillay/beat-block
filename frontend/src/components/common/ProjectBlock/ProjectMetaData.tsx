@@ -1,7 +1,9 @@
-import TrebleClefIcon from "../../assets/projectblock-icons/treble-clef.svg";
-import DrumIcon from "../../assets/projectblock-icons/drums.svg";
-import MusicIcon from "../../assets/projectblock-icons/music.svg";
-import SliderIcon from "../../assets/projectblock-icons/sliders.svg";
+import {
+  TrebleClefIcon,
+  DrumIcon,
+  MusicIcon,
+  SliderIcon,
+} from "../../../assets/icons";
 import IconLabel from "./IconLabel";
 
 export default function ProjectMetaData({
