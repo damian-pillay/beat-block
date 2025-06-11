@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "./Header/Header";
-import Navbar from "../../components/layout/Navbar";
+import Navbar from "../../components/common/NavBar/Navbar";
 import ProjectViewport from "./ProjectViewport";
 import ScreenTexture from "../../components/layout/ScreenTexture";
 

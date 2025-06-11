@@ -2,8 +2,8 @@ import {
   BeatblockLogo,
   BeatblockLogoSmall,
   DefaultProfileIcon,
-} from "../../assets/icons";
-import NavMenu from "../common/Buttons/NavMenu";
+} from "../../../assets/icons";
+import NavMenu from "./NavMenu";
 
 export default function Navbar() {
   return (
