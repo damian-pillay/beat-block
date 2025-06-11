@@ -16,6 +16,17 @@ services:
       - sqlserver
     networks:
       - beatblock
+
+  beatblock-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - beatblock-api
+    networks:
+      - beatblock
   
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
