@@ -1,31 +1,42 @@
 import {
   BeatblockLogo,
   BeatblockLogoSmall,
-  MenuIcon,
-  UploadIcon,
+  DefaultProfileIcon,
 } from "../../assets/icons";
+import NavMenu from "../common/Buttons/NavMenu";
 
 export default function Navbar() {
   return (
-    <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#171515] select-none overflow-hidden flex-shrink-0">
-      <button className="text-white text-2xl" aria-label="Menu">
-        <img src={MenuIcon} alt="Menu Icon" className="h-6 w-6" />
-      </button>
+    <nav className="w-full flex items-center justify-between bg-[#171515] select-none overflow-hidden flex-shrink-0 drag-none">
+      <section className="flex items-center h-full w-1/3 md:px-12 px-8">
+        <NavMenu />
+      </section>
 
-      <img
-        src={BeatblockLogo}
-        alt="BEATBLOCK Logo"
-        className="hidden sm:block h-18"
-      />
-      <img
-        src={BeatblockLogoSmall}
-        alt="BEATBLOCK Logo Small"
-        className="block sm:hidden h-12"
-      />
+      <section className="flex items-center justify-center h-full w-1/3 px-10 py-6">
+        <img
+          src={BeatblockLogo}
+          alt="BEATBLOCK Logo"
+          className="hidden sm:block h-18 drag-none"
+        />
+        <img
+          src={BeatblockLogoSmall}
+          alt="BEATBLOCK Logo Small"
+          className="block sm:hidden h-12 drag-none"
+        />
+      </section>
 
-      <button className="text-white text-2xl" aria-label="Upload">
-        <img src={UploadIcon} alt="Upload Icon" className="h-6 w-6" />
-      </button>
+      <section className="flex justify-end items-center h-full w-1/3 md:px-8 px-6">
+        <button
+          className="text-white text-2xl rounded-full cursor-pointer"
+          aria-label="profile"
+        >
+          <img
+            src={DefaultProfileIcon}
+            alt="profile icon"
+            className="md:h-12 md:w-12 w-8 h-8 drag-none"
+          />
+        </button>
+      </section>
     </nav>
   );
 }
