@@ -8,7 +8,7 @@ export default function ProjectBlock({ project }: { project: any }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.01, ease: "easeIn" }}
+      transition={{ duration: 0.01, ease: "easeIn", type: "spring" }}
       whileHover={{
         scale: 1.03,
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.7)",
@@ -18,7 +18,7 @@ export default function ProjectBlock({ project }: { project: any }) {
       <img
         src={DefaultAudioImage}
         alt="default audio icon"
-        className="h-full rounded-3xl object-cover"
+        className="h-full rounded-3xl object-cover drag-none"
       />
       <div className="flex flex-col justify-between w-full h-full">
         <ProjectDescription
