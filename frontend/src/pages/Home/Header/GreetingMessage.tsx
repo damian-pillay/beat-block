@@ -21,7 +21,7 @@ export default function GreetingMessage({
   }
 
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-montserrat font-extrabold text-white text-center sm:w-full w-2/3 mx-auto">
+    <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-montserrat font-extrabold text-white text-center sm:w-full w-2/3 mx-auto select-none">
       {user ? `${greeting}, ${user}.` : `${greeting}.`}
     </h1>
   );
