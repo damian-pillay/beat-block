@@ -7,6 +7,7 @@ import TrebleClefIcon from "./treble-clef.svg";
 import DrumIcon from "./drums.svg";
 import MusicIcon from "./music.svg";
 import SliderIcon from "./sliders.svg";
+import DefaultProfileIcon from "./default-profile-icon.svg";
 
 export {
   BeatblockLogo,
@@ -18,4 +19,5 @@ export {
   DrumIcon,
   MusicIcon,
   SliderIcon,
+  DefaultProfileIcon
 };
