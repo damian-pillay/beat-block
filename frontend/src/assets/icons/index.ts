@@ -1,13 +1,13 @@
 import BeatblockLogo from "./BEATBLOCK.svg";
 import BeatblockLogoSmall from "./beatblock-icon-only.svg";
 import MenuIcon from "./menu.svg";
-import UploadIcon from "./upload.svg";
 import DefaultAudioImage from "./default-audio-image.svg";
 import TrebleClefIcon from "./treble-clef.svg";
 import DrumIcon from "./drums.svg";
 import MusicIcon from "./music.svg";
 import SliderIcon from "./sliders.svg";
 import DefaultProfileIcon from "./default-profile-icon.svg";
+import UploadIcon from "./upload-icon.svg"
 
 export {
   BeatblockLogo,
