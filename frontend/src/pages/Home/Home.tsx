@@ -4,14 +4,15 @@ import Navbar from "../../components/common/NavBar/Navbar";
 import ProjectViewport from "./ProjectViewport";
 import ScreenTexture from "../../components/layout/ScreenTexture";
 import { useProjectStore } from "../../store/useProjectStore";
+import UploadModal from "../../components/common/UploadModal";
 
 function Home() {
-  const content = useProjectStore((state) => state.content)
-  const fetchContent = useProjectStore((state) => state.fetchContent)
+  const content = useProjectStore((state) => state.content);
+  const fetchContent = useProjectStore((state) => state.fetchContent);
 
   useEffect(() => {
-    fetchContent()
-  }, [fetchContent])
+    fetchContent();
+  }, [fetchContent]);
 
   return (
     <>
