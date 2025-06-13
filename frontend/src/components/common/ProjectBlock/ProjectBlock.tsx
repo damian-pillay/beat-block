@@ -3,7 +3,16 @@ import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";
 
-export default function ProjectBlock({ project }: { project: any }) {
+type Project = {
+  name: string;
+  description: string;
+  keySignature: string;
+  bpm: number;
+  genre: string;
+  daw: string;
+};
+
+export default function ProjectBlock({ project }: { project: Project }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
