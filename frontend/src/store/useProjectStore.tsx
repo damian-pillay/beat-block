@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface ProjectStore {
-  content: any;
+  content: unknown;
   fetchContent: () => Promise<void>;
 }
 
