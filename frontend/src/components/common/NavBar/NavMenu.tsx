@@ -36,7 +36,7 @@ export default function NavMenu() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed top-6 left-6 shadow-lg rounded-lg z-49 bg-[#272626] w-50 origin-top-left pb-5"
+            className="fixed top-6 left-6 shadow-lg rounded-lg z-35 bg-[#272626] w-50 origin-top-left pb-5"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
