@@ -1,4 +1,9 @@
-import { GridTexture, LineTexture, ArrowTexture } from "../../assets/textures";
+import {
+  GridTexture,
+  LineTexture,
+  ArrowTexture,
+  HalfGridTexture,
+} from "../../assets/textures";
 
 export default function ScreenTexture() {
   return (
@@ -20,14 +25,12 @@ export default function ScreenTexture() {
       />
 
       <img
-        src={GridTexture}
+        src={HalfGridTexture}
         alt="Noise Texture"
         className="
           absolute
           top-[260px]
-          right-[-20vw] 
-          sm:right-[-80px] 
-          md:right-[-110px] 
+          right-0
           w-40 
           md:w-60 
           pointer-events-none 
@@ -59,7 +62,7 @@ export default function ScreenTexture() {
         alt="Line Texture"
         className="
           absolute 
-          top-[800px]
+          bottom-[200px]
           left-1/2
           transform 
           -translate-x-1/2
