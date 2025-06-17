@@ -42,7 +42,7 @@ export default function ScreenTexture() {
         alt="Arrow Texture"
         className="
           absolute 
-          top-[270px]
+          top-[290px]
           left-[8vw] 
           md:w-20 
           sm:w-15 
