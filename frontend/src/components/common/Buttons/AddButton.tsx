@@ -45,7 +45,7 @@ export default function AddButton() {
           strokeWidth="1.8"
           strokeLinecap="round"
           animate={{ rotate: isModalOpen ? 45 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, ease: "circInOut" }}
         >
           <line x1="5" y1="12" x2="19" y2="12" />
           <line x1="12" y1="5" x2="12" y2="19" />
