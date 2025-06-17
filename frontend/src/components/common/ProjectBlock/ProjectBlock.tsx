@@ -14,7 +14,7 @@ type Project = {
 
 export default function ProjectBlock({ project }: { project: Project }) {
   return (
-    <motion.div
+    <motion.button
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.01, ease: "easeIn", type: "spring" }}
@@ -41,6 +41,6 @@ export default function ProjectBlock({ project }: { project: Project }) {
           daw={project.daw}
         />
       </div>
-    </motion.div>
+    </motion.button>
   );
 }
