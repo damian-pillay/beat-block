@@ -2,15 +2,7 @@ import { DefaultAudioImage } from "../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";
-
-type Project = {
-  name: string;
-  description: string;
-  keySignature: string;
-  bpm: number;
-  genre: string;
-  daw: string;
-};
+import type { Project } from "../../../types/project";
 
 export default function ProjectBlock({ project }: { project: Project }) {
   return (
