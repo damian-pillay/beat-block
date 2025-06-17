@@ -4,7 +4,7 @@ import Navbar from "../../components/common/NavBar/Navbar";
 import ProjectViewport from "./ProjectViewport";
 import ScreenTexture from "../../components/layout/ScreenTexture";
 import { useProjectStore } from "../../store/useProjectStore";
-import UploadModal from "../../components/common/UploadModal";
+import type { Project } from "../../types/project";
 
 function Home() {
   const content = useProjectStore((state) => state.content);
@@ -20,7 +20,7 @@ function Home() {
         <ScreenTexture />
         <Navbar />
         <Header />
-        <ProjectViewport content={content} />
+        <ProjectViewport content={content as { projects: Project }} />
       </div>
     </>
   );
