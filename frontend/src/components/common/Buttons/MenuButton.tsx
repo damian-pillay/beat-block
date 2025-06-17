@@ -61,7 +61,7 @@ export default function MenuButton({
   return (
     <button
       onClick={toggleMenu}
-      className="relative flex flex-col justify-self-center gap-2 cursor-pointer stroke-white z-50"
+      className="relative flex flex-col justify-self-center gap-2 cursor-pointer stroke-white z-36"
     >
       <svg
         className="md:w-6.5 md:h-6.5 w-5.5 h-5.5"

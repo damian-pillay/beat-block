@@ -2,10 +2,11 @@ import { DefaultAudioImage } from "../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";
+import type { Project } from "../../../types/project";
 
-export default function ProjectBlock({ project }: { project: any }) {
+export default function ProjectBlock({ project }: { project: Project }) {
   return (
-    <motion.div
+    <motion.button
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.01, ease: "easeIn", type: "spring" }}
@@ -32,6 +33,6 @@ export default function ProjectBlock({ project }: { project: any }) {
           daw={project.daw}
         />
       </div>
-    </motion.div>
+    </motion.button>
   );
 }
