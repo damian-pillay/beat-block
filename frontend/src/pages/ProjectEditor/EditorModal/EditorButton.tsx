@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEditorStore } from "../../../store/useEditorStore";
+import { useEditorStore } from "../../../stores/useEditorStore";
 
 interface EditorButtonProps {
   text: string;

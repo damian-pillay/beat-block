@@ -1,6 +1,6 @@
 import FilesAndInformation from "../EditorModalStates/FilesAndInformation/FilesAndInformation";
 import EditorButton from "./EditorButton";
-import { useEditorStore } from "../../../store/useEditorStore";
+import { useEditorStore } from "../../../stores/useEditorStore";
 import Metadata from "../EditorModalStates/MetaData/Metadata";
 
 export default function EditorContent() {
