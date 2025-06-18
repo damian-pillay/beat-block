@@ -1,6 +1,7 @@
-import { useModalStore } from "../../../store/useModalStore";
+import { useModalStore } from "../../../stores/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { UploadIcon } from "../../../assets/icons";
+import { Link } from "@tanstack/react-router";
 
 export default function UploadModal() {
   const isOpen = useModalStore((state) => state.isOpen);
@@ -53,24 +54,26 @@ export default function UploadModal() {
                 className=""
               >
                 Drop project files here, or{" "}
-                <motion.a
-                  style={{ color: "#60a5fa" }}
-                  whileHover={{
-                    color: "#93c5fd",
-                    scale: 1.03,
-                    transition: {
-                      duration: 0.1,
-                      ease: "easeInOut",
-                    },
-                  }}
-                  whileTap={{
-                    color: "#848484",
-                    transition: { duration: 0.05, ease: "backOut" },
-                  }}
-                  className="rounded-sm select-none cursor-pointer"
-                >
-                  browse files
-                </motion.a>
+                <Link to="/create">
+                  <motion.span
+                    style={{ color: "#60a5fa" }}
+                    whileHover={{
+                      color: "#93c5fd",
+                      scale: 1.03,
+                      transition: {
+                        duration: 0.1,
+                        ease: "easeInOut",
+                      },
+                    }}
+                    whileTap={{
+                      color: "#848484",
+                      transition: { duration: 0.05, ease: "backOut" },
+                    }}
+                    className="rounded-sm select-none cursor-pointer"
+                  >
+                    browse files
+                  </motion.span>
+                </Link>
               </motion.p>
               <motion.img
                 className="object-cover h-20 w-25 drag-none"
