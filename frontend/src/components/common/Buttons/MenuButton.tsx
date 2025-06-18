@@ -19,7 +19,7 @@ export default function MenuButton({
   };
 
   const path3Variants = {
-    open: { opacity: 0 },
+    open: { opacity: 0, d: "M0 12L24 12" },
     closed: { opacity: 1, d: "M0 12L24 12" },
   };
 
@@ -56,7 +56,18 @@ export default function MenuButton({
         transition: { duration: 0.2 },
       });
     }
-  }, [isOpen]);
+  }, [
+    isOpen,
+    path1Controls,
+    path1Variants.closed,
+    path1Variants.open,
+    path2Controls,
+    path2Variants.closed,
+    path2Variants.open,
+    path3Controls,
+    path3Variants.closed,
+    path3Variants.open,
+  ]);
 
   return (
     <button
@@ -71,9 +82,21 @@ export default function MenuButton({
         strokeWidth="2"
         strokeLinecap="round"
       >
-        <motion.path {...path1Variants.closed} animate={path1Controls} />
-        <motion.path {...path3Variants.closed} animate={path3Controls} />
-        <motion.path {...path2Variants.closed} animate={path2Controls} />
+        <motion.path
+          variants={path1Variants}
+          initial="closed"
+          animate={path1Controls}
+        />
+        <motion.path
+          variants={path3Variants}
+          initial="closed"
+          animate={path3Controls}
+        />
+        <motion.path
+          variants={path2Variants}
+          initial="closed"
+          animate={path2Controls}
+        />
       </svg>
     </button>
   );
