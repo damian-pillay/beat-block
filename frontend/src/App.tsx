@@ -1,7 +1,8 @@
 import Home from "./pages/Home/Home";
+import ProjectEditor from "./pages/ProjectEditor/ProjectEditor";
 
 function App() {
-  return <Home />;
+  return <ProjectEditor />;
 }
 
 export default App;
