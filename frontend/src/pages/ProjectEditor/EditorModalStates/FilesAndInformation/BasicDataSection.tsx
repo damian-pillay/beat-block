@@ -28,6 +28,7 @@ export default function BasicDataSection() {
           title="title"
           placeholder="Give your track a name."
           charLimit={50}
+          lineHeight={1}
         />
         <TextInput
           title="description"

@@ -34,11 +34,12 @@ export default function TextInput({
         </h4>
       </div>
       <textarea
+        style={{ height: `${boxHeight}rem` }}
         className={`
           border border-white/50 focus:border-white
           focus:outline-none
           transition-colors duration-300 
-          rounded-md p-2 resize-none h-[${boxHeight}rem]
+          rounded-md p-2 resize-none
         `}
         placeholder={placeholder}
         value={value}
