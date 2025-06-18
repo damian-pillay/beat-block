@@ -22,7 +22,7 @@ export default function BasicDataSection() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
         transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col border border-amber-600 w-full justify-between"
+        className="flex flex-col w-full justify-between"
       >
         <TextInput
           title="title"
@@ -33,6 +33,7 @@ export default function BasicDataSection() {
           title="description"
           placeholder="Share the story, vibe or inspiration behind your track."
           charLimit={100}
+          lineHeight={2}
         />
       </motion.section>
     </motion.section>

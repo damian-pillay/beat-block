@@ -7,9 +7,9 @@ export default function FileUploadSection() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
-      className="flex flex-col gap-2 w-full h-full border drag-none"
+      className="flex flex-col gap-2 w-full h-full drag-none"
     >
-      <h4 className="border font-bold">FILES FOR UPLOAD</h4>
+      <h4 className="font-bold">FILES FOR UPLOAD</h4>
       <motion.section
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
