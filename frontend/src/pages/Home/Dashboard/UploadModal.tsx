@@ -1,6 +1,6 @@
-import { useModalStore } from "../../store/useModalStore";
+import { useModalStore } from "../../../store/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { UploadIcon } from "../../assets/icons";
+import { UploadIcon } from "../../../assets/icons";
 
 export default function UploadModal() {
   const isOpen = useModalStore((state) => state.isOpen);

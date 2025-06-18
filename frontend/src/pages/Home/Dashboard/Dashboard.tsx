@@ -1,10 +1,10 @@
-import ActionButton from "../../../components/common/Buttons/ActionButton";
+import ActionButton from "./SearchActionButton";
 import SearchBar from "./SearchBar";
 import GreetingMessage from "./GreetingMessage";
-import AddButton from "../../../components/common/Buttons/AddButton";
-import UploadModal from "../../../components/common/UploadModal";
+import AddButton from "./AddButton";
+import UploadModal from "./UploadModal";
 
-export default function Header() {
+export default function Dashboard() {
   return (
     <div className="flex flex-col gap-4 relative pb-5 pt-6">
       <GreetingMessage userFirstName="Damian" />

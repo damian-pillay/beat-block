@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import EditorProgressTitle from "./EditorProgressTitle";
-import EditorContent from "./EditorModalStates/EditorContent";
+import EditorContent from "./EditorContent";
 
 export default function EditorModal() {
   return (

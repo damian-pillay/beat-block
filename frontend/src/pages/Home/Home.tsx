@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Header from "./Header/Header";
+import Dashboard from "./Dashboard/Dashboard";
 import Navbar from "../../components/common/NavBar/Navbar";
 import ProjectViewport from "./ProjectViewport";
 import ScreenTexture from "../../components/layout/ScreenTexture";
@@ -19,7 +19,7 @@ function Home() {
       <div className="relative h-screen w-screen overflow-hidden flex flex-col">
         <ScreenTexture />
         <Navbar />
-        <Header />
+        <Dashboard />
         <ProjectViewport content={content as { projects: Project }} />
       </div>
     </>

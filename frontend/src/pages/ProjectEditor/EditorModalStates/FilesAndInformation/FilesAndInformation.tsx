@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import FileUploadSection from "../FileUploadSection";
-import BasicDataSection from "../BasicDataSection";
+import FileUploadSection from "./FileUploadSection";
+import BasicDataSection from "./BasicDataSection";
 
 export default function FilesAndInformation() {
   return (

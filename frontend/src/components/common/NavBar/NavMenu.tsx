@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LineTexture } from "../../../assets/textures";
-import MenuButton from "../Buttons/MenuButton";
+import MenuButton from "./MenuButton";
 
 export default function NavMenu() {
   const [menuOpen, setMenuOpen] = useState(false);

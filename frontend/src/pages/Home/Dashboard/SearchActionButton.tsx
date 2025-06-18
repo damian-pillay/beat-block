@@ -1,4 +1,4 @@
-type ActionButtonProps = {
+type SearchActionButtonProps = {
   icon: string;
   ariaLabel: string;
   onClick?: () => void;
@@ -8,7 +8,7 @@ export default function ActionButton({
   icon,
   ariaLabel,
   onClick,
-}: ActionButtonProps) {
+}: SearchActionButtonProps) {
   return (
     <button
       className="bg-[#272626] text-white p-2 rounded-full aspect-square hover:bg-[#383737] transition focus:outline-none cursor-pointer select-none"
