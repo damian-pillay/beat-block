@@ -9,12 +9,16 @@ export default function ProjectBlock({ project }: { project: Project }) {
     <motion.button
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.01, ease: "easeIn", type: "spring" }}
       whileHover={{
         scale: 1.03,
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.7)",
+        transition: { duration: 0.4, ease: "easeIn", type: "spring" },
       }}
-      className="flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center active:bg-[#383737] transition cursor-pointer select-none"
+      whileTap={{
+        backgroundColor: "#383737",
+        transition: { duration: 0.03, ease: "easeOut" },
+      }}
+      className="flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
     >
       <img
         src={DefaultAudioImage}

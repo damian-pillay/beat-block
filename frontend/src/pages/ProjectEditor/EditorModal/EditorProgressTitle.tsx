@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useEditorStore } from "../../../stores/useEditorStore";
 
 export default function EditorProgressTitle() {
-  const { pageIndex } = useEditorStore();
+  const { pageIndex, setPageIndex } = useEditorStore();
 
   const colors: {
     files: Record<number, string>;
@@ -31,19 +31,20 @@ export default function EditorProgressTitle() {
     <motion.section
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
+      transition={{ delay: 0.3, duration: 0.4, ease: "easeIn" }}
     >
       <motion.h3
         transition={{ duration: 0.3 }}
         className="font-medium text-lg drag-none flex gap-3 items-center"
       >
-        <motion.span
+        <motion.button
+          type="button"
           animate={{ color: colors.files[pageIndex] }}
           transition={{ duration: 0.3 }}
+          onClick={() => setPageIndex(0)}
         >
           Files & Basic Information
-        </motion.span>
+        </motion.button>
 
         <motion.span
           animate={{ color: colors.files[pageIndex] }}
@@ -52,12 +53,14 @@ export default function EditorProgressTitle() {
           <ChevronRight />
         </motion.span>
 
-        <motion.span
+        <motion.button
+          type="button"
           animate={{ color: colors.metadata[pageIndex] }}
           transition={{ duration: 0.3 }}
+          onClick={() => setPageIndex(1)}
         >
           Metadata
-        </motion.span>
+        </motion.button>
 
         <motion.span
           animate={{ color: colors.metadata[pageIndex] }}
@@ -66,12 +69,14 @@ export default function EditorProgressTitle() {
           <ChevronRight />
         </motion.span>
 
-        <motion.span
+        <motion.button
+          type="button"
           animate={{ color: colors.publish[pageIndex] }}
           transition={{ duration: 0.3 }}
+          onClick={() => setPageIndex(2)}
         >
           Publish
-        </motion.span>
+        </motion.button>
       </motion.h3>
     </motion.section>
   );

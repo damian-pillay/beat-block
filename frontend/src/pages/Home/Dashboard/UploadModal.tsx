@@ -1,13 +1,13 @@
 import { useModalStore } from "../../../stores/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { UploadIcon } from "../../../assets/icons";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export default function UploadModal() {
-  const isOpen = useModalStore((state) => state.isOpen);
+  const { isOpen, closeModal } = useModalStore();
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
@@ -69,6 +69,7 @@ export default function UploadModal() {
                       color: "#848484",
                       transition: { duration: 0.05, ease: "backOut" },
                     }}
+                    onClick={closeModal}
                     className="rounded-sm select-none cursor-pointer"
                   >
                     browse files
