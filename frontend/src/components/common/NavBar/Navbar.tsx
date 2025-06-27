@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   BeatblockLogo,
   BeatblockLogoSmall,
@@ -12,7 +13,10 @@ export default function Navbar() {
         <NavMenu />
       </section>
 
-      <section className="flex items-center justify-center h-full w-1/3 px-10 py-6">
+      <Link
+        className="flex items-center justify-center h-full w-1/3 px-10 py-6"
+        to={"/"}
+      >
         <img
           src={BeatblockLogo}
           alt="BEATBLOCK Logo"
@@ -23,7 +27,7 @@ export default function Navbar() {
           alt="BEATBLOCK Logo Small"
           className="block sm:hidden h-12 drag-none"
         />
-      </section>
+      </Link>
 
       <section className="flex justify-end items-center h-full w-1/3 md:px-8 px-6">
         <button

@@ -2,9 +2,11 @@ import { useModalStore } from "../../../stores/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { UploadIcon } from "../../../assets/icons";
 import { Link } from "react-router-dom";
+import { useEditorStore } from "../../../stores/useEditorStore";
 
 export default function UploadModal() {
   const { isOpen, closeModal } = useModalStore();
+  const { resetPage } = useEditorStore();
 
   return (
     <AnimatePresence mode="wait">
@@ -54,7 +56,7 @@ export default function UploadModal() {
                 className=""
               >
                 Drop project files here, or{" "}
-                <Link to="/create">
+                <Link to="/create" onClick={resetPage}>
                   <motion.span
                     style={{ color: "#60a5fa" }}
                     whileHover={{
