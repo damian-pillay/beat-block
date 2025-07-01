@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { LineTexture } from "../../../assets/textures";
+import { LineTexture } from "../../../../assets/textures";
 import MenuButton from "./MenuButton";
 
 export default function NavMenu() {

@@ -1,6 +1,6 @@
 import FilesAndInformation from "../EditorModalStates/FilesAndInformation/FilesAndInformation";
 import EditorButton from "./EditorButton";
-import { useEditorStore } from "../../../stores/useEditorStore";
+import { useEditorStore } from "../../services/useEditorStore";
 import Metadata from "../EditorModalStates/MetaData/Metadata";
 import { AnimatePresence, motion } from "framer-motion";
 

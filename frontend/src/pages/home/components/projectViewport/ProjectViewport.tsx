@@ -1,5 +1,5 @@
-import ProjectBlock from "../../components/common/ProjectBlock/ProjectBlock";
-import type { Project } from "../../types/project";
+import ProjectBlock from "../../../common/components/projectBlock/ProjectBlock";
+import type { Project } from "../../../common/types/project";
 
 type ProjectViewportProps = {
   content: {

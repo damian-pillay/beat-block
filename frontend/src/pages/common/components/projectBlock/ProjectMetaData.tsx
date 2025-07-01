@@ -3,7 +3,7 @@ import {
   DrumIcon,
   MusicIcon,
   SliderIcon,
-} from "../../../assets/icons";
+} from "../../../../assets/icons";
 import IconLabel from "./IconLabel";
 
 export default function ProjectMetaData({

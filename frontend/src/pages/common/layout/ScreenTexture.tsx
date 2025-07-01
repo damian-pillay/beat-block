@@ -3,7 +3,7 @@ import {
   LineTexture,
   ArrowTexture,
   HalfGridTexture,
-} from "../../assets/textures";
+} from "../../../assets/textures";
 
 export default function ScreenTexture() {
   return (

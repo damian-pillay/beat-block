@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import Dashboard from "./Dashboard/Dashboard";
-import Navbar from "../../components/common/NavBar/Navbar";
-import ProjectViewport from "./ProjectViewport";
-import ScreenTexture from "../../components/layout/ScreenTexture";
-import { useProjectStore } from "../../stores/useProjectStore";
-import type { Project } from "../../types/project";
+import Dashboard from "../components/dashboard/Dashboard";
+import Navbar from "../../common/components/navBar/Navbar";
+import ProjectViewport from "../components/projectViewport/ProjectViewport";
+import ScreenTexture from "../../common/layout/ScreenTexture";
+import { useProjectStore } from "../services/useProjectStore";
+import type { Project } from "../../common/types/project";
 import { motion } from "framer-motion";
 
 function Home() {

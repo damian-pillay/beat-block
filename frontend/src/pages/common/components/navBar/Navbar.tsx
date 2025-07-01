@@ -3,7 +3,7 @@ import {
   BeatblockLogo,
   BeatblockLogoSmall,
   DefaultProfileIcon,
-} from "../../../assets/icons";
+} from "../../../../assets/icons";
 import NavMenu from "./NavMenu";
 
 export default function Navbar() {

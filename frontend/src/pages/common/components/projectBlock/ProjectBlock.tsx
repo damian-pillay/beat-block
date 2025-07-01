@@ -1,8 +1,8 @@
-import { DefaultAudioImage } from "../../../assets/icons";
+import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";
-import type { Project } from "../../../types/project";
+import type { Project } from "../../types/project";
 
 export default function ProjectBlock({ project }: { project: Project }) {
   return (

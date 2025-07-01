@@ -1,6 +1,6 @@
-import Navbar from "../../components/common/NavBar/Navbar";
-import ScreenTexture from "../../components/layout/ScreenTexture";
-import EditorModal from "./EditorModal/EditorModal";
+import Navbar from "../../common/components/navBar/Navbar";
+import ScreenTexture from "../../common/layout/ScreenTexture";
+import EditorModal from "../components/EditorModal/EditorModal";
 
 function ProjectEditor() {
   return (

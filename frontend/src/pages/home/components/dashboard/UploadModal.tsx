@@ -1,8 +1,8 @@
-import { useModalStore } from "../../../stores/useModalStore";
+import { useModalStore } from "../../services/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { UploadIcon } from "../../../assets/icons";
+import { UploadIcon } from "../../../../assets/icons";
 import { Link } from "react-router-dom";
-import { useEditorStore } from "../../../stores/useEditorStore";
+import { useEditorStore } from "../../../projectEditor/services/useEditorStore";
 
 export default function UploadModal() {
   const { isOpen, closeModal } = useModalStore();

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useModalStore } from "../../../stores/useModalStore";
+import { useModalStore } from "../../services/useModalStore";
 
 export default function AddButton() {
   const isModalOpen = useModalStore((state) => state.isOpen);

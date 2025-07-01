@@ -1,5 +1,5 @@
 import Dropdown from "./Dropdown";
-import { features } from "../../../../helpers/audioFeaturesConfig";
+import { features } from "../../../utils/audioFeaturesConfig";
 import NumberInput from "./NumberInput";
 
 export default function AudioFeatures() {

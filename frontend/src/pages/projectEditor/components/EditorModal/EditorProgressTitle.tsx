@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEditorStore } from "../../../stores/useEditorStore";
+import { useEditorStore } from "../../services/useEditorStore";
 
 export default function EditorProgressTitle() {
   const { pageIndex, setPageIndex } = useEditorStore();

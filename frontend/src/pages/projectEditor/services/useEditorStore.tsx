@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { storage } from "../services/storage";
+import { storage } from "../../common/services/storage";
 
 interface Editor {
   // filepath: string;

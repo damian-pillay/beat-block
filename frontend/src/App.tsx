@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
-import Home from "./pages/Home/Home";
-import ProjectEditor from "./pages/ProjectEditor/ProjectEditor";
+import Home from "./pages/home/layout/Home";
+import ProjectEditor from "./pages/projectEditor/layout/ProjectEditor";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
