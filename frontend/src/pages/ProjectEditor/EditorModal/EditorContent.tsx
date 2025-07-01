@@ -37,7 +37,31 @@ export default function EditorContent() {
           )}
         </AnimatePresence>
       </div>
-      <EditorButton text="next" />
+      <AnimatePresence mode="wait">
+        {pageIndex === 2 ? (
+          <motion.div
+            key={"next"}
+            initial={{ opacity: 0, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={`flex w-full justify-center items-center gap-4`}
+          >
+            <EditorButton text={"publish"} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key={"publish"}
+            initial={{ opacity: 0, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={`flex w-full justify-end items-center gap-4`}
+          >
+            <EditorButton text={"next"} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

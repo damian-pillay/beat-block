@@ -12,7 +12,7 @@ export default function EditorButton({ text }: EditorButtonProps) {
     <motion.button
       type="button"
       onClick={nextPage}
-      className="p-4 bg-[#ff0000] rounded-md min-w-30 ml-auto h-13 cursor-pointer"
+      className="p-4 bg-[#ff0000] rounded-md min-w-30 h-13 cursor-pointer"
     >
       {text.toUpperCase()}
     </motion.button>
