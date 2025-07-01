@@ -5,7 +5,7 @@ import AudioFeatures from "./AudioFeatures";
 export default function Metadata() {
   return (
     <>
-      <motion.section className="flex flex-col w-full h-full border justify-between">
+      <motion.section className="flex flex-col w-full h-full justify-between">
         <AudioFeatures />
         <DawSelection />
       </motion.section>

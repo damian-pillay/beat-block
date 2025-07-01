@@ -1,22 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
-export default function Dropdown() {
+export default function Dropdown({
+  options,
+}: {
+  options?: string[] | number[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [option, setOption] = useState("Select Option");
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        event.target instanceof Node &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="relative inline-block text-left w-[70%]">
+    <div ref={dropdownRef} className="relative inline-block text-left w-[70%]">
       <button
         type="button"
         onClick={toggleDropdown}
         className="inline-flex justify-between items-center w-full px-4 py-2 bg-[#383737] text-white rounded-full shadow-md cursor-pointer hover:bg-[#4c4b4b] transition"
       >
-        Select Option
+        {option}
         <ChevronDown
-          className={`ml-2 w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`ml-2 w-4 h-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
         />
       </button>
 
@@ -27,17 +55,17 @@ export default function Dropdown() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg overflow-hidden"
+            className="absolute z-10 mt-2 w-full rounded-lg shadow-lg rounded-scrollbar max-h-48 overflow-y-auto"
           >
             <ul className="divide-y divide-[#4c4b4b]">
-              {["Lo-fi", "Trap", "House", "Pop"].map((genre) => (
+              {["-- none --", ...(options ?? [])].map((genre) => (
                 <li
                   key={genre}
                   onClick={() => {
-                    console.log("Selected:", genre);
+                    setOption(String(genre));
                     setIsOpen(false);
                   }}
-                  className="px-4 py-2  hover:bg-[#4c4b4b] cursor-pointer bg-[#383737]"
+                  className="px-4 py-2 hover:bg-[#4c4b4b] cursor-pointer bg-[#383737] text-white"
                 >
                   {genre}
                 </li>

@@ -6,6 +6,7 @@ export default function EditorModal() {
   return (
     <div className="h-full flex justify-center py-8">
       <motion.form
+        onSubmit={(e) => e.preventDefault()}
         initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: 1,
