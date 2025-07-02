@@ -1,13 +1,13 @@
 import ProjectBlock from "../../../common/components/projectBlock/ProjectBlock";
 import type { Project } from "../../../common/types/project";
 
-type ProjectViewportProps = {
+type CatalogProps = {
   content: {
     projects: Project;
-  };
+  } | null;
 };
 
-export default function ProjectViewport({ content }: ProjectViewportProps) {
+export default function Catalog({ content }: CatalogProps) {
   return (
     <>
       <div className=" overflow-auto relative w-full h-full z-11">

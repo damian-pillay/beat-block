@@ -1,19 +1,17 @@
 import { useEffect } from "react";
 import Dashboard from "../components/dashboard/Dashboard";
 import Navbar from "../../common/components/navBar/Navbar";
-import ProjectViewport from "../components/projectViewport/ProjectViewport";
+import Catalog from "../components/projectViewport/CatalogViewer";
 import ScreenTexture from "../../common/layout/ScreenTexture";
-import { useProjectStore } from "../services/useProjectStore";
-import type { Project } from "../../common/types/project";
+import { useCatalogStore } from "../services/useCatalogStore";
 import { motion } from "framer-motion";
 
 function Home() {
-  const content = useProjectStore((state) => state.content);
-  const fetchContent = useProjectStore((state) => state.fetchContent);
+  const { content: catalog, fetchContent: fetchCatalog } = useCatalogStore();
 
   useEffect(() => {
-    fetchContent();
-  }, [fetchContent]);
+    fetchCatalog();
+  }, [fetchCatalog]);
 
   return (
     <>
@@ -28,7 +26,7 @@ function Home() {
           className=" overflow-hidden flex flex-col"
         >
           <Dashboard />
-          <ProjectViewport content={content as { projects: Project }} />
+          <Catalog content={catalog} />
         </motion.div>
       </div>
     </>
