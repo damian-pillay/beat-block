@@ -1,10 +1,12 @@
-import { useState, type ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 
 type TextInputProps = {
   title: string;
   charLimit: number;
   placeholder?: string;
   lineHeight?: number;
+  value?: string;
+  setValue: (value: string) => void;
 };
 
 export default function TextInput({
@@ -12,9 +14,9 @@ export default function TextInput({
   charLimit,
   placeholder,
   lineHeight = 1,
+  value = "",
+  setValue,
 }: TextInputProps) {
-  const [value, setValue] = useState("");
-
   function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
     const newValue = e.target.value;
 

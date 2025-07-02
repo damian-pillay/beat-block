@@ -1,6 +1,7 @@
-import { useState, type ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 import { CheckCircle2, CircleAlert } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useProjectStore } from "../../../services/useProjectStore";
 
 type NumberInputProps = {
   min?: number;
@@ -15,8 +16,7 @@ export default function NumberInput({
   placeholder,
   step = 1,
 }: NumberInputProps) {
-  const [value, setValue] = useState<string>("");
-  const [isValid, setIsValid] = useState<boolean | null>(null);
+  const { project, updateProject } = useProjectStore();
 
   function isNaturalNumber(value: number): boolean {
     return Number.isInteger(value) && value >= 0;
@@ -28,21 +28,18 @@ export default function NumberInput({
     if (!isNaturalNumber(Number(newValue))) {
       return;
     } else if (newValue === "") {
-      setValue("");
-      setIsValid(null);
+      updateProject({ bpm: undefined });
     } else if (Number(newValue) < min || Number(newValue) > max) {
-      setValue(newValue);
-      setIsValid(false);
+      updateProject({ bpm: Number(newValue) });
     } else {
-      setIsValid(true);
-      setValue(newValue);
+      updateProject({ bpm: Number(newValue) });
     }
   }
 
   function renderValidationIcon() {
-    if (isValid === null) {
+    if (project.bpm === undefined) {
       return <CircleAlert />;
-    } else if (isValid) {
+    } else if (project.bpm >= min && project.bpm <= max) {
       return <CheckCircle2 className="text-[#4ade80]" />;
     }
     return <CircleAlert className="text-red-500" />;
@@ -66,13 +63,13 @@ export default function NumberInput({
           w-[50%]
         `}
         placeholder={placeholder}
-        value={value}
+        value={project.bpm ?? ""}
         onChange={handleChange}
       />
       <p className="flex items-center gap-2 text-white/70">
         <AnimatePresence mode="wait">
           <motion.span
-            key={isValid === null ? "default" : isValid ? "valid" : "invalid"}
+            key={project.bpm ?? "validation-icon"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

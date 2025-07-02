@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useProjectStore } from "../../../services/useProjectStore";
 import { Check } from "lucide-react";
 
 export default function DawSelection() {
-  const [selected, setSelected] = useState<string | null>(null);
+  const { project, updateProject } = useProjectStore();
 
   const toggleSelect = (daw: string) => {
-    setSelected(daw);
+    updateProject({ daw: daw });
   };
 
   const daws = [
@@ -29,13 +29,13 @@ export default function DawSelection() {
             onClick={() => toggleSelect(daw)}
             type="button"
             className={`relative transition flex items-center shadow-md gap-4 rounded-full w-60 p-2 cursor-pointer ${
-              selected === daw
+              project.daw === daw
                 ? "bg-green-600/20 text-white"
                 : "bg-[#383737] text-gray-200 hover:bg-[#4c4b4b]"
             }`}
           >
             <AnimatePresence>
-              {selected === daw && (
+              {project.daw === daw && (
                 <motion.span
                   key={"check"}
                   initial={{ opacity: 0, y: 10 }}

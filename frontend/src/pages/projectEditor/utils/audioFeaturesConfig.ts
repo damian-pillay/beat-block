@@ -12,6 +12,7 @@ export const features = [
   {
     name: "Key Signature",
     isDropdown: true,
+    value: "keySignature",
     options: [
       "C",
       "Cm",
@@ -42,6 +43,7 @@ export const features = [
   {
     name: "Genre",
     isDropdown: true,
+    value: "genre",
     options: [
       "Amapiano",
       "Afrobeats",

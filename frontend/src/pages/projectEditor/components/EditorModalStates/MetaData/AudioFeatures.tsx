@@ -10,7 +10,9 @@ export default function AudioFeatures() {
         {features.map((feature, index) => (
           <li key={index} className="flex justify-between items-center w-[80%]">
             <label className="w-[30%]">{feature.name}</label>
-            {feature.isDropdown && <Dropdown options={feature.options} />}
+            {feature.isDropdown && (
+              <Dropdown options={feature.options} value={feature.value} />
+            )}
             {feature.isNumberInput && <NumberInput {...feature.options} />}
           </li>
         ))}

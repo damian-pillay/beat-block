@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useProjectStore } from "../../../services/useProjectStore";
 
 export default function Dropdown({
   options,
+  value,
 }: {
   options?: string[] | number[];
+  value: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [option, setOption] = useState("Select Option");
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { project, updateProject } = useProjectStore();
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -40,7 +44,7 @@ export default function Dropdown({
         onClick={toggleDropdown}
         className="inline-flex justify-between items-center w-full px-4 py-2 bg-[#383737] text-white rounded-full shadow-md cursor-pointer hover:bg-[#4c4b4b] transition"
       >
-        {option}
+        {project[value as keyof typeof project] ?? "Select an option"}
         <ChevronDown
           className={`ml-2 w-4 h-4 transition-transform ${
             isOpen ? "rotate-180" : ""
@@ -62,7 +66,7 @@ export default function Dropdown({
                 <li
                   key={genre}
                   onClick={() => {
-                    setOption(String(genre));
+                    updateProject({ [value]: genre });
                     setIsOpen(false);
                   }}
                   className="px-4 py-2 hover:bg-[#4c4b4b] cursor-pointer bg-[#383737] text-white"
