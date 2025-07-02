@@ -1,11 +1,12 @@
 import { create } from "zustand";
+import type { Project } from "../../common/types/project";
 
-interface ProjectStore {
-  content: unknown;
+interface CatalogStore {
+  content: { projects: Project } | null;
   fetchContent: () => Promise<void>;
 }
 
-export const useProjectStore = create<ProjectStore>((set) => ({
+export const useCatalogStore = create<CatalogStore>((set) => ({
   content: null,
 
   fetchContent: async () => {
