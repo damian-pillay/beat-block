@@ -2,16 +2,6 @@ import { create } from "zustand";
 import { storage } from "../../common/services/storage";
 
 interface Editor {
-  // filepath: string;
-  // audiopath?: string;
-  // imagepath?: string;
-  // title: string;
-  // description?: string;
-  // key?: string;
-  // bpm?: number;
-  // genre?: string;
-  // daw: string;
-
   pageIndex: number;
   setPageIndex: (index: number) => void;
   nextPage: () => void;

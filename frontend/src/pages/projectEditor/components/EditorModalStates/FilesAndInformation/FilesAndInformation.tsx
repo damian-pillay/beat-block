@@ -1,15 +1,19 @@
-import { motion } from "framer-motion";
 import FileUploadSection from "./FileUploadSection";
 import BasicDataSection from "./BasicDataSection";
+import EditorButton from "../../EditorModal/EditorButton";
 
 export default function FilesAndInformation() {
   return (
-    <>
-      <motion.section className="flex flex-col gap-4 items-center w-full h-full drag-none">
-        <FileUploadSection />
-        <hr className="w-full h-[4px] flex-shrink-0 bg-white opacity-10 rounded-sm" />
-        <BasicDataSection />
-      </motion.section>
-    </>
+    <div className="flex flex-col justify-between gap-4 items-center h-full w-full drag-none">
+      <FileUploadSection />
+      <hr className="w-full h-[4px] flex-shrink-0 bg-white opacity-10 rounded-sm" />
+      <BasicDataSection />
+      <div
+        key={"next"}
+        className={`flex w-full justify-end items-center gap-4`}
+      >
+        <EditorButton />
+      </div>
+    </div>
   );
 }

@@ -5,6 +5,7 @@ import type { Project } from "../../common/types/project";
 interface ProjectStore {
   project: Partial<Project>;
   updateProject: (updates: Partial<Project>) => void;
+  resetProject: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>()(
@@ -23,6 +24,10 @@ export const useProjectStore = create<ProjectStore>()(
               .replace("Z", ""),
           },
         }));
+      },
+
+      resetProject: () => {
+        set({ project: {} });
       },
     }),
     {

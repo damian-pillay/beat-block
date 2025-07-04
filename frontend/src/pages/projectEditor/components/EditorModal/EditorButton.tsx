@@ -1,11 +1,7 @@
 import { motion } from "framer-motion";
 import { useEditorStore } from "../../services/useEditorStore";
 
-interface EditorButtonProps {
-  text: string;
-}
-
-export default function EditorButton({ text }: EditorButtonProps) {
+export default function EditorButton() {
   const { nextPage } = useEditorStore();
 
   return (
@@ -14,7 +10,7 @@ export default function EditorButton({ text }: EditorButtonProps) {
       onClick={nextPage}
       className="p-4 bg-[#ff0000] rounded-md min-w-30 h-13 cursor-pointer"
     >
-      {text.toUpperCase()}
+      NEXT
     </motion.button>
   );
 }

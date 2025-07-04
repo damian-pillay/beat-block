@@ -31,7 +31,7 @@ export default function EditorProgressTitle() {
     <motion.section
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, duration: 0.4, ease: "easeIn" }}
+      transition={{ delay: 0.3, duration: 0.2, ease: "easeIn" }}
     >
       <motion.h3
         transition={{ duration: 0.3 }}
