@@ -2,9 +2,9 @@ import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { motion } from "framer-motion";
-import type { Project } from "../../types/project";
+import type { project } from "../../types/project";
 
-export default function ProjectBlock({ project }: { project: Project }) {
+export default function ProjectBlock({ project }: { project: project }) {
   return (
     <motion.button
       initial={{ opacity: 0, y: 20 }}

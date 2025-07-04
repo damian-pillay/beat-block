@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useProjectStore } from "../../../services/useProjectStore";
+import type { ProjectCreateRequest } from "../../../../common/types/projectCreateRequest";
 
 export default function Dropdown({
   options,
@@ -44,7 +45,16 @@ export default function Dropdown({
         onClick={toggleDropdown}
         className="inline-flex justify-between items-center w-full px-4 py-2 bg-[#383737] text-white rounded-full shadow-md cursor-pointer hover:bg-[#4c4b4b] transition"
       >
-        {project[value as keyof typeof project] ?? "Select an option"}
+        {(() => {
+          const fieldValue = project[value as keyof ProjectCreateRequest];
+          if (
+            typeof fieldValue === "string" ||
+            typeof fieldValue === "number"
+          ) {
+            return fieldValue;
+          }
+          return "Select an option";
+        })()}
         <ChevronDown
           className={`ml-2 w-4 h-4 transition-transform ${
             isOpen ? "rotate-180" : ""

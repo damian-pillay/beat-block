@@ -1,37 +1,26 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { Project } from "../../common/types/project";
+import type { ProjectCreateRequest } from "../../common/types/projectCreateRequest";
 
 interface ProjectStore {
-  project: Partial<Project>;
-  updateProject: (updates: Partial<Project>) => void;
+  project: ProjectCreateRequest;
+  updateProject: (updates: ProjectCreateRequest) => void;
   resetProject: () => void;
 }
 
-export const useProjectStore = create<ProjectStore>()(
-  persist(
-    (set) => ({
-      project: {},
+export const useProjectStore = create<ProjectStore>()((set) => ({
+  project: {},
 
-      updateProject: (updates) => {
-        set((state) => ({
-          project: {
-            ...state.project,
-            ...updates,
-            updatedAt: new Date()
-              .toISOString()
-              .replace("T", " ")
-              .replace("Z", ""),
-          },
-        }));
+  updateProject: (updates) => {
+    set((state) => ({
+      project: {
+        ...state.project,
+        ...updates,
+        updatedAt: new Date().toISOString().replace("T", " ").replace("Z", ""),
       },
+    }));
+  },
 
-      resetProject: () => {
-        set({ project: {} });
-      },
-    }),
-    {
-      name: "beatblock-project-storage",
-    }
-  )
-);
+  resetProject: () => {
+    set({ project: {} });
+  },
+}));

@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import type { Project } from "../../common/types/project";
+import type { project } from "../../common/types/project";
 
 interface CatalogStore {
-  content: { projects: Project } | null;
+  content: { projects: project } | null;
   fetchContent: () => Promise<void>;
 }
 

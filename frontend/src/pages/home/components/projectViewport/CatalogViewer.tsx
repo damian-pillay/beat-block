@@ -1,9 +1,9 @@
 import ProjectBlock from "../../../common/components/projectBlock/ProjectBlock";
-import type { Project } from "../../../common/types/project";
+import type { project } from "../../../common/types/project";
 
 type CatalogProps = {
   content: {
-    projects: Project;
+    projects: project;
   } | null;
 };
 
@@ -19,7 +19,7 @@ export default function Catalog({ content }: CatalogProps) {
         ></div>
         <div className="relative grid grid-cols-2 [@media(max-width:1280px)]:grid-cols-1 items-start md:auto-rows-[12rem] auto-rows-[9.5rem] gap-3 max-w-[89rem] mx-auto h-full overflow-auto scrollbar-hide md:px-10 px-8 py-7 z-9">
           {Array.isArray(content?.projects) && content.projects.length > 0 ? (
-            content.projects.map((project: Project, index: number) => (
+            content.projects.map((project: project, index: number) => (
               <ProjectBlock key={project.id || index} project={project} />
             ))
           ) : (
