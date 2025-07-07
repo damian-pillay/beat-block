@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import TextInput from "./TextInput";
 import { useProjectStore } from "../../../services/useProjectStore";
+import FileDropZone from "./EditorDropZone";
 
 export default function BasicDataSection() {
   const { project, updateProject } = useProjectStore();
 
   return (
     <motion.section className="flex gap-6 w-full h-full drag-none">
-      <motion.section className="flex flex-col borders gap-10 justify-center items-center rounded-2xl aspect-square h-full bg-[#1c1b1b] border-2 border-dashed drag-none"></motion.section>
-      <motion.section className="flex flex-col w-full justify-between">
+      {/* <motion.section className="flex flex-col justify-center items-center rounded-2xl h-full bg-[#1c1b1b] gap-10 aspect-square border-2 border-dashed drag-none"></motion.section> */}
+      <FileDropZone field="image" />
+      <motion.section className="flex flex-col w-full h-full justify-between">
         <TextInput
           title="title"
           placeholder="Give your track a name."

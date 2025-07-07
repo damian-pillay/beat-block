@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { useProjectStore } from "../../../services/useProjectStore";
 
 export default function PublishButton() {
-  const { resetProject } = useProjectStore();
+  const { resetProject, publishProject } = useProjectStore();
   const navigate = useNavigate();
 
   function handleClick() {
+    publishProject();
     resetProject();
     navigate("/");
   }
