@@ -1,15 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useProjectStore } from "../../../services/useProjectStore";
+import useProjectPublish from "../../../hooks/useProjectPublish";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../../../common/utils/toastConfig";
 
 export default function PublishButton() {
-  const { resetProject, publishProject } = useProjectStore();
+  const { project, resetProject } = useProjectStore();
+  const { mutate: publishProject } = useProjectPublish();
   const navigate = useNavigate();
 
   function handleClick() {
-    publishProject();
-    resetProject();
     navigate("/");
+    publishProject(project, {
+      onSuccess: () => {
+        showSuccessToast(`Congrats! '${project.name}' has been published`);
+        resetProject();
+      },
+      onError: (error) => {
+        showErrorToast(`Failed to publish project: ${error.message}`);
+      },
+    });
   }
 
   return (

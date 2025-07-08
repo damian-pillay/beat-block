@@ -5,10 +5,9 @@ interface ProjectStore {
   project: ProjectCreateRequest;
   updateProject: (updates: ProjectCreateRequest) => void;
   resetProject: () => void;
-  publishProject: () => Promise<void>;
 }
 
-export const useProjectStore = create<ProjectStore>()((set, get) => ({
+export const useProjectStore = create<ProjectStore>()((set) => ({
   project: {},
 
   updateProject: (updates) => {
@@ -23,29 +22,5 @@ export const useProjectStore = create<ProjectStore>()((set, get) => ({
 
   resetProject: () => {
     set({ project: {} });
-  },
-
-  publishProject: async () => {
-    try {
-      const formData = new FormData();
-      const project = get().project;
-
-      for (const key in project) {
-        const value = project[key as keyof typeof project];
-        if (value instanceof File) {
-          formData.append(key, value);
-        } else if (value !== undefined && value !== null) {
-          formData.append(key, String(value));
-        }
-      }
-      const response = await fetch("http://localhost:8080/api/project", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Network response was not ok");
-    } catch (error) {
-      console.error("Failed to publish project:", error);
-    }
   },
 }));
