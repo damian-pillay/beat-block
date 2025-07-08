@@ -4,8 +4,10 @@ import { Trash2 } from "lucide-react";
 import { dropzones } from "../../../utils/dropzoneConfig";
 import { formatList, formatFileSize } from "../../../helpers/formatters";
 
+const image: string = "imageFile";
+
 type FileDropZoneProps = {
-  field: "file" | "audio" | "image";
+  field: "compressedFile" | "audioFile" | "imageFile";
 };
 
 export default function FileDropZone({ field }: FileDropZoneProps) {
@@ -30,7 +32,7 @@ export default function FileDropZone({ field }: FileDropZoneProps) {
       onDragOver={(e) => e.preventDefault()}
       onDragEnter={(e) => e.preventDefault()}
       className={`relative flex flex-col justify-center items-center rounded-2xl drag-none border-2 transition ${dropzoneStyle} ${
-        field == "image" ? " aspect-square gap-3 text-sm" : "h-22"
+        field == image ? " aspect-square gap-3 text-sm" : "h-22"
       }`}
     >
       <AnimatePresence mode="wait">
@@ -70,7 +72,7 @@ export default function FileDropZone({ field }: FileDropZoneProps) {
               {dropzones[field].title}
             </motion.h4>
             <p className="whitespace-pre-line text-center">
-              {field != "image"
+              {field != image
                 ? `Drag & drop, or browse ${formatList(
                     dropzones[field].mimeTypes
                   )}`

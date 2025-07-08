@@ -5,7 +5,7 @@ export type ProjectCreateRequest = {
   bpm?: number;
   genre?: string;
   daw?: string;
-  file?: File;
-  audio?: File;
-  image?: File;
+  compressedFile?: File;
+  audioFile?: File;
+  imageFile?: File;
 };

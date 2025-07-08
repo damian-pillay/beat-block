@@ -9,7 +9,7 @@ export default function BasicDataSection() {
   return (
     <motion.section className="flex gap-6 w-full h-full drag-none">
       {/* <motion.section className="flex flex-col justify-center items-center rounded-2xl h-full bg-[#1c1b1b] gap-10 aspect-square border-2 border-dashed drag-none"></motion.section> */}
-      <FileDropZone field="image" />
+      <FileDropZone field="imageFile" />
       <motion.section className="flex flex-col w-full h-full justify-between">
         <TextInput
           title="title"

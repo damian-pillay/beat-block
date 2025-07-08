@@ -8,18 +8,6 @@ interface ProjectStore {
   publishProject: () => Promise<void>;
 }
 
-const keyMap: Record<string, string> = {
-  name: "Name",
-  description: "Description",
-  keySignature: "KeySignature",
-  bpm: "Bpm",
-  genre: "Genre",
-  daw: "Daw",
-  file: "CompressedFile",
-  audio: "AudioFile",
-  image: "ImageFile",
-};
-
 export const useProjectStore = create<ProjectStore>()((set, get) => ({
   project: {},
 
@@ -43,14 +31,11 @@ export const useProjectStore = create<ProjectStore>()((set, get) => ({
       const project = get().project;
 
       for (const key in project) {
-        const backendKey = keyMap[key];
-        if (!backendKey) continue; // skip unknown keys
-
         const value = project[key as keyof typeof project];
         if (value instanceof File) {
-          formData.append(backendKey, value);
+          formData.append(key, value);
         } else if (value !== undefined && value !== null) {
-          formData.append(backendKey, String(value));
+          formData.append(key, String(value));
         }
       }
       const response = await fetch("http://localhost:8080/api/project", {
