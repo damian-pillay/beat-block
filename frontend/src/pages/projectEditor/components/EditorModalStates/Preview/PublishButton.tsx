@@ -2,12 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useProjectStore } from "../../../services/useProjectStore";
 import useProjectPublish from "../../../hooks/useProjectPublish";
-import {
-  showErrorToast,
-  showSuccessToast,
-} from "../../../../common/utils/toastConfig";
 import { toast } from "react-toastify";
 import { useCatalogStore } from "../../../../home/services/useCatalogStore";
+import { AxiosError } from "axios";
 
 export default function PublishButton() {
   const { project, resetProject } = useProjectStore();
@@ -27,7 +24,8 @@ export default function PublishButton() {
       pending: `Publishing '${project.name}'...`,
       success: `Congrats! '${project.name}' has been published`,
       error: {
-        render({ data }) {
+        render({ data }: { data: AxiosError }) {
+          console.log(data);
           return `Failed to publish: ${data?.message || "Unknown error"}`;
         },
       },
