@@ -1,6 +1,7 @@
 import FileUploadSection from "./FileUploadSection";
 import BasicDataSection from "./BasicDataSection";
 import EditorButton from "../../EditorModal/EditorButton";
+import { filesAndInfoSchema } from "../../../validation/projectSchema";
 
 export default function FilesAndInformation() {
   return (
@@ -12,7 +13,7 @@ export default function FilesAndInformation() {
         key={"next"}
         className={`flex w-full justify-end items-center gap-4`}
       >
-        <EditorButton />
+        <EditorButton validationSchema={filesAndInfoSchema} />
       </div>
     </div>
   );

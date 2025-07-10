@@ -6,21 +6,30 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../../common/utils/toastConfig";
+import { toast } from "react-toastify";
+import { useCatalogStore } from "../../../../home/services/useCatalogStore";
 
 export default function PublishButton() {
   const { project, resetProject } = useProjectStore();
-  const { mutate: publishProject } = useProjectPublish();
+  const { mutateAsync: publishProject } = useProjectPublish();
+  const { fetchContent } = useCatalogStore();
   const navigate = useNavigate();
 
   function handleClick() {
     navigate("/");
-    publishProject(project, {
-      onSuccess: () => {
-        showSuccessToast(`Congrats! '${project.name}' has been published`);
-        resetProject();
-      },
-      onError: (error) => {
-        showErrorToast(`Failed to publish project: ${error.message}`);
+
+    const publishPromise = publishProject(project).then(() => {
+      resetProject();
+      fetchContent();
+    });
+
+    toast.promise(publishPromise, {
+      pending: `Publishing '${project.name}'...`,
+      success: `Congrats! '${project.name}' has been published`,
+      error: {
+        render({ data }) {
+          return `Failed to publish: ${data?.message || "Unknown error"}`;
+        },
       },
     });
   }

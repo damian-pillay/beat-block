@@ -12,7 +12,7 @@ export default function BasicDataSection() {
       <FileDropZone field="imageFile" />
       <motion.section className="flex flex-col w-full h-full justify-between">
         <TextInput
-          title="title"
+          title="title *"
           placeholder="Give your track a name."
           charLimit={50}
           lineHeight={1}

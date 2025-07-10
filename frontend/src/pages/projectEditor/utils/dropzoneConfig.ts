@@ -1,17 +1,20 @@
 export const dropzones = {
   compressedFile: {
-    title: "Project Files",
-    mimeTypes: [".zip", ".rar"],
+    title: "Project Files *",
+    extensions: [".zip", ".rar"],
+    mimeTypes: ["application/zip", "application/x-zip-compressed"],
     description: undefined,
   },
   audioFile: {
     title: "Rendered Audio for Preview (Optional)",
-    mimeTypes: [".wav", ".mp3"],
+    extensions: [".wav", ".mp3"],
+    mimeTypes: ["audio/mpeg", "audio/wav"],
     description: undefined,
   },
   imageFile: {
     title: "Artwork",
-    mimeTypes: [".jpeg", ".jpg", ".png"],
+    extensions: [".jpeg", ".jpg", ".png"],
+    mimeTypes: ["image/jpeg", "image/png"],
     description: "1000 x 1000 px max",
   },
 };

@@ -1,6 +1,7 @@
 import DawSelection from "./DawSelection";
 import AudioFeatures from "./AudioFeatures";
 import EditorButton from "../../EditorModal/EditorButton";
+import { metadataSchema } from "../../../validation/projectSchema";
 
 export default function Metadata() {
   return (
@@ -12,7 +13,7 @@ export default function Metadata() {
           key={"next"}
           className={`flex w-full justify-end items-center gap-4`}
         >
-          <EditorButton />
+          <EditorButton validationSchema={metadataSchema} />
         </div>
       </section>
     </div>

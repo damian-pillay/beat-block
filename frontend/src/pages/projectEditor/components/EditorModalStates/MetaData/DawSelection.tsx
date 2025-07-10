@@ -20,7 +20,7 @@ export default function DawSelection() {
 
   return (
     <section className="flex flex-col gap-2 w-full">
-      <h4 className="font-bold">DIGITAL AUDIO WORKSTATION</h4>
+      <h4 className="font-bold">DIGITAL AUDIO WORKSTATION *</h4>
       <p>Please select the Digital Audio Workstation (DAW) of your project</p>
       <section className="flex flex-wrap justify-center gap-6 py-5 w-full">
         {daws.map((daw, index) => (
