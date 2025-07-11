@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import TextInput from "./TextInput";
 import { useProjectStore } from "../../../services/useProjectStore";
-import FileDropzone from "../../../../common/components/fileDropzone/FileDropzone";
+import FileDropzone from "../../../../common/components/fileDropzone/fileDropzone/FileDropzone";
 
 export default function BasicDataSection() {
   const { project, updateProject } = useProjectStore();

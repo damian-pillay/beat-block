@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { dropzoneConfig } from "../../../projectEditor/utils/dropzoneConfig";
-import useFileDrop from "../../hooks/useFileDrop";
-import { type DropzoneField } from "../../types/dropZoneField";
-import FilePreview from "./filePreview";
-import FilePlaceholder from "./filePlaceholder";
-import FileClearButton from "./fileClearButton";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
+import useFileDrop from "../../../hooks/useFileDrop";
+import { type DropzoneField } from "../../../types/dropzoneField";
+import FilePreview from "./FilePreview";
+import FilePlaceholder from "./FilePlaceholder";
+import FileClearButton from "./FileClearButton";
 
 type FileDropZoneProps = {
   field: DropzoneField;

@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useProjectStore } from "../../../projectEditor/services/useProjectStore";
-import { dropzoneConfig } from "../../../projectEditor/utils/dropzoneConfig";
-import type { DropzoneField } from "../../types/dropzoneField";
-import { showErrorToast } from "../../utils/toastConfig";
+import { useProjectStore } from "../../../../projectEditor/services/useProjectStore";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
+import type { DropzoneField } from "../../../types/dropzoneField";
+import { showErrorToast } from "../../../utils/toastConfig";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 

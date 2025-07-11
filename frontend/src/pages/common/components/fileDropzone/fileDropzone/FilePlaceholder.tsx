@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { dropzoneConfig } from "../../../projectEditor/utils/dropzoneConfig";
-import { type DropzoneField } from "../../types/dropZoneField";
-import { formatList } from "../../../projectEditor/helpers/formatters";
-import FileBrowseButton from "./fileBrowseButton";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
+import { type DropzoneField } from "../../../types/dropzoneField";
+import { formatList } from "../../../../projectEditor/helpers/formatters";
+import FileBrowseButton from "../_shared/FileBrowseButton";
 
 interface FilePlaceholderProps {
   field: DropzoneField;

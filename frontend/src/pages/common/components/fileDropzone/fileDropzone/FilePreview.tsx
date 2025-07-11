@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { formatFileSize } from "../../../projectEditor/helpers/formatters";
+import { formatFileSize } from "../../../../projectEditor/helpers/formatters";
 
 interface FilePreviewProps {
   title: string;

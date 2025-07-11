@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import ProjectUploadDropzone from "../../../common/components/fileDropzone/ProjectUploadDropzone";
+import ProjectUploadDropzone from "../../../common/components/fileDropzone/projectDropzone/ProjectUploadDropzone";
 
 export default function UploadModal({ isOpen }: { isOpen: boolean }) {
   return (

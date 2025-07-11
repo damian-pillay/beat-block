@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useProjectStore } from "../../projectEditor/services/useProjectStore";
-import { dropzoneConfig } from "../../projectEditor/utils/dropzoneConfig";
+import { dropzoneConfig } from "../utils/dropzoneConfig";
 import { showInfoToast } from "../utils/toastConfig";
 import { showErrorToast } from "../utils/toastConfig";
 import { type DropzoneField } from "../types/dropzoneField";

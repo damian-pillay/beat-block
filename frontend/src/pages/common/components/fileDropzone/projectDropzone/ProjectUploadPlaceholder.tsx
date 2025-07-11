@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { UploadIcon } from "../../../../assets/icons";
-import FileBrowseButton from "./fileBrowseButton";
+import { UploadIcon } from "../../../../../assets/icons";
+import FileBrowseButton from "../_shared/FileBrowseButton";
 
 export default function ProjectUploadPlaceholder() {
   return (

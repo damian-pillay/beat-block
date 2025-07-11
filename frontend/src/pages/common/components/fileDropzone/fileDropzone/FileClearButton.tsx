@@ -1,6 +1,6 @@
-import { useProjectStore } from "../../../projectEditor/services/useProjectStore";
-import type { DropzoneField } from "../../types/dropZoneField";
-import { dropzoneConfig } from "../../../projectEditor/utils/dropzoneConfig";
+import { useProjectStore } from "../../../../projectEditor/services/useProjectStore";
+import type { DropzoneField } from "../../../types/dropzoneField";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
 import { motion } from "framer-motion";
 
 interface DropzoneFieldProps {

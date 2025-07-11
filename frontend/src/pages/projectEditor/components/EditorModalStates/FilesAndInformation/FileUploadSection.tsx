@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import FileDropzone from "../../../../common/components/fileDropzone/FileDropzone";
+import FileDropzone from "../../../../common/components/fileDropzone/fileDropzone/FileDropzone";
 
 export default function FileUploadSection() {
   return (

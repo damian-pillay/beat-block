@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import useFileDrop from "../../hooks/useFileDrop";
+import useFileDrop from "../../../hooks/useFileDrop";
 import ProjectUploadPlaceholder from "./ProjectUploadPlaceholder";
 import { Check } from "lucide-react";
 
