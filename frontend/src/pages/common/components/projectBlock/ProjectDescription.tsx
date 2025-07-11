@@ -2,8 +2,8 @@ export default function ProjectDescription({
   name,
   description,
 }: {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
 }) {
   return (
     <section className="flex flex-col font-montserrat justify-between w-full flex-grow">

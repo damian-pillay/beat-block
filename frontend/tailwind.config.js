@@ -1,8 +1,5 @@
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./index.html",               
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
   theme: {
     extend: {
       fontFamily: {
@@ -11,9 +8,9 @@ module.exports = {
       fontSize: {
         "28px": "28px",
       },
-      colors: {
-        'beatblock-grey': '#848484',
-      },
+    },
+    colors: {
+      "beatblock-grey": "#848484",
     },
   },
 };

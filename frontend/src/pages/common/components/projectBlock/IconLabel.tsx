@@ -7,7 +7,7 @@ export default function IconLabel({
   alt,
 }: {
   icon: string;
-  text: string;
+  text?: string;
   alt: string;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
