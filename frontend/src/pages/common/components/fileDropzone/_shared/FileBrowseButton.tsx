@@ -71,6 +71,7 @@ export default function FileBrowseButton({
         type="file"
         className="hidden"
         onChange={handleFileChange}
+        accept={dropzoneConfig[field].extensions.join(", ")}
       />
     </>
   );
