@@ -29,9 +29,7 @@ export default function FilePlaceholder({ field }: FilePlaceholderProps) {
         {field === image && <br />}
         {formatList(config.extensions)}
       </p>
-      {config.description && (
-        <p className="opacity-30">{dropzoneConfig[field].description}</p>
-      )}
+      {config.description && <p className="opacity-30">{config.description}</p>}
     </>
   );
 }

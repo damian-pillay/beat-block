@@ -20,12 +20,14 @@ export default function FileDropzone({ field }: FileDropZoneProps) {
     >
       <AnimatePresence mode="wait">
         {file ? (
-          <FilePreview file={file} title={dropzoneConfig[field].title} />
+          <>
+            <FilePreview file={file} title={dropzoneConfig[field].title} />
+            <FileClearButton field={field} />
+          </>
         ) : (
           <FilePlaceholder field={field} />
         )}
       </AnimatePresence>
-      {file && <FileClearButton field={field} />}
     </motion.section>
   );
 }

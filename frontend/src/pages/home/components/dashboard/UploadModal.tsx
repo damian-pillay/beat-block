@@ -1,13 +1,7 @@
-import { useModalStore } from "../../services/useModalStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { UploadIcon } from "../../../../assets/icons";
-import { Link } from "react-router-dom";
-import { useEditorStore } from "../../../projectEditor/services/useEditorStore";
+import ProjectUploadDropzone from "../../../common/components/fileDropzone/ProjectUploadDropzone";
 
-export default function UploadModal() {
-  const { isOpen, closeModal } = useModalStore();
-  const { resetPage } = useEditorStore();
-
+export default function UploadModal({ isOpen }: { isOpen: boolean }) {
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -36,75 +30,7 @@ export default function UploadModal() {
             >
               <h3 className="font-black text-lg drag-none">Upload a project</h3>
             </motion.section>
-
-            <motion.section
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
-              className="flex flex-col gap-4 justify-center items-center rounded-2xl w-full h-full bg-[#1c1b1b] border-2 border-dashed drag-none"
-            >
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{
-                  delay: 0.5,
-                  duration: 0.2,
-                  ease: "easeIn",
-                }}
-                className=""
-              >
-                Drop project files here, or{" "}
-                <Link to="/create" onClick={resetPage}>
-                  <motion.span
-                    style={{ color: "#60a5fa" }}
-                    whileHover={{
-                      color: "#93c5fd",
-                      scale: 1.03,
-                      transition: {
-                        duration: 0.1,
-                        ease: "easeInOut",
-                      },
-                    }}
-                    whileTap={{
-                      color: "#848484",
-                      transition: { duration: 0.05, ease: "backOut" },
-                    }}
-                    onClick={closeModal}
-                    className="rounded-sm select-none cursor-pointer"
-                  >
-                    browse files
-                  </motion.span>
-                </Link>
-              </motion.p>
-              <motion.img
-                className="object-cover h-20 w-25 drag-none"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{
-                  delay: 0.5,
-                  duration: 0.2,
-                  ease: "easeIn",
-                }}
-                src={UploadIcon}
-                alt="Upload Icon"
-              />
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.5,
-                  duration: 0.2,
-                  ease: "easeIn",
-                }}
-                exit={{ opacity: 0, y: 10 }}
-                className=""
-              >
-                You can upload files in .zip formats only.
-              </motion.p>
-            </motion.section>
+            <ProjectUploadDropzone />
           </motion.div>
         </>
       )}

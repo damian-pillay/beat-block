@@ -3,14 +3,16 @@ import { useProjectStore } from "../../projectEditor/services/useProjectStore";
 import { dropzoneConfig } from "../../projectEditor/utils/dropzoneConfig";
 import { showInfoToast } from "../utils/toastConfig";
 import { showErrorToast } from "../utils/toastConfig";
+import { type DropzoneField } from "../types/dropzoneField";
+import { useNavigate } from "react-router-dom";
 
-type FileDropZoneProps = {
-  field: "compressedFile" | "audioFile" | "imageFile";
-};
-
-export default function useFileDrop(field: FileDropZoneProps["field"]) {
+export default function useFileDrop(
+  field: DropzoneField,
+  isProjectUpload: boolean = false
+) {
   const { updateProject, project } = useProjectStore();
   const [isDragOver, setIsDragOver] = useState(false);
+  const navigate = useNavigate();
 
   const file = project[field];
 
@@ -32,6 +34,10 @@ export default function useFileDrop(field: FileDropZoneProps["field"]) {
     }
 
     updateProject({ [field]: files[0] });
+
+    if (isProjectUpload) {
+      navigate("/create");
+    }
   }
 
   const dropHandlers = {

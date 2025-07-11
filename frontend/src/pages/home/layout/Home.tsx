@@ -5,13 +5,19 @@ import Catalog from "../components/projectViewport/CatalogViewer";
 import ScreenTexture from "../../common/layout/ScreenTexture";
 import { useCatalogStore } from "../services/useCatalogStore";
 import { motion } from "framer-motion";
+import { useProjectStore } from "../../projectEditor/services/useProjectStore";
 
 function Home() {
-  const { content: catalog, fetchContent: fetchCatalog } = useCatalogStore();
+  const { catalog, fetchCatalog } = useCatalogStore();
+  const { resetProject } = useProjectStore();
 
   useEffect(() => {
     fetchCatalog();
   }, [fetchCatalog]);
+
+  useEffect(() => {
+    resetProject();
+  }, [resetProject]);
 
   return (
     <>

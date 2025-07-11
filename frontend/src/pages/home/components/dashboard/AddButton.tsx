@@ -1,30 +1,22 @@
 import { motion } from "framer-motion";
-import { useModalStore } from "../../services/useModalStore";
 
-export default function AddButton() {
-  const isModalOpen = useModalStore((state) => state.isOpen);
-  const openModal = useModalStore((state) => state.openModal);
-  const closeModal = useModalStore((state) => state.closeModal);
+interface AddButtonProps {
+  isOpen: boolean;
+  handleToggle: () => void;
+}
 
-  function handleToggle() {
-    if (isModalOpen) {
-      closeModal();
-    } else {
-      openModal();
-    }
-  }
-
+export default function AddButton({ isOpen, handleToggle }: AddButtonProps) {
   return (
     <motion.button
       onClick={handleToggle}
-      animate={{ backgroundColor: isModalOpen ? "#272626" : "#ff0000" }}
+      animate={{ backgroundColor: isOpen ? "#272626" : "#ff0000" }}
       className="cursor-pointer stroke-white rounded-full h-full aspect-square flex z-50 items-center justify-center"
     >
       <motion.div
         className="flex justify-center items-center w-[80%] h-[80%]"
         animate={{ rotate: 0 }}
         whileHover={
-          isModalOpen
+          isOpen
             ? {
                 rotate: [-4, 4, -4, 4, -4],
                 transition: {
@@ -44,7 +36,7 @@ export default function AddButton() {
           stroke="white"
           strokeWidth="1.8"
           strokeLinecap="round"
-          animate={{ rotate: isModalOpen ? 45 : 0 }}
+          animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.3, ease: "circInOut" }}
         >
           <line x1="5" y1="12" x2="19" y2="12" />

@@ -1,17 +1,23 @@
 import { useRef } from "react";
 import { useProjectStore } from "../../../projectEditor/services/useProjectStore";
 import { dropzoneConfig } from "../../../projectEditor/utils/dropzoneConfig";
-import type { DropzoneField } from "../../types/dropZoneField";
+import type { DropzoneField } from "../../types/dropzoneField";
 import { showErrorToast } from "../../utils/toastConfig";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface FileBrowseButtonProps {
   field: DropzoneField;
+  isProjectUpload?: boolean;
 }
 
-export default function FileBrowseButton({ field }: FileBrowseButtonProps) {
+export default function FileBrowseButton({
+  field,
+  isProjectUpload = false,
+}: FileBrowseButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { updateProject } = useProjectStore();
+  const navigate = useNavigate();
 
   function handleBrowseClick() {
     inputRef.current?.click();
@@ -34,6 +40,10 @@ export default function FileBrowseButton({ field }: FileBrowseButtonProps) {
       return;
     }
     updateProject({ [field]: files[0] });
+
+    if (isProjectUpload) {
+      navigate("/create");
+    }
   }
 
   return (

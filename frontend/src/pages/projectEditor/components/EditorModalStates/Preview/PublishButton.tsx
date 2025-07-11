@@ -5,15 +5,18 @@ import useProjectPublish from "../../../hooks/useProjectPublish";
 import { toast } from "react-toastify";
 import { useCatalogStore } from "../../../../home/services/useCatalogStore";
 import { AxiosError } from "axios";
+import { useEditorStore } from "../../../services/useEditorStore";
 
 export default function PublishButton() {
   const { project, resetProject } = useProjectStore();
   const { mutateAsync: publishProject } = useProjectPublish();
-  const { fetchContent } = useCatalogStore();
+  const { setPageIndex } = useEditorStore();
+  const { fetchCatalog: fetchContent } = useCatalogStore();
   const navigate = useNavigate();
 
   function handleClick() {
     navigate("/");
+    setPageIndex(0);
 
     const publishPromise = publishProject(project).then(() => {
       resetProject();
