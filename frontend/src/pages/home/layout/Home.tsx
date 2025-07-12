@@ -14,7 +14,7 @@ function Home() {
   useEffect(() => {
     resetProject();
     resetPage();
-  }, []);
+  }, [resetPage, resetProject]);
 
   return (
     <>
