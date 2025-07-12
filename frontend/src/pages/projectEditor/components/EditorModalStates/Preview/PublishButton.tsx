@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useProjectStore } from "../../../services/useProjectStore";
 import useProjectPublish from "../../../hooks/useProjectPublish";
 import { toast } from "react-toastify";
-import { useCatalogStore } from "../../../../home/services/useCatalogStore";
 import { AxiosError } from "axios";
 import { useEditorStore } from "../../../services/useEditorStore";
 
@@ -11,7 +10,6 @@ export default function PublishButton() {
   const { project, resetProject } = useProjectStore();
   const { mutateAsync: publishProject } = useProjectPublish();
   const { setPageIndex } = useEditorStore();
-  const { fetchCatalog: fetchContent } = useCatalogStore();
   const navigate = useNavigate();
 
   function handleClick() {
@@ -20,7 +18,6 @@ export default function PublishButton() {
 
     const publishPromise = publishProject(project).then(() => {
       resetProject();
-      fetchContent();
     });
 
     toast.promise(publishPromise, {

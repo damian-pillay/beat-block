@@ -1,23 +1,20 @@
 import { useEffect } from "react";
 import Dashboard from "../components/dashboard/Dashboard";
 import Navbar from "../../common/components/navBar/Navbar";
-import Catalog from "../components/projectViewport/CatalogViewer";
+import Catalog from "../components/catalogViewer/CatalogViewer";
 import ScreenTexture from "../../common/layout/ScreenTexture";
-import { useCatalogStore } from "../services/useCatalogStore";
 import { motion } from "framer-motion";
 import { useProjectStore } from "../../projectEditor/services/useProjectStore";
+import { useEditorStore } from "../../projectEditor/services/useEditorStore";
 
 function Home() {
-  const { catalog, fetchCatalog } = useCatalogStore();
   const { resetProject } = useProjectStore();
-
-  useEffect(() => {
-    fetchCatalog();
-  }, [fetchCatalog]);
+  const { resetPage } = useEditorStore();
 
   useEffect(() => {
     resetProject();
-  }, [resetProject]);
+    resetPage();
+  }, []);
 
   return (
     <>
@@ -29,10 +26,10 @@ function Home() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           exit={{ opacity: 0 }}
-          className=" overflow-hidden flex flex-col"
+          className=" overflow-hidden flex flex-col h-[88%]"
         >
           <Dashboard />
-          <Catalog content={catalog} />
+          <Catalog />
         </motion.div>
       </div>
     </>
