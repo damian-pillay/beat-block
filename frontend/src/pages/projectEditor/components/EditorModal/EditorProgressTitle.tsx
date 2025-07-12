@@ -1,30 +1,30 @@
 import { ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEditorStore } from "../../services/useEditorStore";
+import { useProjectStore } from "../../services/useProjectStore";
+import { ValidationError } from "yup";
+import { showErrorToast } from "../../../common/utils/toastConfig";
+import { type ProjectCreateRequest } from "../../../common/types/projectCreateRequest";
+import { editorProgressConfig } from "../../utils/editorProgressConfig";
 
 export default function EditorProgressTitle() {
   const { pageIndex, setPageIndex } = useEditorStore();
+  const { project } = useProjectStore();
 
-  const colors: {
-    files: Record<number, string>;
-    metadata: Record<number, string>;
-    publish: Record<number, string>;
-  } = {
-    files: {
-      0: "#ffffff",
-      1: "#4ade80",
-      2: "#4ade80",
-    },
-    metadata: {
-      0: "#9ca3af",
-      1: "#ffffff",
-      2: "#4ade80",
-    },
-    publish: {
-      0: "#9ca3af",
-      1: "#9ca3af",
-      2: "#ffffff",
-    },
+  const handleClick = (
+    index: number,
+    validateFn: (project: ProjectCreateRequest) => void
+  ) => {
+    try {
+      validateFn(project);
+      setPageIndex(index);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        showErrorToast(error.message);
+      } else {
+        showErrorToast("An unexpected error occurred");
+      }
+    }
   };
 
   return (
@@ -37,46 +37,28 @@ export default function EditorProgressTitle() {
         transition={{ duration: 0.3 }}
         className="font-medium text-lg drag-none flex gap-3 items-center"
       >
-        <motion.button
-          type="button"
-          animate={{ color: colors.files[pageIndex] }}
-          transition={{ duration: 0.3 }}
-          onClick={() => setPageIndex(0)}
-        >
-          Files & Basic Information
-        </motion.button>
+        {editorProgressConfig.map((step, index) => (
+          <div className="flex items-center gap-3" key={step.title}>
+            <motion.button
+              type="button"
+              className="cursor-pointer"
+              animate={{ color: step.color[pageIndex] }}
+              transition={{ duration: 0.3 }}
+              onClick={() => handleClick(index, step.validate)}
+            >
+              {step.title}
+            </motion.button>
 
-        <motion.span
-          animate={{ color: colors.files[pageIndex] }}
-          transition={{ duration: 0.3 }}
-        >
-          <ChevronRight />
-        </motion.span>
-
-        <motion.button
-          type="button"
-          animate={{ color: colors.metadata[pageIndex] }}
-          transition={{ duration: 0.3 }}
-          onClick={() => setPageIndex(1)}
-        >
-          Metadata
-        </motion.button>
-
-        <motion.span
-          animate={{ color: colors.metadata[pageIndex] }}
-          transition={{ duration: 0.3 }}
-        >
-          <ChevronRight />
-        </motion.span>
-
-        <motion.button
-          type="button"
-          animate={{ color: colors.publish[pageIndex] }}
-          transition={{ duration: 0.3 }}
-          onClick={() => setPageIndex(2)}
-        >
-          Publish
-        </motion.button>
+            {index < editorProgressConfig.length - 1 && (
+              <motion.span
+                animate={{ color: step.color[pageIndex] }}
+                transition={{ duration: 0.3 }}
+              >
+                <ChevronRight />
+              </motion.span>
+            )}
+          </div>
+        ))}
       </motion.h3>
     </motion.section>
   );
