@@ -1,17 +1,18 @@
+using Azure.Storage.Blobs;
 using BeatBlock.Data;
+using BeatBlock.Middleware;
 using BeatBlock.Repositories;
 using BeatBlock.Services;
-using Microsoft.EntityFrameworkCore;
-using DotNetEnv;
-using Azure.Storage.Blobs;
-using Scalar.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
 using BeatBlock.Services.Validators;
+using DotNetEnv;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using OpenTelemetry.Logs;
-using BeatBlock.Middleware;
+using Scalar.AspNetCore;
 
 Env.Load();
 
@@ -52,6 +53,11 @@ builder.Services.AddOpenTelemetry()
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.MaxRequestBodySize = null;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 300 * 1024 * 1024;
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
