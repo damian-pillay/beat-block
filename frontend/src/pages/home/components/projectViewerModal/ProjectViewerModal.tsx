@@ -11,6 +11,7 @@ import ProjectMetaData from "../../../common/components/projectBlock/ProjectMeta
 import type { project } from "../../../common/types/project";
 import ProjectTimeData from "./ProjectTimeData";
 import { OrbTexture } from "../../../../assets/textures";
+import ProjectDownloadButton from "./ProjectDownloadButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
@@ -62,17 +63,13 @@ export default function ProjectViewerModal({
             />
           </section>
         </section>
-        <section className="h-1/3 w-full flex items-center justify-between">
+        <section className="h-1/3 w-full flex items-center justify-between md:gap-0 gap-10">
           <section className="flex flex-col w-1/3 gap-2">
-            <button className="p-3 rounded-full bg-[#383737] cursor-pointer">
-              Files
-            </button>
-            <button className="p-3 rounded-full bg-[#383737] cursor-pointer">
-              Audio
-            </button>
+            <ProjectDownloadButton title="Files" />
+            <ProjectDownloadButton title="Audio" />
           </section>
-          <img src={OrbTexture} className="h-32" />
-          <section className="flex justify-end gap-7">
+          <img src={OrbTexture} className="hidden md:block h-32" />
+          <section className="flex justify-end md:gap-7 gap-3">
             <button className="">
               <img
                 src={ProjectDeleteIcon}

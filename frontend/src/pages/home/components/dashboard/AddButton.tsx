@@ -10,7 +10,7 @@ export default function AddButton({ isOpen, handleToggle }: AddButtonProps) {
     <motion.button
       onClick={handleToggle}
       animate={{ backgroundColor: isOpen ? "#272626" : "#ff0000" }}
-      className="cursor-pointer stroke-white rounded-full h-full aspect-square flex z-50 items-center justify-center"
+      className="cursor-pointer stroke-white rounded-full h-full aspect-square flex z-49 items-center justify-center"
     >
       <motion.div
         className="flex justify-center items-center w-[80%] h-[80%]"
