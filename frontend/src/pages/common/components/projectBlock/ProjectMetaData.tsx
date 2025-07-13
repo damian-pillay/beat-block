@@ -18,7 +18,7 @@ export default function ProjectMetaData({
   daw?: string;
 }) {
   return (
-    <section className="flex justify-center items-end h-[100%] max-h-[100%] border-amber-600 md:pr-9">
+    <section className="flex justify-center items-end md:pr-9">
       <section className="flex justify-center w-full">
         <ul className="flex flex-col gap-2">
           <IconLabel

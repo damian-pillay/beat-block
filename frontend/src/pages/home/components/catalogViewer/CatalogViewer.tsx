@@ -4,7 +4,7 @@ import { showErrorToast } from "../../../common/utils/toastConfig";
 import useFetchCatalog from "../../hooks/useFetchCatalog";
 
 export default function Catalog() {
-  const { isPending, error, data: catalog } = useFetchCatalog()
+  const { isPending, error, data: catalog } = useFetchCatalog();
 
   return (
     <>
@@ -16,11 +16,10 @@ export default function Catalog() {
           }}
         ></div>
         <div className="relative grid grid-cols-2 [@media(max-width:1280px)]:grid-cols-1 items-start md:auto-rows-[12rem] auto-rows-[9.5rem] gap-3 max-w-[89rem] mx-auto h-full overflow-auto scrollbar-hide md:px-10 px-8 py-7 z-9 h-full">
-          {catalog && (
+          {catalog &&
             catalog.projects.map((project: project, index: number) => (
               <ProjectBlock key={project.id || index} project={project} />
-            ))
-          )}
+            ))}
           {isPending && <p>loading...</p>}
           {error && showErrorToast(`Error fetching catalog: ${error}`)}
         </div>
