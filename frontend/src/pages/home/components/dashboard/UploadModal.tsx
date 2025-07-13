@@ -14,10 +14,14 @@ export default function UploadModal({ isOpen }: { isOpen: boolean }) {
             className="fixed inset-0 bg-black z-40"
           />
           <motion.div
-            key="modal"
+            key="upload-modal"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
+            exit={{
+              scale: 0,
+              opacity: 1,
+              transition: { duration: 0.3, type: "tween" },
+            }}
             transition={{ duration: 0.8, type: "spring", delay: 0.02 }}
             style={{ originX: 0.94, originY: 0.05 }}
             className="absolute w-[105%] h-120 top-[-5px] flex flex-col gap-4 z-49 p-5 pt-4 rounded-4xl bg-[#272626] shadow-lg"
