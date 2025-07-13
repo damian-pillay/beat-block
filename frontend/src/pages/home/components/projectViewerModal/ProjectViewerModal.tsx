@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
-import {
-  DefaultAudioImage,
-  ProjectDeleteIcon,
-  ProjectEditIcon,
-  ProjectPlayIcon,
-} from "../../../../assets/icons";
+import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectDescription from "../../../common/components/projectBlock/ProjectDescription";
 import ProjectMetaData from "../../../common/components/projectBlock/ProjectMetaData";
 import type { project } from "../../../common/types/project";
 import ProjectTimeData from "./ProjectTimeData";
 import { OrbTexture } from "../../../../assets/textures";
 import ProjectDownloadButton from "./ProjectDownloadButton";
+import {
+  actionButtonConfig,
+  downloadButtonConfig,
+} from "../../utils/projectViewerModalConfig";
+import ProjectActionButton from "./ProjectActionButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
@@ -22,6 +22,8 @@ export default function ProjectViewerModal({
   handleAwayClick,
   project,
 }: HandleAwayClickProps) {
+  console.log(project);
+
   return createPortal(
     <>
       <motion.div
@@ -65,29 +67,20 @@ export default function ProjectViewerModal({
         </section>
         <section className="h-1/3 w-full flex items-center justify-between md:gap-0 gap-10">
           <section className="flex flex-col w-1/3 gap-2">
-            <ProjectDownloadButton title="Files" />
-            <ProjectDownloadButton title="Audio" />
+            {downloadButtonConfig.map((item) => (
+              <ProjectDownloadButton
+                key={item.title}
+                id={project.id}
+                type={item.title}
+                title={project.name}
+              />
+            ))}
           </section>
           <img src={OrbTexture} className="hidden md:block h-32" />
           <section className="flex justify-end md:gap-7 gap-3">
-            <button className="">
-              <img
-                src={ProjectDeleteIcon}
-                className="object-contain h-18 cursor-pointer"
-              />
-            </button>
-            <button className="">
-              <img
-                src={ProjectEditIcon}
-                className="object-contain h-18 cursor-pointer"
-              />
-            </button>
-            <button className="">
-              <img
-                src={ProjectPlayIcon}
-                className="object-contain h-18 cursor-pointer"
-              />
-            </button>
+            {actionButtonConfig.map((item) => (
+              <ProjectActionButton key={item.title} icon={item.icon} />
+            ))}
           </section>
         </section>
       </motion.div>
