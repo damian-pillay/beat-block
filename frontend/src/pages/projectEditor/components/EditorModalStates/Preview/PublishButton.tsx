@@ -5,12 +5,14 @@ import useProjectPublish from "../../../hooks/useProjectPublish";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useEditorStore } from "../../../services/useEditorStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PublishButton() {
   const { project, resetProject } = useProjectStore();
   const { mutateAsync: publishProject } = useProjectPublish();
   const { setPageIndex } = useEditorStore();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   function handleClick() {
     navigate("/");
@@ -18,6 +20,7 @@ export default function PublishButton() {
 
     const publishPromise = publishProject(project).then(() => {
       resetProject();
+      queryClient.invalidateQueries({ queryKey: ["catalog"] });
     });
 
     toast.promise(publishPromise, {
@@ -25,7 +28,6 @@ export default function PublishButton() {
       success: `Congrats! '${project.name}' has been published`,
       error: {
         render({ data }: { data: AxiosError }) {
-          console.log(data);
           return `Failed to publish: ${data?.message || "Unknown error"}`;
         },
       },

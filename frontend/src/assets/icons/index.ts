@@ -7,7 +7,10 @@ import DrumIcon from "./drums.svg";
 import MusicIcon from "./music.svg";
 import SliderIcon from "./sliders.svg";
 import DefaultProfileIcon from "./default-profile-icon.svg";
-import UploadIcon from "./upload-icon.svg"
+import UploadIcon from "./upload-icon.svg";
+import ProjectDeleteIcon from "./project-delete.svg";
+import ProjectEditIcon from "./project-edit.svg";
+import ProjectPlayIcon from "./project-play.svg";
 
 export {
   BeatblockLogo,
@@ -19,5 +22,8 @@ export {
   DrumIcon,
   MusicIcon,
   SliderIcon,
-  DefaultProfileIcon
+  DefaultProfileIcon,
+  ProjectDeleteIcon,
+  ProjectEditIcon,
+  ProjectPlayIcon,
 };
