@@ -15,7 +15,8 @@ import {
   actionButtonConfig,
   downloadButtonConfig,
 } from "../../utils/projectViewerModalConfig";
-import ProjectActionButton from "./ProjectActionButton";
+import ProjectActionButton from "./actionButtons/ProjectActionButton";
+import ProjectDeleteButton from "./actionButtons/ProjectDeleteButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
@@ -53,7 +54,7 @@ export default function ProjectViewerModal({
         <div className="relative flex flex-col gap-7 p-8 rounded-4xl ">
           <img
             src={HalfGridTexture}
-            className="absolute right-0 top-1/4 h-26"
+            className="absolute right-0 top-1/4 h-28"
           />
           <img
             src={DiagonalDotTexture}
@@ -95,8 +96,18 @@ export default function ProjectViewerModal({
             </section>
             <img src={OrbTexture} className="hidden md:block h-32" />
             <section className="flex justify-end md:gap-7 gap-3">
+              <ProjectDeleteButton
+                projectId={project.id}
+                projectName={project.name}
+                onDelete={handleAwayClick}
+              />
+
               {actionButtonConfig.map((item) => (
-                <ProjectActionButton key={item.title} icon={item.icon} />
+                <ProjectActionButton
+                  key={item.title}
+                  icon={item.icon}
+                  alt={item.title}
+                />
               ))}
             </section>
           </section>

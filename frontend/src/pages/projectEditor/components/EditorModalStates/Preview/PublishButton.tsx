@@ -28,7 +28,6 @@ export default function PublishButton() {
       success: `Congrats! '${project.name}' has been published`,
       error: {
         render({ data }: { data: AxiosError }) {
-          console.log(data);
           return `Failed to publish: ${data?.message || "Unknown error"}`;
         },
       },
