@@ -21,13 +21,9 @@ export default function ProjectDeleteButton({
   function handleClick() {
     onDelete();
 
-    if (projectId) {
-      markDeleting(projectId);
-    }
-
     setTimeout(() => {
       const deletePromise = deleteProject(projectId).then(() => {
-        clearDeleting(projectId);
+        markDeleting(projectId);
       });
 
       toast.promise(deletePromise, {
@@ -40,6 +36,8 @@ export default function ProjectDeleteButton({
         },
       });
     }, 200);
+
+    clearDeleting(projectId);
   }
 
   return (
