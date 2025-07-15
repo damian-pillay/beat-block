@@ -3,10 +3,15 @@ import { formatFileSize } from "../../../../projectEditor/helpers/formatters";
 
 interface FilePreviewProps {
   title: string;
-  file: File;
+  fileName: string;
+  fileSize: number;
 }
 
-export default function FilePreview({ title, file }: FilePreviewProps) {
+export default function FilePreview({
+  title,
+  fileName,
+  fileSize,
+}: FilePreviewProps) {
   return (
     <>
       <motion.h4
@@ -27,9 +32,9 @@ export default function FilePreview({ title, file }: FilePreviewProps) {
         transition={{ duration: 0.3 }}
         className="flex w-full px-5 whitespace-pre"
       >
-        <span className="truncate">{file.name}</span>
+        <span className="truncate">{fileName}</span>
         {"  •  "}
-        <span>{formatFileSize(file.size)}</span>
+        <span>{formatFileSize(fileSize)}</span>
       </motion.p>
     </>
   );
