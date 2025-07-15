@@ -2,5 +2,5 @@
 
 namespace BeatBlock.Models.DTOs.Response
 {
-    public record GetAllProjectsResponse(IEnumerable<Project> Projects);
+    public record GetAllProjectsResponse(IEnumerable<ProjectResponse> Projects);
 }

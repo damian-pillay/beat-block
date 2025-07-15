@@ -27,12 +27,16 @@ public class ProjectService : IProjectService
         _logger = logger;
     }
 
-    public IEnumerable<Project> GetAllProjects()
+    public IEnumerable<ProjectResponse> GetAllProjects()
     {
-        return _repository.GetAllProjects();
+        var projects = _repository.GetAllProjects();
+
+        var projectsResponse = projects.Select(project => ConvertToProjectResponse(project));
+
+        return projectsResponse;
     }
 
-    public async Task<Project> CreateProjectAsync(CreateProjectRequest projectDto)
+    public async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto)
     {
         _logger.LogInformation("Creating project: {ProjectName}", projectDto.Name);
 
@@ -69,10 +73,10 @@ public class ProjectService : IProjectService
         };
 
         await _repository.AddAsync(project);
-        return project;
+        return ConvertToProjectResponse(project);
     }
 
-    public async Task<Project?> GetProjectByIdAsync(int id)
+    public async Task<ProjectResponse?> GetProjectByIdAsync(int id)
     {
         _logger.LogInformation("Fetching project with Id: {ProjectId}", id);
 
@@ -83,7 +87,7 @@ public class ProjectService : IProjectService
             _logger.LogWarning("No project found with Id: {ProjectId}", id);
         }
 
-        return project;
+        return ConvertToProjectResponse(project);
     }
 
     public async Task<bool> DeleteProjectAsync(int id)
@@ -167,7 +171,7 @@ public class ProjectService : IProjectService
             ContentType = contentType
         };
     }
-    public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto)
+    public async Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto)
     {
         _logger.LogInformation("Starting update for project with ID: {ProjectId}", id);
 
@@ -182,7 +186,7 @@ public class ProjectService : IProjectService
         var updatedProject = await GetUpdatedProjectDTO(project, requestDto);
 
         await _repository.UpdateProjectAsync(updatedProject);
-        return updatedProject;
+        return ConvertToProjectResponse(updatedProject);
     }
 
     private async Task<Project> GetUpdatedProjectDTO(Project project, UpdateProjectRequest requestDto)
@@ -246,5 +250,29 @@ public class ProjectService : IProjectService
         }
 
         return updatedProject;
+    }
+
+    private ProjectResponse? ConvertToProjectResponse(Project project)
+    {
+        if (project == null)
+        { 
+            return null;
+        }
+
+        return new ProjectResponse
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            KeySignature = project.KeySignature,
+            Bpm = project.Bpm,
+            Daw = project.Daw,
+            Genre = project.Genre,
+            HasFile = !string.IsNullOrEmpty(project.FilePath),
+            HasAudio = !string.IsNullOrEmpty(project.AudioPath),
+            HasImage = !string.IsNullOrEmpty(project.ImagePath),
+            CreatedAt = project.CreatedAt,
+            UpdatedAt = project.UpdatedAt,
+        };
     }
 }

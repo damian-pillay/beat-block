@@ -7,11 +7,11 @@ namespace BeatBlock.Services
 {
     public interface IProjectService
     {
-        IEnumerable<Project> GetAllProjects();
-        Task<Project> CreateProjectAsync(CreateProjectRequest projectDto);
-        Task<Project?> GetProjectByIdAsync(int id);
+        IEnumerable<ProjectResponse> GetAllProjects();
+        Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto);
+        Task<ProjectResponse?> GetProjectByIdAsync(int id);
         Task<bool> DeleteProjectAsync(int id);
-        Task<Project?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto);
+        Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto);
         Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes, string DefaultContentType);
     }
 }

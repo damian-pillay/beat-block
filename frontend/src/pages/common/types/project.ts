@@ -6,9 +6,9 @@ export type project = {
   bpm?: number;
   genre?: string;
   daw: string;
-  filepath?: string;
-  audiopath?: string;
-  imagepath?: string;
+  hasFile?: boolean;
+  hasAudio?: boolean;
+  hasImage?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };
