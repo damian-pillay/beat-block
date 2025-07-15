@@ -1,6 +1,4 @@
-import { AnimatePresence } from "framer-motion";
-import useToolTip from "../../hooks/useToolTip";
-import Tooltip from "./ToolTip";
+import ToolTipProvider from "../toolTip/ToolTipProvider";
 
 export default function IconLabel({
   icon,
@@ -11,26 +9,27 @@ export default function IconLabel({
   text?: string;
   alt: string;
 }) {
-  const { handleMouseEnter, handleMouseLeave, showTooltip } = useToolTip();
-
   return (
-    <li
-      className="relative flex justify-start items-center gap-2"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <span>
-        <img
-          src={icon}
-          alt={alt}
-          className="object-cover md:h-8 md:w-8 h-5 w-5"
-        />
-      </span>
-      <span>
-        <p className="md:text-[1.1em] text-sm">{text}</p>
-      </span>
-
-      <AnimatePresence>{showTooltip && <Tooltip text={alt} />}</AnimatePresence>
-    </li>
+    <ToolTipProvider text={alt}>
+      {({ onMouseEnter, onMouseLeave, renderToolTip }) => (
+        <li
+          className="relative flex justify-start items-center gap-2"
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <span>
+            <img
+              src={icon}
+              alt={alt}
+              className="object-cover md:h-8 md:w-8 h-5 w-5"
+            />
+          </span>
+          <span>
+            <p className="md:text-[1.1em] text-sm">{text}</p>
+          </span>
+          {renderToolTip()}
+        </li>
+      )}
+    </ToolTipProvider>
   );
 }

@@ -3,7 +3,7 @@ import { dropzoneConfig } from "../../../utils/dropzoneConfig";
 import type { DropzoneField } from "../../../types/dropzoneField";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import useFileInput from "../../../hooks/useFileDrop";
+import useFileHandler from "../../../hooks/useFileHandler";
 
 interface FileBrowseButtonProps {
   field: DropzoneField;
@@ -15,7 +15,7 @@ export default function FileBrowseButton({
   isProjectUpload = false,
 }: FileBrowseButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { handleFileInput } = useFileInput(field);
+  const { handleFileInput } = useFileHandler(field);
   const navigate = useNavigate();
 
   function handleBrowseClick() {

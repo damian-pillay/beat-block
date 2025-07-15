@@ -94,7 +94,7 @@ export default function ProjectViewerModal({
                 />
               ))}
             </section>
-            <img src={OrbTexture} className="hidden md:block h-32" />
+            <img src={OrbTexture} className="hidden md:block h-30" />
             <section className="flex justify-end md:gap-7 gap-3">
               <ProjectDeleteButton
                 projectId={project.id}

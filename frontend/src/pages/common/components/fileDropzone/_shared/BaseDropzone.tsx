@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { dropzoneConfig } from "../../../utils/dropzoneConfig";
-import useFileInput from "../../../hooks/useFileDrop";
+import useFileHandler from "../../../hooks/useFileHandler";
 import { type DropzoneField } from "../../../types/dropzoneField";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ export default function BaseDropzone({
   onFilePresent,
 }: FileDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
-  const { file, handleFileInput } = useFileInput(field);
+  const { file, handleFileInput } = useFileHandler(field);
   const navigate = useNavigate();
 
   function handleDrop(event: React.DragEvent<HTMLElement>): void {
@@ -31,7 +31,7 @@ export default function BaseDropzone({
     handleFileInput(files);
 
     if (isProjectUpload) {
-      navigate("/");
+      navigate("/create");
     }
   }
 

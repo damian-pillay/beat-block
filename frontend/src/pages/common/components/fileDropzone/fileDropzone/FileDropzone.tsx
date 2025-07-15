@@ -7,7 +7,6 @@ import BaseDropzone from "../_shared/BaseDropzone";
 
 type FileDropZoneProps = {
   field: DropzoneField;
-  isProjectUpload?: boolean;
 };
 
 export default function FileDropzone({ field }: FileDropZoneProps) {

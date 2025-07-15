@@ -4,6 +4,7 @@ import ProjectActionButton from "./ProjectActionButton";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useDeletionStore } from "../../../services/useDeletionStore";
+import { queryClient } from "../../../../../lib/queryClient";
 
 export default function ProjectDeleteButton({
   projectId,
@@ -24,6 +25,11 @@ export default function ProjectDeleteButton({
     setTimeout(() => {
       const deletePromise = deleteProject(projectId).then(() => {
         markDeleting(projectId);
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ["catalog"] }).then(() => {
+            clearDeleting(projectId);
+          });
+        }, 300);
       });
 
       toast.promise(deletePromise, {
@@ -35,9 +41,7 @@ export default function ProjectDeleteButton({
           },
         },
       });
-    }, 200);
-
-    clearDeleting(projectId);
+    }, 300);
   }
 
   return (

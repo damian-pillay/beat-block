@@ -4,7 +4,7 @@ import { showInfoToast } from "../utils/toastConfig";
 import { showErrorToast } from "../utils/toastConfig";
 import { type DropzoneField } from "../types/dropzoneField";
 
-export default function useFileInput(field: DropzoneField) {
+export default function useFileHandler(field: DropzoneField) {
   const { updateProject, project } = useProjectStore();
   const file = project[field];
 
