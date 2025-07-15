@@ -4,16 +4,16 @@ import { useEditorStore } from "../../services/useEditorStore";
 import { useProjectStore } from "../../services/useProjectStore";
 import { ValidationError } from "yup";
 import { showErrorToast } from "../../../common/utils/toastConfig";
-import { type ProjectCreateRequest } from "../../../common/types/projectCreateRequest";
+import { type ProjectRequest } from "../../../common/types/projectRequest";
 import { editorProgressConfig } from "../../utils/editorProgressConfig";
 
 export default function EditorProgressTitle() {
   const { pageIndex, setPageIndex } = useEditorStore();
-  const { project } = useProjectStore();
+  const { requestForm: project } = useProjectStore();
 
   const handleClick = (
     index: number,
-    validateFn: (project: ProjectCreateRequest) => void
+    validateFn: (project: ProjectRequest) => void
   ) => {
     try {
       validateFn(project);

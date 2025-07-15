@@ -4,7 +4,8 @@ import { useProjectStore } from "../../../services/useProjectStore";
 import FileDropzone from "../../../../common/components/fileDropzone/fileDropzone/FileDropzone";
 
 export default function BasicDataSection() {
-  const { project, updateProject } = useProjectStore();
+  const { requestForm: project, updateRequestForm: updateProject } =
+    useProjectStore();
 
   return (
     <motion.section className="flex gap-6 w-full h-full drag-none">

@@ -3,7 +3,7 @@ import { useProjectStore } from "../../../services/useProjectStore";
 import PublishProject from "./PublishProject";
 
 export default function Preview() {
-  const { project } = useProjectStore();
+  const { requestForm: project } = useProjectStore();
 
   return (
     <div className="flex flex-col justify-between gap-5 h-full w-full">

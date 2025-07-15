@@ -2,12 +2,12 @@ import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { AnimatePresence, motion } from "framer-motion";
-import type { project } from "../../types/project";
+import type { ProjectResponse } from "../../types/projectResponse";
 import { useState } from "react";
 import ProjectViewerModal from "../../../home/components/projectViewerModal/ProjectViewerModal";
 
 interface ProjectBlockProps {
-  project: project;
+  project: ProjectResponse;
   isDeleting: boolean;
 }
 

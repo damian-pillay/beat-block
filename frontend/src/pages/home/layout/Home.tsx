@@ -8,7 +8,7 @@ import { useProjectStore } from "../../projectEditor/services/useProjectStore";
 import { useEditorStore } from "../../projectEditor/services/useEditorStore";
 
 function Home() {
-  const { resetProject } = useProjectStore();
+  const { resetRequestForm: resetProject } = useProjectStore();
   const { resetPage } = useEditorStore();
 
   useEffect(() => {

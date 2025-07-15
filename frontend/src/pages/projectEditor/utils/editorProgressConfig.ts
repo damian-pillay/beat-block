@@ -2,12 +2,12 @@ import {
   filesAndInfoSchema,
   metadataSchema,
 } from "../validation/projectSchema";
-import { type ProjectCreateRequest } from "../../common/types/projectCreateRequest";
+import { type ProjectRequest } from "../../common/types/projectRequest";
 
 export type EditorStep = {
   title: string;
   color: [string, string, string];
-  validate: (project: ProjectCreateRequest) => void;
+  validate: (project: ProjectRequest) => void;
 };
 
 export const editorProgressConfig: EditorStep[] = [

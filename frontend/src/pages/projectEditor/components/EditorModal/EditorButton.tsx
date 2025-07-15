@@ -17,7 +17,7 @@ export default function EditorButton<T extends Maybe<AnyObject>>({
   validationSchema,
 }: ValidationSchemaProps<T>) {
   const { nextPage } = useEditorStore();
-  const { project } = useProjectStore();
+  const { requestForm: project } = useProjectStore();
 
   function handleClick() {
     try {

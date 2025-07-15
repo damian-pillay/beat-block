@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectDescription from "../../../common/components/projectBlock/ProjectDescription";
 import ProjectMetaData from "../../../common/components/projectBlock/ProjectMetaData";
-import type { project } from "../../../common/types/project";
+import type { ProjectResponse } from "../../../common/types/projectResponse";
 import ProjectTimeData from "./ProjectTimeData";
 import {
   DiagonalDotTexture,
@@ -17,10 +17,11 @@ import {
 } from "../../utils/projectViewerModalConfig";
 import ProjectActionButton from "./actionButtons/ProjectActionButton";
 import ProjectDeleteButton from "./actionButtons/ProjectDeleteButton";
+import ProjectEditButton from "./actionButtons/ProjectEditButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
-  project: project;
+  project: ProjectResponse;
 }
 
 export default function ProjectViewerModal({
@@ -101,7 +102,10 @@ export default function ProjectViewerModal({
                 projectName={project.name}
                 onDelete={handleAwayClick}
               />
-
+              <ProjectEditButton
+                closeModal={handleAwayClick}
+                project={project}
+              />
               {actionButtonConfig.map((item) => (
                 <ProjectActionButton
                   key={item.title}

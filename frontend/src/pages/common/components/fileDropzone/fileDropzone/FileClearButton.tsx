@@ -8,7 +8,7 @@ interface DropzoneFieldProps {
 }
 
 export default function FileClearButton({ field }: DropzoneFieldProps) {
-  const { updateProject } = useProjectStore();
+  const { updateRequestForm: updateProject } = useProjectStore();
   const config = dropzoneConfig[field];
 
   return (

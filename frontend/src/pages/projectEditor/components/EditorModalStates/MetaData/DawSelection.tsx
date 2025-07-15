@@ -3,7 +3,8 @@ import { useProjectStore } from "../../../services/useProjectStore";
 import { Check } from "lucide-react";
 
 export default function DawSelection() {
-  const { project, updateProject } = useProjectStore();
+  const { requestForm: project, updateRequestForm: updateProject } =
+    useProjectStore();
 
   const toggleSelect = (daw: string) => {
     updateProject({ daw: daw });

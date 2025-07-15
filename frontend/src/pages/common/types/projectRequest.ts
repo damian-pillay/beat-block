@@ -1,4 +1,4 @@
-export type ProjectCreateRequest = {
+export type ProjectRequest = {
   name?: string;
   description?: string;
   keySignature?: string;

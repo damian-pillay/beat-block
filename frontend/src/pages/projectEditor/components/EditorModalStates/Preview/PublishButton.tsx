@@ -8,7 +8,8 @@ import { useEditorStore } from "../../../services/useEditorStore";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function PublishButton() {
-  const { project, resetProject } = useProjectStore();
+  const { requestForm: project, resetRequestForm: resetProject } =
+    useProjectStore();
   const { mutateAsync: publishProject } = useProjectPublish();
   const { setPageIndex } = useEditorStore();
   const navigate = useNavigate();

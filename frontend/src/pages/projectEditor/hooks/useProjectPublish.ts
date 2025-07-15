@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../../lib/axios";
-import type { ProjectCreateRequest } from "../../common/types/projectCreateRequest";
+import type { ProjectRequest } from "../../common/types/projectRequest";
 
 export default function useProjectPublish() {
   return useMutation({
-    mutationFn: async (project: ProjectCreateRequest) => {
+    mutationFn: async (project: ProjectRequest) => {
       const formData = new FormData();
 
       for (const key in project) {
