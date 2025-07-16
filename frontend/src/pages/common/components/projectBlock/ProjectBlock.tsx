@@ -17,6 +17,8 @@ export default function ProjectBlock({
 }: ProjectBlockProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  console.log(project);
+
   return (
     <>
       <AnimatePresence mode="wait">

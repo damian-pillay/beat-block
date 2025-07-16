@@ -3,40 +3,24 @@ import FilePreview from "./FilePreview";
 import FilePlaceholder from "./createMode/FilePlaceholder";
 import FileClearButton from "./FileClearButton";
 import BaseDropzone from "../_shared/BaseDropzone";
-import { type ProjectResponse } from "../../../types/projectResponse";
 import { useProjectStore } from "../../../../projectEditor/services/useProjectStore";
 import FileUpdatePlaceholder from "./editMode/FileUpdatePlaceholder";
+import { checkFileUploaded } from "../../../helper/fileUploadedValidator";
 
 type FileDropZoneProps = {
   field: DropzoneField;
 };
 
 export default function FileDropzone({ field }: FileDropZoneProps) {
-  const { mode, project } = useProjectStore();
-
-  const fileMap = {
-    compressedFile: "hasFile",
-    audioFile: "hasAudio",
-    imageFile: "hasImage",
-  } as const;
-
-  type FileField = keyof typeof fileMap;
-
-  function checkField(project?: Partial<ProjectResponse>, field?: FileField) {
-    if (!project || !field) return false;
-
-    const fileFlag = fileMap[field];
-    const hasFieldFile = project[fileFlag as keyof ProjectResponse];
-
-    return hasFieldFile;
-  }
+  const { mode, projectResponse } = useProjectStore();
+  const isFileAlreadyUploaded = checkFileUploaded(projectResponse, field);
 
   return (
     <BaseDropzone
       field={field}
       isProjectUpload={false}
       onFileAbsent={() =>
-        mode == "edit" && checkField(project, field) ? (
+        mode == "edit" && isFileAlreadyUploaded ? (
           <>
             <FileUpdatePlaceholder field={field} />
           </>

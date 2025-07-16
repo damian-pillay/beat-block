@@ -8,7 +8,7 @@ interface ProjectStore {
   resetRequestForm: () => void;
 
   mode: "edit" | "create";
-  project?: Partial<ProjectResponse>;
+  projectResponse?: Partial<ProjectResponse>;
 
   hydrateRequestForm: (currentProject: ProjectResponse) => void;
 }
@@ -20,7 +20,7 @@ export const useProjectStore = create<ProjectStore>()((set) => ({
   hydrateRequestForm: (currentProject) => {
     set({
       mode: "edit",
-      project: currentProject,
+      projectResponse: currentProject,
       requestForm: {
         name: currentProject.name ?? undefined,
         description: currentProject.description ?? undefined,

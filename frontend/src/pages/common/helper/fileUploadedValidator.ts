@@ -7,15 +7,16 @@ const fileMap = {
 } as const;
 
 type FileField = keyof typeof fileMap;
+type ProjectFileResponseField = "hasFile" | "hasAudio" | "hasImage";
 
-export function checkField(
+export function checkFileUploaded(
   project?: Partial<ProjectResponse>,
   field?: FileField
 ) {
   if (!project || !field) return false;
 
   const fileFlag = fileMap[field];
-  const hasFieldFile = project[fileFlag as keyof ProjectResponse];
+  const isFileAlreadyUploaded = project[fileFlag as ProjectFileResponseField];
 
-  return !!hasFieldFile;
+  return isFileAlreadyUploaded;
 }
