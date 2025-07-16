@@ -5,9 +5,8 @@ import { showErrorToast } from "../utils/toastConfig";
 import { type DropzoneField } from "../types/dropzoneField";
 
 export default function useFileHandler(field: DropzoneField) {
-  const { updateRequestForm: updateProject, requestForm: project } =
-    useProjectStore();
-  const file = project[field];
+  const { updateRequestForm: updateProject, requestForm } = useProjectStore();
+  const file = requestForm[field];
 
   function handleFileInput(files: File[]) {
     if (!files) {
