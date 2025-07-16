@@ -22,12 +22,12 @@ export const useProjectStore = create<ProjectStore>()((set) => ({
       mode: "edit",
       project: currentProject,
       requestForm: {
-        name: currentProject.name,
-        description: currentProject.description,
-        keySignature: currentProject.keySignature,
-        bpm: currentProject.bpm,
-        genre: currentProject.genre,
-        daw: currentProject.daw,
+        name: currentProject.name ?? undefined,
+        description: currentProject.description ?? undefined,
+        keySignature: currentProject.keySignature ?? undefined,
+        bpm: currentProject.bpm ?? undefined,
+        genre: currentProject.genre ?? undefined,
+        daw: currentProject.daw ?? undefined,
       },
     });
   },
@@ -42,6 +42,9 @@ export const useProjectStore = create<ProjectStore>()((set) => ({
   },
 
   resetRequestForm: () => {
-    set({ requestForm: {} });
+    set({
+      requestForm: {},
+      mode: "create",
+    });
   },
 }));
