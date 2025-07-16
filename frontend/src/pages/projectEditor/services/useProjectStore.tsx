@@ -8,7 +8,7 @@ interface ProjectStore {
   resetRequestForm: () => void;
 
   mode: "edit" | "create";
-  projectResponse?: Partial<ProjectResponse>;
+  projectResponse?: ProjectResponse;
 
   hydrateRequestForm: (currentProject: ProjectResponse) => void;
 }
@@ -22,12 +22,12 @@ export const useProjectStore = create<ProjectStore>()((set) => ({
       mode: "edit",
       projectResponse: currentProject,
       requestForm: {
-        name: currentProject.name ?? undefined,
+        name: currentProject.name,
         description: currentProject.description ?? undefined,
         keySignature: currentProject.keySignature ?? undefined,
         bpm: currentProject.bpm ?? undefined,
         genre: currentProject.genre ?? undefined,
-        daw: currentProject.daw ?? undefined,
+        daw: currentProject.daw,
       },
     });
   },
