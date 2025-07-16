@@ -22,11 +22,13 @@ import ProjectEditButton from "./actionButtons/ProjectEditButton";
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
   project: ProjectResponse;
+  image: string | null;
 }
 
 export default function ProjectViewerModal({
   handleAwayClick,
   project,
+  image,
 }: HandleAwayClickProps) {
   console.log(project);
 
@@ -63,7 +65,7 @@ export default function ProjectViewerModal({
           />
           <section className="w-full flex h-60 gap-5">
             <img
-              src={DefaultAudioImage}
+              src={image ?? DefaultAudioImage}
               alt="default-audio-image"
               className="rounded-3xl object-cover aspect-square drag-none w-1/3"
             />
