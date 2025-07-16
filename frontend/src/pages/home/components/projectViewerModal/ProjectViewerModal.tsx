@@ -30,8 +30,6 @@ export default function ProjectViewerModal({
   project,
   image,
 }: HandleAwayClickProps) {
-  console.log(project);
-
   return createPortal(
     <>
       <motion.div

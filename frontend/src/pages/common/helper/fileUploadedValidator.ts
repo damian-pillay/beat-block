@@ -1,4 +1,5 @@
 import { type ProjectResponse } from "../types/projectResponse";
+import { type DropzoneField } from "../types/dropzoneField";
 
 const fileMap = {
   compressedFile: "hasFile",
@@ -6,17 +7,16 @@ const fileMap = {
   imageFile: "hasImage",
 } as const;
 
-type FileField = keyof typeof fileMap;
 type ProjectFileResponseField = "hasFile" | "hasAudio" | "hasImage";
 
 export function checkFileUploaded(
   project?: Partial<ProjectResponse>,
-  field?: FileField
+  field?: DropzoneField
 ) {
   if (!project || !field) return false;
 
   const fileFlag = fileMap[field];
   const isFileAlreadyUploaded = project[fileFlag as ProjectFileResponseField];
 
-  return isFileAlreadyUploaded;
+  return isFileAlreadyUploaded ?? false;
 }

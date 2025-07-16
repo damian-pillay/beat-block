@@ -9,32 +9,51 @@ export default function useProjectUpdate() {
       projectResponse,
       projectRequest,
     }: {
-      projectResponse: Partial<ProjectResponse> | undefined;
+      projectResponse: ProjectResponse;
       projectRequest: ProjectRequest;
     }) => {
+      console.log(projectRequest);
       const formData = new FormData();
 
       for (const key in projectRequest) {
-        const value = projectRequest[key as keyof typeof projectRequest];
+        const value = projectRequest[key as keyof ProjectRequest];
 
-        if (
-          projectResponse &&
-          value == projectResponse[key as keyof typeof projectResponse]
-        ) {
+        const isFileField = [
+          "compressedFile",
+          "audioFile",
+          "imageFile",
+        ].includes(key);
+
+        if (isFileField && value instanceof File) {
+          formData.append(key, value);
           continue;
         }
 
-        if (value instanceof File) {
-          formData.append(key, value);
-        } else if (value !== undefined && value !== null) {
-          formData.append(key, String(value));
-        }
+        const responseValue = projectResponse[key as keyof ProjectResponse];
+
+        const areEqual =
+          value === responseValue ||
+          (value === "" && responseValue === null) ||
+          (value === null &&
+            (responseValue === "" || responseValue === undefined)) ||
+          (value === undefined &&
+            (responseValue === "" || responseValue === null));
+
+        if (areEqual) continue;
+
+        formData.append(key, value === null || undefined ? "" : String(value));
+      }
+
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
       }
 
       const response = await api.patch(
         `/project/${projectResponse?.id}`,
         formData
       );
+
+      console.log(response.data);
       return response.data;
     },
   });
