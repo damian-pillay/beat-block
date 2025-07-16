@@ -1,6 +1,7 @@
 import ProjectBlock from "../../../../common/components/projectBlock/ProjectBlock";
+import { toProjectResponse } from "../../../../common/helper/projectRequestToResponseConvertor";
 import { useProjectStore } from "../../../services/useProjectStore";
-import PublishProject from "./PublishProject";
+import ProjectSubmitButton from "./ProjectSubmitButton";
 
 export default function Preview() {
   const { requestForm: project } = useProjectStore();
@@ -22,12 +23,12 @@ export default function Preview() {
         }}
         className="flex p-2 rounded-4xl bg-[#171515] h-full w-[90%] mx-auto items-center "
       >
-        <ProjectBlock project={project} />
+        <ProjectBlock project={toProjectResponse(project)} isDeleting={false} />
       </section>
       <section className="flex justify-center py-2">
         <p>Publish your project if you are happy with your results !</p>
       </section>
-      <PublishProject />
+      <ProjectSubmitButton />
     </div>
   );
 }
