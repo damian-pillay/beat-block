@@ -9,7 +9,7 @@ import { editorProgressConfig } from "../../utils/editorProgressConfig";
 
 export default function EditorProgressTitle() {
   const { pageIndex, setPageIndex } = useEditorStore();
-  const { requestForm: project } = useProjectStore();
+  const { requestForm: project, mode } = useProjectStore();
 
   const handleClick = (
     index: number,
@@ -44,7 +44,7 @@ export default function EditorProgressTitle() {
               className="cursor-pointer"
               animate={{ color: step.color[pageIndex] }}
               transition={{ duration: 0.3 }}
-              onClick={() => handleClick(index, step.validate)}
+              onClick={() => handleClick(index, step.validate[mode])}
             >
               {step.title}
             </motion.button>

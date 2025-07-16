@@ -1,9 +1,16 @@
 import FileUploadSection from "./FileUploadSection";
 import BasicDataSection from "./BasicDataSection";
 import EditorButton from "../../EditorModal/EditorButton";
-import { filesAndInfoSchema } from "../../../validation/projectSchema";
+import {
+  filesAndInfoCreateSchema,
+  filesAndInfoUpdateSchema,
+} from "../../../validation/projectSchema";
+import { useProjectStore } from "../../../services/useProjectStore";
 
 export default function FilesAndInformation() {
+  const { mode } = useProjectStore();
+  const isEditing = mode == "edit";
+
   return (
     <div className="flex flex-col justify-between gap-4 items-center h-full w-full drag-none">
       <FileUploadSection />
@@ -13,7 +20,11 @@ export default function FilesAndInformation() {
         key={"next"}
         className={`flex w-full justify-end items-center gap-4`}
       >
-        <EditorButton validationSchema={filesAndInfoSchema} />
+        <EditorButton
+          validationSchema={
+            isEditing ? filesAndInfoUpdateSchema : filesAndInfoCreateSchema
+          }
+        />
       </div>
     </div>
   );
