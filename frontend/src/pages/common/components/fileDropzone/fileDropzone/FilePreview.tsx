@@ -1,17 +1,22 @@
 import { motion } from "framer-motion";
 import { formatFileSize } from "../../../../projectEditor/helpers/formatters";
+import type { DropzoneField } from "../../../types/dropzoneField";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
+import FileClearButton from "./FileClearButton";
 
 interface FilePreviewProps {
-  title: string;
+  field: DropzoneField;
   fileName: string;
   fileSize: number;
 }
 
 export default function FilePreview({
-  title,
+  field,
   fileName,
   fileSize,
 }: FilePreviewProps) {
+  const config = dropzoneConfig[field];
+
   return (
     <>
       <motion.h4
@@ -22,7 +27,7 @@ export default function FilePreview({
         transition={{ duration: 0.3 }}
         className="flex font-bold w-full px-5"
       >
-        {title}
+        {config.title}
       </motion.h4>
       <motion.p
         key="file-size"
@@ -36,6 +41,7 @@ export default function FilePreview({
         {"  •  "}
         <span>{formatFileSize(fileSize)}</span>
       </motion.p>
+      <FileClearButton field={field} />
     </>
   );
 }

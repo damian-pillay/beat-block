@@ -17,7 +17,10 @@ export default function ProjectUploadPlaceholder() {
         className=""
       >
         Drop project files here, or{" "}
-        <FileBrowseButton field="compressedFile" isProjectUpload={true} /> files
+        <FileBrowseButton field="compressedFile" isProjectUpload={true}>
+          browse
+        </FileBrowseButton>{" "}
+        files
       </motion.p>
       <motion.img
         className="object-cover h-20 w-25 drag-none"

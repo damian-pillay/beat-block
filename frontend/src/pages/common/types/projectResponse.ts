@@ -6,7 +6,7 @@ export type ProjectResponse = {
   bpm?: number;
   genre?: string;
   daw: string;
-  hasFile?: boolean;
+  hasFile: boolean;
   hasAudio?: boolean;
   hasImage?: boolean;
   createdAt?: string;

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { dropzoneConfig } from "../../../utils/dropzoneConfig";
-import { type DropzoneField } from "../../../types/dropzoneField";
-import { formatList } from "../../../../projectEditor/helpers/formatters";
-import FileBrowseButton from "../_shared/FileBrowseButton";
+import { dropzoneConfig } from "../../../../utils/dropzoneConfig";
+import { type DropzoneField } from "../../../../types/dropzoneField";
+import { formatList } from "../../../../../projectEditor/helpers/formatters";
+import FileBrowseButton from "../../_shared/FileBrowseButton";
 
 interface FilePlaceholderProps {
   field: DropzoneField;
@@ -25,7 +25,8 @@ export default function FilePlaceholder({ field }: FilePlaceholderProps) {
         {config.title}
       </motion.h4>
       <p className="whitespace-pre-line text-center">
-        Drag & drop, or <FileBrowseButton field={field} />{" "}
+        Drag & drop, or{" "}
+        <FileBrowseButton field={field}>browse</FileBrowseButton>{" "}
         {field === image && <br />}
         {formatList(config.extensions)}
       </p>

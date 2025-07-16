@@ -8,11 +8,13 @@ import useFileHandler from "../../../hooks/useFileHandler";
 interface FileBrowseButtonProps {
   field: DropzoneField;
   isProjectUpload?: boolean;
+  children: string | React.ReactNode;
 }
 
 export default function FileBrowseButton({
   field,
   isProjectUpload = false,
+  children,
 }: FileBrowseButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { handleFileInput } = useFileHandler(field);
@@ -56,7 +58,7 @@ export default function FileBrowseButton({
         className="rounded-sm select-none cursor-pointer"
         onClick={handleBrowseClick}
       >
-        browse
+        {children}
       </motion.button>
       <input
         ref={inputRef}
