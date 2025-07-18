@@ -16,7 +16,8 @@ export default function NumberInput({
   placeholder,
   step = 1,
 }: NumberInputProps) {
-  const { project, updateProject } = useProjectStore();
+  const { requestForm: project, updateRequestForm: updateProject } =
+    useProjectStore();
 
   function isNaturalNumber(value: number): boolean {
     return Number.isInteger(value) && value >= 0;

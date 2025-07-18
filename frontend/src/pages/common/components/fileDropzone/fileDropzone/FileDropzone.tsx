@@ -1,33 +1,43 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { dropzoneConfig } from "../../../utils/dropzoneConfig";
-import useFileDrop from "../../../hooks/useFileDrop";
 import { type DropzoneField } from "../../../types/dropzoneField";
 import FilePreview from "./FilePreview";
-import FilePlaceholder from "./FilePlaceholder";
+import FilePlaceholder from "./createMode/FilePlaceholder";
 import FileClearButton from "./FileClearButton";
+import BaseDropzone from "../_shared/BaseDropzone";
+import { useProjectStore } from "../../../../projectEditor/services/useProjectStore";
+import FileUpdatePlaceholder from "./editMode/FileUpdatePlaceholder";
+import { checkFileUploaded } from "../../../helper/fileUploadedValidator";
 
 type FileDropZoneProps = {
   field: DropzoneField;
 };
 
 export default function FileDropzone({ field }: FileDropZoneProps) {
-  const { dropHandlers, file, dropzoneStyle } = useFileDrop(field);
+  const { mode, projectResponse } = useProjectStore();
+  const isFileAlreadyUploaded = checkFileUploaded(projectResponse, field);
 
   return (
-    <motion.section
-      {...dropHandlers}
-      className={`relative flex flex-col justify-center items-center rounded-2xl drag-none border-2 transition ${dropzoneStyle} ${dropzoneConfig[field].styleClass}`}
-    >
-      <AnimatePresence mode="wait">
-        {file ? (
+    <BaseDropzone
+      field={field}
+      isProjectUpload={false}
+      onFileAbsent={() =>
+        mode == "edit" && isFileAlreadyUploaded ? (
           <>
-            <FilePreview file={file} title={dropzoneConfig[field].title} />
-            <FileClearButton field={field} />
+            <FileUpdatePlaceholder field={field} />
           </>
         ) : (
           <FilePlaceholder field={field} />
-        )}
-      </AnimatePresence>
-    </motion.section>
+        )
+      }
+      onFilePresent={(file) => (
+        <>
+          <FilePreview
+            fileName={file.name}
+            fileSize={file.size}
+            field={field}
+          />
+          <FileClearButton field={field} />
+        </>
+      )}
+    />
   );
 }

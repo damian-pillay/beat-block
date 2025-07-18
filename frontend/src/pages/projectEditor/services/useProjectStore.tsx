@@ -1,26 +1,50 @@
 import { create } from "zustand";
-import type { ProjectCreateRequest } from "../../common/types/projectCreateRequest";
+import type { ProjectRequest } from "../../common/types/projectRequest";
+import type { ProjectResponse } from "../../common/types/projectResponse";
 
 interface ProjectStore {
-  project: ProjectCreateRequest;
-  updateProject: (updates: ProjectCreateRequest) => void;
-  resetProject: () => void;
+  requestForm: ProjectRequest;
+  updateRequestForm: (updates: ProjectRequest) => void;
+  resetRequestForm: () => void;
+
+  mode: "edit" | "create";
+  projectResponse?: ProjectResponse;
+
+  hydrateRequestForm: (currentProject: ProjectResponse) => void;
 }
 
 export const useProjectStore = create<ProjectStore>()((set) => ({
-  project: {},
+  requestForm: {},
+  mode: "create",
 
-  updateProject: (updates) => {
+  hydrateRequestForm: (currentProject) => {
+    set({
+      mode: "edit",
+      projectResponse: currentProject,
+      requestForm: {
+        name: currentProject.name,
+        description: currentProject.description ?? undefined,
+        keySignature: currentProject.keySignature ?? undefined,
+        bpm: currentProject.bpm ?? undefined,
+        genre: currentProject.genre ?? undefined,
+        daw: currentProject.daw,
+      },
+    });
+  },
+
+  updateRequestForm: (updates) => {
     set((state) => ({
-      project: {
-        ...state.project,
+      requestForm: {
+        ...state.requestForm,
         ...updates,
-        updatedAt: new Date().toISOString().replace("T", " ").replace("Z", ""),
       },
     }));
   },
 
-  resetProject: () => {
-    set({ project: {} });
+  resetRequestForm: () => {
+    set({
+      requestForm: {},
+      mode: "create",
+    });
   },
 }));

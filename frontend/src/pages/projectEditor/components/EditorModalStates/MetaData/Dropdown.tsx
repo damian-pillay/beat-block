@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useProjectStore } from "../../../services/useProjectStore";
-import type { ProjectCreateRequest } from "../../../../common/types/projectCreateRequest";
+import type { ProjectRequest } from "../../../../common/types/projectRequest";
 
 export default function Dropdown({
   options,
@@ -14,7 +14,8 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { project, updateProject } = useProjectStore();
+  const { requestForm: project, updateRequestForm: updateProject } =
+    useProjectStore();
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -46,7 +47,7 @@ export default function Dropdown({
         className="inline-flex justify-between items-center w-full px-4 py-2 bg-[#383737] text-white rounded-full shadow-md cursor-pointer hover:bg-[#4c4b4b] transition"
       >
         {(() => {
-          const fieldValue = project[value as keyof ProjectCreateRequest];
+          const fieldValue = project[value as keyof ProjectRequest];
           if (
             typeof fieldValue === "string" ||
             typeof fieldValue === "number"

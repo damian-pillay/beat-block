@@ -1,11 +1,16 @@
 import * as yup from "yup";
 
-export const filesAndInfoSchema = yup.object({
+export const filesAndInfoCreateSchema = yup.object({
   name: yup.string().required("Title is a required field").max(50),
   description: yup.string().max(100),
   compressedFile: yup
     .mixed<File>()
     .required("Project files is a required field"),
+});
+
+export const filesAndInfoUpdateSchema = yup.object({
+  name: yup.string().required("Title is a required field").max(50),
+  description: yup.string().max(100),
 });
 
 export const metadataSchema = yup.object({

@@ -1,16 +1,20 @@
 import { motion } from "framer-motion";
 import { useEditorStore } from "../../../services/useEditorStore";
 import PublishButton from "./PublishButton";
+import { useProjectStore } from "../../../services/useProjectStore";
+import UpdateButton from "./UpdateButton";
 
-export default function PublishProject() {
+export default function ProjectSubmitButton() {
   const { setPageIndex } = useEditorStore();
+  const { mode } = useProjectStore();
+  const isEditMode = mode == "edit";
 
   return (
     <motion.section
       key={"publishProject"}
       className={`flex flex-col w-full justify-center items-center gap-4`}
     >
-      <PublishButton />
+      {isEditMode ? <UpdateButton /> : <PublishButton />}
       <p>
         <span className="opacity-40">Not happy ? </span>
         <motion.button

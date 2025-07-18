@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import useToolTip from "../../../../common/hooks/useToolTip";
-import Tooltip from "../../../../common/components/projectBlock/ToolTip";
+import Tooltip from "../../../../common/components/toolTip/ToolTip";
 
 interface ProjectActionButtonProps {
   icon: string;

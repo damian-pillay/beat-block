@@ -5,18 +5,19 @@ import {
   SliderIcon,
 } from "../../../../assets/icons";
 import IconLabel from "./IconLabel";
+import type { ProjectResponse } from "../../types/projectResponse";
+
+type ProjectMetaDataProps = Pick<
+  ProjectResponse,
+  "keySignature" | "bpm" | "genre" | "daw"
+>;
 
 export default function ProjectMetaData({
   keySignature,
   bpm,
   genre,
   daw,
-}: {
-  keySignature?: string;
-  bpm?: number;
-  genre?: string;
-  daw?: string;
-}) {
+}: ProjectMetaDataProps) {
   return (
     <section className="flex justify-center items-end md:pr-9">
       <section className="flex justify-center w-full">

@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "../../../lib/queryClient";
 import { api } from "../../../lib/axios";
 
 export default function useDeleteProject() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (projectId?: number) => {
       const response = await api.delete(`/project/${projectId}`);
@@ -12,8 +11,8 @@ export default function useDeleteProject() {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["catalog"] });
     },
-    onError: () => {
-      queryClient.invalidateQueries({ queryKey: ["catalog"] });
-    },
+    // onError: () => {
+    //   queryClient.invalidateQueries({ queryKey: ["catalog"] });
+    // },
   });
 }

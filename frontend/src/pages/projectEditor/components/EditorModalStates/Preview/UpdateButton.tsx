@@ -1,38 +1,44 @@
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useProjectStore } from "../../../services/useProjectStore";
-import useProjectPublish from "../../../hooks/useProjectPublish";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useEditorStore } from "../../../services/useEditorStore";
-import { useQueryClient } from "@tanstack/react-query";
+import { queryClient } from "../../../../../lib/queryClient";
+import useProjectUpdate from "../../../hooks/useProjectUpdate";
 import { useState } from "react";
-import { CloudUploadIcon } from "lucide-react";
+import { CloudCheck } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
-export default function PublishButton() {
-  const { requestForm: project, resetRequestForm: resetProject } =
-    useProjectStore();
-  const { mutateAsync: publishProject } = useProjectPublish();
+export default function UpdateButton() {
+  const {
+    requestForm: projectRequest,
+    resetRequestForm,
+    projectResponse,
+  } = useProjectStore();
+  const { mutateAsync: updateProject } = useProjectUpdate();
   const { setPageIndex } = useEditorStore();
   const [isDragOver, setIsDragOver] = useState(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   function handleClick() {
     navigate("/");
     setPageIndex(0);
 
-    const publishPromise = publishProject(project).then(() => {
-      resetProject();
+    const updatePromise = updateProject({
+      projectResponse,
+      projectRequest,
+    }).then(() => {
+      resetRequestForm();
       queryClient.invalidateQueries({ queryKey: ["catalog"] });
     });
 
-    toast.promise(publishPromise, {
-      pending: `Publishing '${project.name}'...`,
-      success: `Congrats! '${project.name}' has been published`,
+    toast.promise(updatePromise, {
+      pending: `Updating '${projectRequest.name}'...`,
+      success: `'${projectRequest.name}' has been successfully updated`,
       error: {
         render({ data }: { data: AxiosError }) {
-          return `Failed to publish: ${data?.message || "Unknown error"}`;
+          return `Failed to Update: ${data?.message || "Unknown error"}`;
         },
       },
     });
@@ -45,7 +51,7 @@ export default function PublishButton() {
       onMouseOver={() => setIsDragOver(true)}
       onMouseLeave={() => setIsDragOver(false)}
       transition={{ duration: 0.01 }}
-      className="flex justify-center items-center p-4 bg-[#ff0000] rounded-md min-w-30 h-13 cursor-pointer overflow-hidden relative transition focus:bg-[#cc0000]"
+      className="flex justify-center items-center p-4 bg-[#ff0000] rounded-md min-w-40 h-13 cursor-pointer overflow-hidden relative transition focus:bg-[#cc0000]"
     >
       <AnimatePresence mode="wait">
         {isDragOver ? (
@@ -57,7 +63,7 @@ export default function PublishButton() {
             transition={{ duration: 0.15 }}
             className="flex items-center justify-center"
           >
-            <CloudUploadIcon size={28} />
+            <CloudCheck size={28} />
           </motion.div>
         ) : (
           <motion.span
@@ -67,7 +73,7 @@ export default function PublishButton() {
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            PUBLISH
+            SAVE CHANGES
           </motion.span>
         )}
       </AnimatePresence>

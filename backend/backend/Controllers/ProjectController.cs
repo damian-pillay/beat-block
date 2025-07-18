@@ -26,8 +26,8 @@ public class ProjectController : ControllerBase
     public ActionResult<GetAllProjectsResponse> GetAll()
     {
         _logger.LogInformation("Fetching all projects");
-        var projects = _projectService.GetAllProjects();
-        var response = new GetAllProjectsResponse(projects);
+        var projectsResponse = _projectService.GetAllProjects();
+        var response = new GetAllProjectsResponse(projectsResponse);
 
         return Ok(response);
     }

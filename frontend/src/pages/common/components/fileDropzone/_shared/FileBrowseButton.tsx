@@ -1,22 +1,23 @@
 import { useRef } from "react";
-import { useProjectStore } from "../../../../projectEditor/services/useProjectStore";
 import { dropzoneConfig } from "../../../utils/dropzoneConfig";
 import type { DropzoneField } from "../../../types/dropzoneField";
-import { showErrorToast } from "../../../utils/toastConfig";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import useFileHandler from "../../../hooks/useFileHandler";
 
 interface FileBrowseButtonProps {
   field: DropzoneField;
   isProjectUpload?: boolean;
+  children: string | React.ReactNode;
 }
 
 export default function FileBrowseButton({
   field,
   isProjectUpload = false,
+  children,
 }: FileBrowseButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { updateProject } = useProjectStore();
+  const { handleFileInput } = useFileHandler(field);
   const navigate = useNavigate();
 
   function handleBrowseClick() {
@@ -30,16 +31,9 @@ export default function FileBrowseButton({
       return;
     }
 
-    if (files?.length !== 1) {
-      showErrorToast("Please only select one file.");
-      return;
-    }
+    const filesArray = Array.from(files);
 
-    if (!dropzoneConfig[field].mimeTypes.includes(files[0].type)) {
-      showErrorToast("Please select a valid file type");
-      return;
-    }
-    updateProject({ [field]: files[0] });
+    handleFileInput(filesArray);
 
     if (isProjectUpload) {
       navigate("/create");
@@ -64,7 +58,7 @@ export default function FileBrowseButton({
         className="rounded-sm select-none cursor-pointer"
         onClick={handleBrowseClick}
       >
-        browse
+        {children}
       </motion.button>
       <input
         ref={inputRef}

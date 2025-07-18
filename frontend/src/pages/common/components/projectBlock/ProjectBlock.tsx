@@ -2,12 +2,13 @@ import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectMetaData from "./ProjectMetaData";
 import ProjectDescription from "./ProjectDescription";
 import { AnimatePresence, motion } from "framer-motion";
-import type { project } from "../../types/project";
+import type { ProjectResponse } from "../../types/projectResponse";
 import { useState } from "react";
 import ProjectViewerModal from "../../../home/components/projectViewerModal/ProjectViewerModal";
+import useFetchFile from "../../../home/hooks/useFetchFile";
 
 interface ProjectBlockProps {
-  project: project;
+  project: ProjectResponse;
   isDeleting: boolean;
 }
 
@@ -16,6 +17,11 @@ export default function ProjectBlock({
   isDeleting,
 }: ProjectBlockProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { url: image } = useFetchFile({
+    field: "image",
+    projectId: project.id,
+    hasFile: project.hasImage,
+  });
 
   return (
     <>
@@ -39,9 +45,9 @@ export default function ProjectBlock({
             className="flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
             <img
-              src={DefaultAudioImage}
+              src={image ?? DefaultAudioImage}
               alt="default audio icon"
-              className="h-full rounded-3xl object-cover drag-none"
+              className="h-full rounded-3xl object-cover drag-none aspect-square"
             />
             <div className="flex flex-col justify-between w-full h-full">
               <ProjectDescription
@@ -63,6 +69,7 @@ export default function ProjectBlock({
           <ProjectViewerModal
             handleAwayClick={() => setIsModalOpen(false)}
             project={project}
+            image={image}
           />
         )}
       </AnimatePresence>

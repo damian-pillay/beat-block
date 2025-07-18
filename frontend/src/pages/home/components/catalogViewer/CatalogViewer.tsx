@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import ProjectBlock from "../../../common/components/projectBlock/ProjectBlock";
-import type { project } from "../../../common/types/project";
+import type { ProjectResponse } from "../../../common/types/projectResponse";
 import { showErrorToast } from "../../../common/utils/toastConfig";
 import useFetchCatalog from "../../hooks/useFetchCatalog";
 import { motion } from "framer-motion";
@@ -22,13 +22,15 @@ export default function Catalog() {
         <AnimatePresence mode="wait">
           <motion.div className="relative grid grid-cols-2 [@media(max-width:1280px)]:grid-cols-1 items-start md:auto-rows-[12rem] auto-rows-[9.5rem] gap-3 max-w-[89rem] mx-auto overflow-auto scrollbar-hide md:px-10 px-8 py-7 z-9 h-full">
             {catalog &&
-              catalog.projects.map((project: project, index: number) => (
-                <ProjectBlock
-                  key={project.id || index}
-                  project={project}
-                  isDeleting={deletingIds.has(project.id)}
-                />
-              ))}
+              catalog.projects.map(
+                (project: ProjectResponse, index: number) => (
+                  <ProjectBlock
+                    key={project.id || index}
+                    project={project}
+                    isDeleting={deletingIds.has(project.id)}
+                  />
+                )
+              )}
             {isPending && <p>loading...</p>}
             {error && showErrorToast(`Error fetching catalog: ${error}`)}
           </motion.div>

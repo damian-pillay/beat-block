@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { DefaultAudioImage } from "../../../../assets/icons";
 import ProjectDescription from "../../../common/components/projectBlock/ProjectDescription";
 import ProjectMetaData from "../../../common/components/projectBlock/ProjectMetaData";
-import type { project } from "../../../common/types/project";
+import type { ProjectResponse } from "../../../common/types/projectResponse";
 import ProjectTimeData from "./ProjectTimeData";
 import {
   DiagonalDotTexture,
@@ -17,18 +17,19 @@ import {
 } from "../../utils/projectViewerModalConfig";
 import ProjectActionButton from "./actionButtons/ProjectActionButton";
 import ProjectDeleteButton from "./actionButtons/ProjectDeleteButton";
+import ProjectEditButton from "./actionButtons/ProjectEditButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
-  project: project;
+  project: ProjectResponse;
+  image: string | null;
 }
 
 export default function ProjectViewerModal({
   handleAwayClick,
   project,
+  image,
 }: HandleAwayClickProps) {
-  console.log(project);
-
   return createPortal(
     <>
       <motion.div
@@ -62,7 +63,7 @@ export default function ProjectViewerModal({
           />
           <section className="w-full flex h-60 gap-5">
             <img
-              src={DefaultAudioImage}
+              src={image ?? DefaultAudioImage}
               alt="default-audio-image"
               className="rounded-3xl object-cover aspect-square drag-none w-1/3"
             />
@@ -94,14 +95,17 @@ export default function ProjectViewerModal({
                 />
               ))}
             </section>
-            <img src={OrbTexture} className="hidden md:block h-32" />
+            <img src={OrbTexture} className="hidden md:block h-30" />
             <section className="flex justify-end md:gap-7 gap-3">
               <ProjectDeleteButton
                 projectId={project.id}
                 projectName={project.name}
                 onDelete={handleAwayClick}
               />
-
+              <ProjectEditButton
+                closeModal={handleAwayClick}
+                project={project}
+              />
               {actionButtonConfig.map((item) => (
                 <ProjectActionButton
                   key={item.title}
