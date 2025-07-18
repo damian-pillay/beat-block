@@ -22,6 +22,7 @@ export default function useFetchFile({
       return response.data;
     },
     enabled: projectId != -1 && hasFile,
+    retry: false,
   });
 
   useEffect(() => {

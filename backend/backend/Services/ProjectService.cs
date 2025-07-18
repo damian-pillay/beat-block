@@ -69,7 +69,10 @@ public class ProjectService : IProjectService
             Daw = projectDto.Daw,
             FilePath = filePath,
             AudioPath = audioPath,
-            ImagePath = imagePath
+            ImagePath = imagePath,
+            CreatedAt = DateTime.Today,
+            UpdatedAt = DateTime.Today,
+            
         };
 
         await _repository.AddAsync(project);
@@ -85,6 +88,7 @@ public class ProjectService : IProjectService
         if (project == null)
         {
             _logger.LogWarning("No project found with Id: {ProjectId}", id);
+            return null;
         }
 
         return ConvertToProjectResponse(project);
@@ -204,8 +208,10 @@ public class ProjectService : IProjectService
             AudioPath = project.AudioPath,
             ImagePath = project.ImagePath,
             CreatedAt = project.CreatedAt,
-            UpdatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.Today,
         };
+
+        _logger.LogInformation("Updated Description: {ProjectDescription}", updatedProject.Description);
 
         if (requestDto.CompressedFile != null)
         {
@@ -252,13 +258,8 @@ public class ProjectService : IProjectService
         return updatedProject;
     }
 
-    private ProjectResponse? ConvertToProjectResponse(Project project)
+    private ProjectResponse ConvertToProjectResponse(Project project)
     {
-        if (project == null)
-        { 
-            return null;
-        }
-
         return new ProjectResponse
         {
             Id = project.Id,

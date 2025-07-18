@@ -64,6 +64,7 @@ public class ProjectRepository : IProjectRepository
         project.Daw = updatedProject.Daw;
         project.FilePath = updatedProject.FilePath;
         project.AudioPath = updatedProject.AudioPath;
+        project.ImagePath = updatedProject.ImagePath;
         project.UpdatedAt = updatedProject.UpdatedAt;
 
         await _context.SaveChangesAsync();
