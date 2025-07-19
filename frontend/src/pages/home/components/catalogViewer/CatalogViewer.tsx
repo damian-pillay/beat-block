@@ -20,7 +20,7 @@ export default function Catalog() {
           }}
         ></div>
         <AnimatePresence mode="wait">
-          <motion.div className="relative grid grid-cols-2 [@media(max-width:1280px)]:grid-cols-1 items-start md:auto-rows-[12rem] auto-rows-[9.5rem] gap-3 max-w-[89rem] mx-auto overflow-auto scrollbar-hide md:px-10 px-8 py-7 z-9 h-full">
+          <motion.div className="relative grid grid-cols-2 [@media(max-width:1280px)]:grid-cols-1 items-start md:auto-rows-[12rem] auto-rows-[9.5rem] gap-3 max-w-[89rem] mx-auto overflow-auto scrollbar-hide md:px-10 px-8 py-7 z-9 h-full pb-24">
             {catalog &&
               catalog.projects.map(
                 (project: ProjectResponse, index: number) => (
