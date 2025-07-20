@@ -112,6 +112,7 @@ export default function ProjectViewerModal({
               <ProjectPlayButton
                 hasFile={checkFileUploaded(project, "audioFile")}
                 project={project}
+                image={image ?? DefaultAudioImage}
               />
             </section>
           </section>

@@ -11,11 +11,13 @@ import type { AudioData } from "../../../../common/types/audioData";
 
 interface ProjectPlayButton {
   project: ProjectResponse;
+  image: string;
   hasFile: boolean;
 }
 
 export default function ProjectPlayButton({
   project,
+  image,
   hasFile,
 }: ProjectPlayButton) {
   const { queueAudio: setFilePath } = useAudioPlayerStore();
@@ -39,6 +41,7 @@ export default function ProjectPlayButton({
         bpm: project.bpm,
         genre: project.genre,
         keySignature: project.keySignature,
+        image: image,
       };
 
       const url = URL.createObjectURL(blob);

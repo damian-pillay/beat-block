@@ -3,4 +3,5 @@ export interface AudioData {
   keySignature?: string;
   bpm?: number;
   genre?: string;
+  image?: string;
 }
