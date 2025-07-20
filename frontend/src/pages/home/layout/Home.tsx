@@ -12,12 +12,13 @@ import { useAudioPlayerStore } from "../../common/services/useAudioPlayerStore";
 function Home() {
   const { resetRequestForm: resetProject } = useProjectStore();
   const { resetPage } = useEditorStore();
-  const { isOpen } = useAudioPlayerStore();
+  const { isOpen, closePlayer } = useAudioPlayerStore();
 
   useEffect(() => {
     resetProject();
     resetPage();
-  }, [resetPage, resetProject]);
+    closePlayer();
+  }, [resetPage, resetProject, closePlayer]);
 
   return (
     <>

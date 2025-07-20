@@ -1,10 +1,56 @@
-import { Pause, SkipBack, SkipForward, Volume2, X } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward, Volume2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { DefaultAudioImage, InfoIcon } from "../../../../assets/icons";
 import { useAudioPlayerStore } from "../../services/useAudioPlayerStore";
+import { useEffect, useRef } from "react";
 
 export default function AudioPlayer() {
-  const { audioData, closePlayer } = useAudioPlayerStore();
+  const { audioData, closePlayer, filePath, isPlaying, togglePlaying } =
+    useAudioPlayerStore();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  function toggleAudio() {
+    if (!audioRef.current) return;
+    togglePlaying();
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      return;
+    }
+
+    audioRef.current.play();
+  }
+
+  useEffect(() => {
+    if (!filePath) return;
+
+    // Stop previous audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    const audio = new Audio(filePath);
+    audioRef.current = audio;
+
+    // Try to play the audio
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error("Playback failed:", err);
+        }
+      });
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [filePath]);
 
   return (
     <motion.div
@@ -59,8 +105,31 @@ export default function AudioPlayer() {
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}
                 className="cursor-pointer"
+                onClick={toggleAudio}
               >
-                <Pause size={32} strokeWidth={0} fill="currentColor" />
+                <AnimatePresence mode="wait">
+                  {isPlaying ? (
+                    <motion.div
+                      key="pause"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Pause size={32} strokeWidth={0} fill="currentColor" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="play"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Play size={32} strokeWidth={0} fill="currentColor" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.button>
               <motion.button
                 transition={{ duration: 0.2 }}
