@@ -24,7 +24,6 @@ export default function AudioPlayer() {
   useEffect(() => {
     if (!filePath) return;
 
-    // Stop previous audio
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
@@ -33,7 +32,6 @@ export default function AudioPlayer() {
     const audio = new Audio(filePath);
     audioRef.current = audio;
 
-    // Try to play the audio
     const playPromise = audio.play();
 
     if (playPromise !== undefined) {

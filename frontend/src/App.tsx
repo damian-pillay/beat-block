@@ -18,8 +18,8 @@ function App() {
           <Route path="/create" element={<ProjectEditor />} />
         </Routes>
       </AnimatePresence>
-      <AnimatePresence>{isOpen && <AudioPlayer />}</AnimatePresence>
       <MessageToast />
+      <AnimatePresence>{isOpen && <AudioPlayer />}</AnimatePresence>
     </>
   );
 }
