@@ -1,10 +1,12 @@
 import { create } from "zustand";
+import { type AudioData } from "../types/audioData";
 
 interface AudioPlayerState {
   isOpen: boolean;
   isPlaying: boolean;
   filePath?: string;
-  setFilePath: (newPath: string) => void;
+  audioData?: AudioData;
+  queueAudio: (data: AudioData, path: string) => void;
   togglePlaying: () => void;
   closePlayer: () => void;
 }
@@ -13,11 +15,12 @@ export const useAudioPlayerStore = create<AudioPlayerState>((set) => ({
   isOpen: false,
   isPlaying: false,
 
-  setFilePath: (newPath) =>
+  queueAudio: (data, path) =>
     set({
+      audioData: data,
       isOpen: true,
       isPlaying: true,
-      filePath: newPath,
+      filePath: path,
     }),
 
   togglePlaying: () =>

@@ -6,6 +6,7 @@ import type { ProjectResponse } from "../../types/projectResponse";
 import { useState } from "react";
 import ProjectViewerModal from "../../../home/components/projectViewerModal/ProjectViewerModal";
 import useFetchFile from "../../../home/hooks/useFetchFile";
+import { useEffect } from "react";
 
 interface ProjectBlockProps {
   project: ProjectResponse;
@@ -17,11 +18,24 @@ export default function ProjectBlock({
   isDeleting,
 }: ProjectBlockProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { url: image } = useFetchFile({
+  const [image, setImage] = useState<string | null>(null);
+
+  const { data } = useFetchFile({
     field: "image",
     projectId: project.id,
-    hasFile: project.hasImage,
+    isEnabled: project.hasImage && project.id != -1,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    const objectUrl = URL.createObjectURL(data);
+    setImage(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [data]);
 
   return (
     <>

@@ -1,10 +1,19 @@
 import { Pause, SkipBack, SkipForward, Volume2, X } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { DefaultAudioImage, InfoIcon } from "../../../../assets/icons";
+import { useAudioPlayerStore } from "../../services/useAudioPlayerStore";
 
 export default function AudioPlayer() {
+  const { audioData, closePlayer } = useAudioPlayerStore();
+
   return (
-    <div className="absolute w-full h-25 bottom-0 z-50">
+    <motion.div
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      exit={{ y: 100 }}
+      transition={{ duration: 0.5 }}
+      className="absolute w-full h-25 bottom-0 z-50"
+    >
       <div
         className="relative top-0 w-full h-[15%] pointer-events-none mx-auto"
         style={{
@@ -15,16 +24,29 @@ export default function AudioPlayer() {
         <div className=" w-full max-w-[89rem] px-10 flex justify-start">
           <div className="relative w-full py-2 gap-7 flex justify-start items center">
             <img src={DefaultAudioImage} className="rounded-xl" />
-            <section className="flex flex-col justify-center gap-">
-              <p className="font-bold text-sm">Test Audio 1</p>
-              <p className="opacity-40">
-                <span>C#</span>
-                <span> • </span>
-                <span>122 BPM</span>
-                <span> • </span>
-                <span>Amapiano</span>
-              </p>
-            </section>
+            <AnimatePresence mode="wait">
+              {audioData && (
+                <motion.section
+                  key={`${audioData.title}-${audioData.keySignature}-${audioData.bpm}-${audioData.genre}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col justify-center gap-"
+                >
+                  <p className="font-bold text-sm">{audioData?.title}</p>
+                  <p className="opacity-40">
+                    <span>{audioData?.keySignature ?? "--"}</span>
+                    <span> • </span>
+                    <span>
+                      {audioData?.bpm ? `${audioData.bpm} BPM` : "--"}
+                    </span>
+                    <span> • </span>
+                    <span>{audioData?.genre ?? "--"}</span>
+                  </p>
+                </motion.section>
+              )}
+            </AnimatePresence>
             <section className=" absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex gap-18 items-center">
               <motion.button
                 transition={{ duration: 0.2 }}
@@ -71,6 +93,7 @@ export default function AudioPlayer() {
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}
                 className="cursor-pointer"
+                onClick={closePlayer}
               >
                 <X
                   size={24}
@@ -83,6 +106,6 @@ export default function AudioPlayer() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
