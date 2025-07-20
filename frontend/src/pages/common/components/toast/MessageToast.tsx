@@ -12,7 +12,7 @@ export default function MessageToast() {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="colored"
+      theme="dark"
       transition={Zoom}
     />
   );

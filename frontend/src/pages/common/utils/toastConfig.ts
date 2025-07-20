@@ -11,7 +11,6 @@ export function showErrorToast(errorMessage: string | undefined) {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
     transition: Zoom,
   });
 }
@@ -26,7 +25,6 @@ export function showSuccessToast(successMessage: string) {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
     transition: Zoom,
   });
 }
@@ -41,7 +39,6 @@ export function showInfoToast(infoMessage: string) {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
     transition: Zoom,
   });
 }
@@ -55,7 +52,6 @@ export function showWarningToast(warningMessage: string | undefined) {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
     transition: Zoom,
   });
 }
