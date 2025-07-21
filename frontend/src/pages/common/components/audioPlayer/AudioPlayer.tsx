@@ -67,7 +67,10 @@ export default function AudioPlayer() {
       <div className="w-full h-[85%] bg-[#171515] flex justify-center">
         <div className=" w-full max-w-[89rem] px-10 flex justify-start">
           <div className="relative w-full py-2 gap-7 flex justify-start items center">
-            <img src={audioData?.image} className="rounded-xl" />
+            <img
+              src={audioData?.image}
+              className="rounded-xl aspect-square object-cover"
+            />
             <AnimatePresence mode="wait">
               {audioData && (
                 <motion.section
