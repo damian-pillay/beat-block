@@ -4,7 +4,7 @@ import EditorContent from "./EditorContent";
 
 export default function EditorModal() {
   return (
-    <div className="h-full flex justify-center py-8">
+    <div className="h-full flex justify-center py-8 pb-25 overflow-auto scrollbar-hide">
       <motion.form
         onSubmit={(e) => e.preventDefault()}
         initial={{ scale: 0, opacity: 0 }}

@@ -11,13 +11,12 @@ import {
   OrbTexture,
 } from "../../../../assets/textures";
 import ProjectDownloadButton from "./ProjectDownloadButton";
-import {
-  actionButtonConfig,
-  downloadButtonConfig,
-} from "../../utils/projectViewerModalConfig";
-import ProjectActionButton from "./actionButtons/ProjectActionButton";
+import { downloadButtonConfig } from "../../utils/projectViewerModalConfig";
 import ProjectDeleteButton from "./actionButtons/ProjectDeleteButton";
 import ProjectEditButton from "./actionButtons/ProjectEditButton";
+import { checkFileUploaded } from "../../../common/helper/fileUploadedValidator";
+import type { DropzoneField } from "../../../common/types/dropzoneField";
+import ProjectPlayButton from "./actionButtons/ProjectPlayButton";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
@@ -86,11 +85,15 @@ export default function ProjectViewerModal({
           </section>
           <section className="h-1/3 w-full flex items-center justify-between md:gap-0 gap-10">
             <section className="flex flex-col w-1/3 gap-2">
-              {downloadButtonConfig.map((item) => (
+              {downloadButtonConfig.map((action) => (
                 <ProjectDownloadButton
-                  key={item.title}
+                  key={action.title}
                   id={project.id}
-                  type={item.title}
+                  hasFile={checkFileUploaded(
+                    project,
+                    action.field as DropzoneField
+                  )}
+                  type={action.title.toLowerCase()}
                   title={project.name}
                 />
               ))}
@@ -106,13 +109,11 @@ export default function ProjectViewerModal({
                 closeModal={handleAwayClick}
                 project={project}
               />
-              {actionButtonConfig.map((item) => (
-                <ProjectActionButton
-                  key={item.title}
-                  icon={item.icon}
-                  alt={item.title}
-                />
-              ))}
+              <ProjectPlayButton
+                hasFile={checkFileUploaded(project, "audioFile")}
+                project={project}
+                image={image ?? DefaultAudioImage}
+              />
             </section>
           </section>
         </div>

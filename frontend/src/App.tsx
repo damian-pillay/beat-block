@@ -3,9 +3,12 @@ import Home from "./pages/home/layout/Home";
 import ProjectEditor from "./pages/projectEditor/layout/ProjectEditor";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MessageToast from "./pages/common/components/toast/MessageToast";
+import { useAudioPlayerStore } from "./pages/common/services/useAudioPlayerStore";
+import AudioPlayer from "./pages/common/components/audioPlayer/AudioPlayer";
 
 function App() {
   const location = useLocation();
+  const { isOpen } = useAudioPlayerStore();
 
   return (
     <>
@@ -16,6 +19,7 @@ function App() {
         </Routes>
       </AnimatePresence>
       <MessageToast />
+      <AnimatePresence>{isOpen && <AudioPlayer />}</AnimatePresence>
     </>
   );
 }

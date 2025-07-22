@@ -4,4 +4,7 @@ export const actionButtonConfig = [
   { title: "Play Audio", icon: ProjectPlayIcon },
 ];
 
-export const downloadButtonConfig = [{ title: "Files" }, { title: "Audio" }];
+export const downloadButtonConfig = [
+  { title: "Files", field: "compressedFile" },
+  { title: "Audio", field: "audioFile" },
+];

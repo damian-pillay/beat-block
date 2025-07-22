@@ -26,7 +26,7 @@ function Home() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           exit={{ opacity: 0 }}
-          className=" overflow-hidden flex flex-col h-[88%]"
+          className="relative overflow-hidden flex flex-col h-[90%]"
         >
           <Dashboard />
           <Catalog />
