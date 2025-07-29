@@ -20,8 +20,9 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task<User?> GetByEmailAsync(string email)
+    public async Task<User?> GetByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        return await _context.User
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 }

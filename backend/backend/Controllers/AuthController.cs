@@ -31,4 +31,14 @@ public class AuthController : ControllerBase
 
         return Ok("Registration successful.");
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto loginDto)
+    {
+        var token = await _userService.LoginAsync(loginDto.Email, loginDto.Password);
+        if (token == null)
+            return Unauthorized("Invalid username or password.");
+
+        return Ok(new { token });
+    }
 }
