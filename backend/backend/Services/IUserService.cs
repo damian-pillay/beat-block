@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<bool> RegisterUserAsync(RegisterRequestDTO registerDto);
     Task<string?> LoginAsync(string email, string password);
+    Task<bool> UserExistsAsync(Guid userId);
 }

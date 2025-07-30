@@ -19,23 +19,24 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         _logger.LogError(exception, "An unhandled exception occurred.");
 
-        httpContext.Response.StatusCode = 500;
-        httpContext.Response.ContentType = "application/json";
-
         var (status, title, detail, type) =
             ProjectExceptionMap.ExceptionToResponse.TryGetValue(exception.GetType(), out var value)
             ? value
             : ProjectExceptionMap.DefaultResponse;
 
-        var errorResponse = new
+        httpContext.Response.StatusCode = status;
+        httpContext.Response.ContentType = "application/problem+json";
+
+        var problemDetails = new
         {
-            type = type,
-            title = title,
-            status = status,
-            detail = detail,
+            type,
+            title,
+            status,
+            detail,
+            instance = httpContext.Request.Path
         };
 
-        await httpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
         return true;
     }
 }

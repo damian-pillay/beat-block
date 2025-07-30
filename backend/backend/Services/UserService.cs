@@ -66,6 +66,11 @@ public class UserService : IUserService
         return GenerateToken(user);
     }
 
+    public async Task<bool> UserExistsAsync(Guid userId)
+    {
+        return await _userRepository.IdExistsAsync(userId);
+    }
+
     private string GenerateToken(User user)
     {
         var claims = new[]

@@ -40,8 +40,8 @@ public static class ProjectExceptionMap
             },
             {
                 typeof(UnauthorizedAccessException),
-                (StatusCodes.Status403Forbidden,
-                    "Forbidden",
+                (StatusCodes.Status401Unauthorized,
+                    "Unauthorized",
                     "You do not have permission to access or modify this resource.",
                     "https://tools.ietf.org/html/rfc7231#section-6.5.3")
             },

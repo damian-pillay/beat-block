@@ -6,7 +6,7 @@ public interface IProjectRepository
 {
     IEnumerable<Project> GetAllProjects();
     Task AddAsync(Project project);
-    Task<Project?> GetByIdAsync(int id);
+    Task<Project?> GetByIdAsync(int id, Guid userId);
     Task DeleteProject(Project project);
     Task UpdateProjectAsync(Project project);
     Task<string?> GetImageFilePathAsync(int projectId);

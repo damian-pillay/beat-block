@@ -79,11 +79,11 @@ public class ProjectService : IProjectService
         return ConvertToProjectResponse(project);
     }
 
-    public async Task<ProjectResponse?> GetProjectByIdAsync(int id)
+    public async Task<ProjectResponse?> GetProjectByIdAsync(int id, Guid userId)
     {
         _logger.LogInformation("Fetching project with Id: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {
@@ -94,11 +94,11 @@ public class ProjectService : IProjectService
         return ConvertToProjectResponse(project);
     }
 
-    public async Task<bool> DeleteProjectAsync(int id)
+    public async Task<bool> DeleteProjectAsync(int id, Guid userId)
     {
         _logger.LogInformation("Attempting to delete project with Id: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {
@@ -175,11 +175,11 @@ public class ProjectService : IProjectService
             ContentType = contentType
         };
     }
-    public async Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto)
+    public async Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto, Guid userId)
     {
         _logger.LogInformation("Starting update for project with ID: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {

@@ -15,13 +15,15 @@ public class ProjectController : ControllerBase
 {
     private readonly IProjectService _projectService;
     private readonly IProjectUploadValidator _uploadValidator;
+    private readonly IUserService _userService;
     private readonly ILogger _logger;
 
-    public ProjectController(IProjectService projectService, IProjectUploadValidator uploadValidator, ILogger<ProjectController> logger)
+    public ProjectController(IProjectService projectService, IProjectUploadValidator uploadValidator, ILogger<ProjectController> logger, IUserService userService)
     {
         _projectService = projectService;
         _uploadValidator = uploadValidator;
         _logger = logger;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -37,16 +39,18 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
-        _logger.LogInformation("Fetching project by ID: {ProjectId}", id);
-        var project = await _projectService.GetProjectByIdAsync(id);
+        var userId = GetUserId();
+
+        _logger.LogInformation("Fetching project by ID: {ProjectId} for user by ID: {UserId}", id, userId);
+        var project = await _projectService.GetProjectByIdAsync(id, userId);
 
         if (project == null)
         {
-            _logger.LogWarning("Project with ID {ProjectId} not found", id);
-            return NotFound();
+            _logger.LogWarning("Project with ID {ProjectId} not found for User with ID {UserId}", id, userId);
+            return Forbid();
         }
 
-        _logger.LogInformation("Project found: {ProjectName} (Id: {ProjectId})", project.Name, project.Id);
+        _logger.LogInformation("Project found: {ProjectName} (Id: {ProjectId}) for User with ID {UserId}", project.Name, project.Id, userId);
         return Ok(project);
     }
 
@@ -79,6 +83,12 @@ public class ProjectController : ControllerBase
     {
         var userId = GetUserId();
 
+        if (!await _userService.UserExistsAsync(userId))
+        {
+            _logger.LogWarning("User ID {UserId} does not exist in the system", userId);
+            return Forbid();
+        }
+
         _logger.LogInformation("Received request to create a new project");
         _uploadValidator.Validate(projectDto, ModelState);
 
@@ -98,6 +108,7 @@ public class ProjectController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest projectDto)
     {
+        var userId = GetUserId();
         _logger.LogInformation("Received request to update project ID: {ProjectId}", id);
 
         _uploadValidator.Validate(projectDto, ModelState);
@@ -108,12 +119,12 @@ public class ProjectController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var updatedProject = await _projectService.UpdateProjectAsync(id, projectDto);
+        var updatedProject = await _projectService.UpdateProjectAsync(id, projectDto, userId);
 
         if (updatedProject == null)
         {
             _logger.LogWarning("Project with ID {ProjectId} not found for update", id);
-            return NotFound();
+            return Forbid();
         }
 
         _logger.LogInformation("Project with ID {ProjectId} updated successfully", id);
@@ -123,13 +134,15 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
+        var userId = GetUserId();
+
         _logger.LogInformation("Received request to delete project ID: {ProjectId}", id);
-        var result = await _projectService.DeleteProjectAsync(id);
+        var result = await _projectService.DeleteProjectAsync(id, userId);
 
         if (!result)
         {
             _logger.LogWarning("Project with ID {ProjectId} not found for deletion", id);
-            return NotFound();
+            return Forbid();
         }
 
         _logger.LogInformation("Project with ID {ProjectId} deleted successfully", id);
@@ -138,6 +151,5 @@ public class ProjectController : ControllerBase
 
     private Guid GetUserId() =>
         Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?
-            .Value ?? throw new UnauthorizedAccessException("User ID not found in token"));
-
+            .Value ?? throw new UnauthorizedAccessException());
 }

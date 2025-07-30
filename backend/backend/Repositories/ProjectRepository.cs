@@ -30,14 +30,16 @@ public class ProjectRepository : IProjectRepository
         _logger.LogInformation("Project added with Id {ProjectId}", project.Id);
     }
 
-    public async Task<Project?> GetByIdAsync(int id)
+    public async Task<Project?> GetByIdAsync(int id, Guid userId)
     {
-        _logger.LogInformation("Fetching project by ID: {ProjectId}", id);
-        var project = await _context.Project.FindAsync(id);
+        _logger.LogInformation("Fetching project by ID: {ProjectId} for user {UserId}", id, userId);
+
+        var project = await _context.Project
+            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
 
         if (project == null)
         {
-            _logger.LogWarning("Project with ID {ProjectId} not found.", id);
+            _logger.LogWarning("Project with ID {ProjectId} not found or does not belong to user {UserId}.", id, userId);
         }
 
         return project;
