@@ -1,10 +1,6 @@
-﻿using BeatBlock.Models;
-using BeatBlock.Models.DTOs.Request;
+﻿using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Services;
-using Humanizer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BeatBlock.Controllers;
 

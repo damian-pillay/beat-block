@@ -8,7 +8,7 @@ namespace BeatBlock.Services
     public interface IProjectService
     {
         IEnumerable<ProjectResponse> GetAllProjects();
-        Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto);
+        Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto, Guid userId);
         Task<ProjectResponse?> GetProjectByIdAsync(int id);
         Task<bool> DeleteProjectAsync(int id);
         Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto);

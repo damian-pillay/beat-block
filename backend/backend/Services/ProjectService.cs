@@ -36,8 +36,8 @@ public class ProjectService : IProjectService
         return projectsResponse;
     }
 
-    public async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto)
-    {
+    public async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto, Guid userId)
+    { 
         _logger.LogInformation("Creating project: {ProjectName}", projectDto.Name);
 
         var filePath = await _blobStorageRepository.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
@@ -72,7 +72,7 @@ public class ProjectService : IProjectService
             ImagePath = imagePath,
             CreatedAt = DateTime.Today,
             UpdatedAt = DateTime.Today,
-            
+            UserId = userId
         };
 
         await _repository.AddAsync(project);

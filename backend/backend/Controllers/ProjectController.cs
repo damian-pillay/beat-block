@@ -3,10 +3,12 @@ using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
 using BeatBlock.Services.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeatBlock.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectController : ControllerBase
@@ -75,6 +77,8 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
+        var userId = GetUserId();
+
         _logger.LogInformation("Received request to create a new project");
         _uploadValidator.Validate(projectDto, ModelState);
 
@@ -84,7 +88,7 @@ public class ProjectController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var createdProject = await _projectService.CreateProjectAsync(projectDto);
+        var createdProject = await _projectService.CreateProjectAsync(projectDto, userId);
 
         _logger.LogInformation("Project created successfully with ID: {ProjectId}", createdProject.Id);
 
@@ -131,4 +135,9 @@ public class ProjectController : ControllerBase
         _logger.LogInformation("Project with ID {ProjectId} deleted successfully", id);
         return NoContent();
     }
+
+    private Guid GetUserId() =>
+        Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?
+            .Value ?? throw new UnauthorizedAccessException("User ID not found in token"));
+
 }

@@ -118,8 +118,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(_ => { });
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
