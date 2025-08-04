@@ -1,42 +1,57 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { SendHorizonal } from "lucide-react";
+import { ValidationError } from "yup";
+import { showErrorToast } from "../../common/utils/toastConfig";
+import {
+  type SignUpFormData,
+  signUpSchema,
+} from "../validation/onboardingSchema";
+import AuthenticationButton from "./AuthenticationButton2";
+import useSignUp from "../api/useSignUp";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function SignUpButton() {
-  const [isDragOver, setIsDragOver] = useState(false);
+interface SignUpButtonProps {
+  formData: SignUpFormData;
+}
+
+export default function SignUpButton({ formData }: SignUpButtonProps) {
+  const { mutateAsync: signUp } = useSignUp();
+  const navigate = useNavigate();
+
+  async function validateSignUpInfo() {
+    try {
+      signUpSchema.validateSync(formData);
+      return true;
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        showErrorToast(error.message);
+      } else {
+        showErrorToast("An unexpected error occured");
+      }
+      return false;
+    }
+  }
+
+  async function handleClick() {
+    const isValid = await validateSignUpInfo();
+    if (!isValid) return;
+
+    const signUpPromise = signUp(formData).then(() => {
+      navigate("/login");
+    });
+
+    toast.promise(signUpPromise, {
+      pending: "Signing up...",
+      success: "Sign up successful! Please login",
+      error: {
+        render({ data }: { data: AxiosError }) {
+          return `Sign up failed: ${data?.message || "Unknown error"}`;
+        },
+      },
+    });
+  }
 
   return (
-    <motion.button
-      type="button"
-      onMouseOver={() => setIsDragOver(true)}
-      onMouseLeave={() => setIsDragOver(false)}
-      transition={{ duration: 0.01 }}
-      className="flex justify-center items-center p-4 bg-[#ff0000] min-w-30 h-10 rounded-full cursor-pointer overflow-hidden relative transition focus:bg-[#cc0000]"
-    >
-      <AnimatePresence mode="wait">
-        {isDragOver ? (
-          <motion.div
-            key="send"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 20, opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="flex items-center justify-center"
-          >
-            <SendHorizonal size={22} />
-          </motion.div>
-        ) : (
-          <motion.span
-            key="text"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            SIGN UP
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </motion.button>
+    <AuthenticationButton onClick={handleClick}>SIGN UP</AuthenticationButton>
   );
 }

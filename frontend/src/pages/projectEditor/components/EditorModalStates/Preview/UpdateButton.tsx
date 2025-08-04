@@ -26,7 +26,7 @@ export default function UpdateButton() {
     setPageIndex(0);
 
     const updatePromise = updateProject({
-      projectResponse,
+      projectResponse: projectResponse!,
       projectRequest,
     }).then(() => {
       resetRequestForm();

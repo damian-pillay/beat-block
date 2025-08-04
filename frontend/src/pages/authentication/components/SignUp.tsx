@@ -1,9 +1,28 @@
 import OnboardingFormInput from "./OnboardingFormInput";
 import { SignUpConfig } from "../utils/OnboardingConfig";
-import SignUpButton from "./SignUpButton";
 import { motion } from "framer-motion";
+import { type SignUpFormData } from "../validation/onboardingSchema";
+import { useState } from "react";
+import SignUpButton from "./SignUpButton";
 
 export default function SignUp() {
+  const initialValues: SignUpFormData = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    alias: "",
+  };
+  const [formValues, setFormValues] = useState<SignUpFormData>(initialValues);
+
+  function handleInputChange(key: keyof SignUpFormData, value: string) {
+    setFormValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 30 }}
@@ -22,10 +41,16 @@ export default function SignUp() {
               title={input.title}
               type={input.type}
               placeholder={input.placeholder}
+              value={formValues[input.key as keyof SignUpFormData]}
+              onChange={(value) =>
+                handleInputChange(input.key as keyof SignUpFormData, value)
+              }
             />
           ))}
         </div>
-        <SignUpButton />
+        <div className="flex justify-center w-full py-2">
+          <SignUpButton formData={formValues} />
+        </div>
       </form>
     </motion.div>
   );
