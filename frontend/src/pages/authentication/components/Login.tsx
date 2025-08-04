@@ -1,12 +1,9 @@
 import OnboardingFormInput from "./OnboardingFormInput";
 import { LoginConfig } from "../utils/OnboardingConfig";
-import AuthenticationButton from "./AuthenticationButton";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import {
-  loginSchema,
-  type LoginFormData,
-} from "../validation/onboardingSchema";
+import { type LoginFormData } from "../validation/onboardingSchema";
+import LoginButton from "./LoginButton";
 
 export default function Login() {
   const initialValues = {
@@ -49,11 +46,7 @@ export default function Login() {
           ))}
         </div>
         <div className="flex justify-center w-full py-2">
-          <AuthenticationButton
-            title="LOGIN"
-            validationSchema={loginSchema}
-            formData={formValues}
-          />
+          <LoginButton formData={formValues} />
         </div>
       </form>
     </motion.div>
