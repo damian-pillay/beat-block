@@ -1,5 +1,8 @@
-﻿using BeatBlock.Models.DTOs.Request;
+﻿using BeatBlock.Helpers;
+using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeatBlock.Controllers;
@@ -42,5 +45,21 @@ public class AuthController : ControllerBase
         });
 
         return Ok(new { message = "Login Successful" });
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var userId = User.GetUserId();
+
+        var userInfo = await _userService.GetUserInfoAsync(userId);
+
+        if (userInfo == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(userInfo);
     }
 }

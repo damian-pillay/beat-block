@@ -1,5 +1,6 @@
 ﻿using BeatBlock.Models;
 using BeatBlock.Models.DTOs.Request;
+using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -69,6 +70,26 @@ public class UserService : IUserService
     public async Task<bool> UserExistsAsync(Guid userId)
     {
         return await _userRepository.IdExistsAsync(userId);
+    }
+
+    public async Task<UserInfoDTO?> GetUserInfoAsync(Guid userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        var userInfo = new UserInfoDTO
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Alias = user.Alias,
+        };
+
+        return userInfo;
     }
 
     private string GenerateToken(User user)

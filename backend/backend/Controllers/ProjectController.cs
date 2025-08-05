@@ -29,7 +29,7 @@ public class ProjectController : ControllerBase
     [HttpGet]
     public ActionResult<GetAllProjectsResponse> GetAll()
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
 
         _logger.LogInformation("Fetching all projects");
         var projectsResponse = _projectService.GetAllProjects(userId);
@@ -41,7 +41,7 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
 
         _logger.LogInformation("Fetching project by ID: {ProjectId} for user by ID: {UserId}", id, userId);
         var project = await _projectService.GetProjectByIdAsync(id, userId);
@@ -59,7 +59,7 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}/{fileType}")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
 
         _logger.LogInformation("Fetching file of type '{FileType}' for project ID: {ProjectId}", fileType, id);
 
@@ -86,7 +86,7 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
 
         if (!await _userService.UserExistsAsync(userId))
         {
@@ -113,7 +113,7 @@ public class ProjectController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest projectDto)
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
         _logger.LogInformation("Received request to update project ID: {ProjectId}", id);
 
         _uploadValidator.Validate(projectDto, ModelState);
@@ -139,7 +139,7 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
-        var userId = GetUserId();
+        var userId = User.GetUserId();
 
         _logger.LogInformation("Received request to delete project ID: {ProjectId}", id);
         var result = await _projectService.DeleteProjectAsync(id, userId);
@@ -153,8 +153,4 @@ public class ProjectController : ControllerBase
         _logger.LogInformation("Project with ID {ProjectId} deleted successfully", id);
         return NoContent();
     }
-
-    private Guid GetUserId() =>
-        Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?
-            .Value ?? throw new UnauthorizedAccessException());
 }
