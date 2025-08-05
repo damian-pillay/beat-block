@@ -15,10 +15,13 @@ public class ProjectRepository : IProjectRepository
         _logger = logger;
     }
 
-    public IEnumerable<Project> GetAllProjects()
+    public IEnumerable<Project> GetAllProjects(Guid userId)
     {
         _logger.LogInformation("Retrieving all projects.");
-        return _context.Project.ToList();
+
+        var userProjects = _context.Project.Where(p  => p.UserId == userId).ToList();
+
+        return userProjects;
     }
 
     public async Task AddAsync(Project project)

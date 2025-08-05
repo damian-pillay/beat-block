@@ -27,9 +27,9 @@ public class ProjectService : IProjectService
         _logger = logger;
     }
 
-    public IEnumerable<ProjectResponse> GetAllProjects()
+    public IEnumerable<ProjectResponse> GetAllProjects(Guid userId)
     {
-        var projects = _repository.GetAllProjects();
+        var projects = _repository.GetAllProjects(userId);
 
         var projectsResponse = projects.Select(project => ConvertToProjectResponse(project));
 

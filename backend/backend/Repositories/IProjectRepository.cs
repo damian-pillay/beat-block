@@ -4,7 +4,7 @@ namespace BeatBlock.Repositories;
 
 public interface IProjectRepository
 {
-    IEnumerable<Project> GetAllProjects();
+    IEnumerable<Project> GetAllProjects(Guid userId);
     Task AddAsync(Project project);
     Task<Project?> GetByIdAsync(int id, Guid userId);
     Task DeleteProject(Project project);

@@ -44,8 +44,9 @@ export default function LoginButton({ formData }: LoginButtonProps) {
     toast.promise(loginPromise, {
       pending: "Logging in...",
       error: {
-        render({ data }: { data: AxiosError }) {
-          return `Sign up failed: ${data?.message || "Unknown error"}`;
+        render({ data: error }: { data: AxiosError }) {
+          console.log(error);
+          return `Sign up failed: ${error?.response?.data || "Unknown error"}`;
         },
       },
     });

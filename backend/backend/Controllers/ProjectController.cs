@@ -29,8 +29,10 @@ public class ProjectController : ControllerBase
     [HttpGet]
     public ActionResult<GetAllProjectsResponse> GetAll()
     {
+        var userId = GetUserId();
+
         _logger.LogInformation("Fetching all projects");
-        var projectsResponse = _projectService.GetAllProjects();
+        var projectsResponse = _projectService.GetAllProjects(userId);
         var response = new GetAllProjectsResponse(projectsResponse);
 
         return Ok(response);
