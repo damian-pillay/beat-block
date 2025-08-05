@@ -36,11 +36,12 @@ export default function LoginButton({ formData }: LoginButtonProps) {
     const isValid = await validateSignUpInfo();
     if (!isValid) return;
 
-    const signUpPromise = login(formData).then(() => {
+    const loginPromise = login(formData).then((response) => {
+      console.log(response);
       navigate("/");
     });
 
-    toast.promise(signUpPromise, {
+    toast.promise(loginPromise, {
       pending: "Logging in...",
       error: {
         render({ data }: { data: AxiosError }) {

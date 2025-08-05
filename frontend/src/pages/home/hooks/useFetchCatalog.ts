@@ -5,7 +5,9 @@ export default function useFetchCatalog() {
   const catalog = useQuery({
     queryKey: ["catalog"],
     queryFn: async () => {
-      const response = await api.get("/project");
+      const response = await api.get("/project", {
+        withCredentials: true,
+      });
       return response.data;
     },
   });

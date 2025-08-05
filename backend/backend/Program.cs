@@ -79,13 +79,15 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+              .AllowCredentials()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -100,6 +102,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("access_token"))
+                {
+                    context.Token = context.Request.Cookies["access_token"];
+                }
+
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -116,7 +131,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler(_ => { });
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

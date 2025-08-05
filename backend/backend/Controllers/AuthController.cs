@@ -35,6 +35,12 @@ public class AuthController : ControllerBase
         if (token == null)
             return Unauthorized("Invalid username or password.");
 
-        return Ok(new { token });
+        Response.Cookies.Append("access_token", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTimeOffset.UtcNow.AddHours(2)
+        });
+
+        return Ok(new { message = "Login Successful" });
     }
 }

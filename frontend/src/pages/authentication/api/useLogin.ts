@@ -5,7 +5,9 @@ import { type LoginFormData } from "../validation/onboardingSchema";
 export default function useLogin() {
   return useMutation({
     mutationFn: async (loginData: LoginFormData) => {
-      const response = await api.post("/auth/login", loginData);
+      const response = await api.post("/auth/login", loginData, {
+        withCredentials: true,
+      });
       return response.data;
     },
   });
