@@ -59,6 +59,8 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}/{fileType}")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
+        var userId = GetUserId();
+
         _logger.LogInformation("Fetching file of type '{FileType}' for project ID: {ProjectId}", fileType, id);
 
         var result = await _projectService
@@ -66,13 +68,14 @@ public class ProjectController : ControllerBase
                 id,
                 fileType.ToLower(),
                 ContentTypeHelper.ContentTypes,
-                ContentTypeHelper.DefaultContentType
+                ContentTypeHelper.DefaultContentType,
+                userId
             );
 
         if (result == null)
         {
             _logger.LogWarning("File of type '{FileType}' for project ID {ProjectId} not found", fileType, id);
-            return NotFound();
+            return Forbid();
         }
 
         Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");

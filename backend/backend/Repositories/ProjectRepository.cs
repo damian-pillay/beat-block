@@ -75,12 +75,12 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<string?> GetImageFilePathAsync(int projectId)
+    public async Task<string?> GetImageFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching image path for Project ID: {ProjectId}", projectId);
 
         var imagePath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.ImagePath)
             .FirstOrDefaultAsync();
 
@@ -92,12 +92,12 @@ public class ProjectRepository : IProjectRepository
         return imagePath;
     }
 
-    public async Task<string?> GetCompressedFilePathAsync(int projectId)
+    public async Task<string?> GetCompressedFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching compressed file path for Project ID: {ProjectId}", projectId);
 
         var filePath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.FilePath)
             .FirstOrDefaultAsync();
 
@@ -109,12 +109,12 @@ public class ProjectRepository : IProjectRepository
         return filePath;
     }
 
-    public async Task<string?> GetAudioFilePathAsync(int projectId)
+    public async Task<string?> GetAudioFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching audio path for Project ID: {ProjectId}", projectId);
 
         var audioPath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.AudioPath)
             .FirstOrDefaultAsync();
 

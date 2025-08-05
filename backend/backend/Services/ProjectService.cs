@@ -129,15 +129,17 @@ public class ProjectService : IProjectService
         int id,
         string fileType,
         FrozenDictionary<string, string> ContentTypes,
-        string DefaultContentType)
+        string DefaultContentType,
+        Guid userId
+        )
     {
         _logger.LogInformation("Attempting to retrieve {FileType} for project with Id: {ProjectId}", fileType, id);
 
         var blobPath = fileType switch
         {
-            CompressedFileType => await _repository.GetCompressedFilePathAsync(id),
-            AudioFileType => await _repository.GetAudioFilePathAsync(id),
-            ImageFileType => await _repository.GetImageFilePathAsync(id),
+            CompressedFileType => await _repository.GetCompressedFilePathAsync(id, userId),
+            AudioFileType => await _repository.GetAudioFilePathAsync(id, userId),
+            ImageFileType => await _repository.GetImageFilePathAsync(id, userId),
             _ => null
         };
 

@@ -12,6 +12,6 @@ namespace BeatBlock.Services
         Task<ProjectResponse?> GetProjectByIdAsync(int id, Guid userId);
         Task<bool> DeleteProjectAsync(int id, Guid userId);
         Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest projectDto, Guid userId);
-        Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes, string DefaultContentType);
+        Task<FileDownloadResponse?> GetProjectFileStreamAsync(int id, string fileType, FrozenDictionary<string, string> ContentTypes, string DefaultContentType, Guid userId);
     }
 }
