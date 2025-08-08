@@ -47,6 +47,15 @@ public class AuthController : ControllerBase
         return Ok(new { message = "Login Successful" });
     }
 
+    [HttpPost("logout")]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("access_token");
+
+        return Ok(new { message = "Logout successful" });
+    }
+
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetUserInfo()
