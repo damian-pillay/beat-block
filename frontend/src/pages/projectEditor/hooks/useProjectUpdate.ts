@@ -12,7 +12,6 @@ export default function useProjectUpdate() {
       projectResponse: ProjectResponse;
       projectRequest: ProjectRequest;
     }) => {
-      console.log(projectRequest);
       const formData = new FormData();
 
       for (const key in projectRequest) {
@@ -44,16 +43,11 @@ export default function useProjectUpdate() {
         formData.append(key, value === null || undefined ? "" : String(value));
       }
 
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       const response = await api.patch(
         `/project/${projectResponse?.id}`,
         formData
       );
 
-      console.log(response.data);
       return response.data;
     },
   });

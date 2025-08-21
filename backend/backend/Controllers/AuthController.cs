@@ -57,17 +57,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("me")]
-    [Authorize]
     public async Task<IActionResult> GetUserInfo()
     {
+        if (User?.Identity == null || !User.Identity.IsAuthenticated)
+        {
+            return Ok(null);
+        }
+
         var userId = User.GetUserId();
 
         var userInfo = await _userService.GetUserInfoAsync(userId);
-
-        if (userInfo == null)
-        {
-            return NotFound();
-        }
 
         return Ok(userInfo);
     }

@@ -3,7 +3,11 @@ import AuthInfoPanel from "../components/AuthInfoPanel";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 
-export default function Onboarding({ isSignUp }: { isSignUp: boolean }) {
+export default function Onboarding({
+  isSignUp = false,
+}: {
+  isSignUp?: boolean;
+}) {
   return (
     <div
       className="border h-screen w-full flex justify-center"

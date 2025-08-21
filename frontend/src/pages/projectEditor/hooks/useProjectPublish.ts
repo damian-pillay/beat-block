@@ -5,8 +5,6 @@ import type { ProjectRequest } from "../../common/types/projectRequest";
 export default function useProjectPublish() {
   return useMutation({
     mutationFn: async (project: ProjectRequest) => {
-      console.log(project);
-
       const formData = new FormData();
 
       for (const key in project) {

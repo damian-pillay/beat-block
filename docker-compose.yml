@@ -81,7 +81,7 @@ services:
       - "10001:10001"
       - "10002:10002"
     volumes:
-      - ./azurite_data:/data
+      - azurite_data:/data
     environment:
       - AZURITE_ACCOUNTS=devstoreaccount1:Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc==
     command: ["azurite-blob", "--blobHost", "0.0.0.0", "--silent"]

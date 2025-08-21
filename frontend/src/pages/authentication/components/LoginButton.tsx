@@ -36,8 +36,7 @@ export default function LoginButton({ formData }: LoginButtonProps) {
     const isValid = await validateSignUpInfo();
     if (!isValid) return;
 
-    const loginPromise = login(formData).then((response) => {
-      console.log(response);
+    const loginPromise = login(formData).then(() => {
       navigate("/");
     });
 
@@ -45,7 +44,6 @@ export default function LoginButton({ formData }: LoginButtonProps) {
       pending: "Logging in...",
       error: {
         render({ data: error }: { data: AxiosError }) {
-          console.log(error);
           return `Sign up failed: ${error?.response?.data || "Unknown error"}`;
         },
       },
