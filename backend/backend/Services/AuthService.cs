@@ -23,10 +23,13 @@ public class AuthService : IAuthService
     public async Task<string?> LoginAsync(string email, string password)
     {
         var user = await _userRepository.GetByEmailAsync(email);
-
         var hashToCheck = user?.Password ?? dummyHash;
 
         var passwordValid = BCrypt.Net.BCrypt.Verify(password, hashToCheck);
+
+        var random = new Random();
+        int delay = random.Next(50, 151);
+        await Task.Delay(delay);
 
         if (user == null)
         {
