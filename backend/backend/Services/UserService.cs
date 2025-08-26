@@ -12,14 +12,10 @@ namespace BeatBlock.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IConfiguration _config;
-
-    const string dummyHash = "$2a$12$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-    public UserService(IUserRepository userRepository, IConfiguration config)
+   
+    public UserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _config = config;
     }
 
     public async Task<bool> RegisterUserAsync(RegisterRequestDTO registerDto)
@@ -46,27 +42,6 @@ public class UserService : IUserService
         return true;
     }
 
-    public async Task<string?> LoginAsync(string email, string password)
-    { 
-        var user = await _userRepository.GetByEmailAsync(email);
-
-        var hashToCheck = user?.Password ?? dummyHash;
-
-        var passwordValid = BCrypt.Net.BCrypt.Verify(password, hashToCheck);
-
-        if (user == null)
-        {
-            return null;
-        }
-
-        if (!passwordValid)
-        {
-            return null;
-        }
-
-        return GenerateToken(user);
-    }
-
     public async Task<bool> UserExistsAsync(Guid userId)
     {
         return await _userRepository.IdExistsAsync(userId);
@@ -90,26 +65,5 @@ public class UserService : IUserService
         };
 
         return userInfo;
-    }
-
-    private string GenerateToken(User user)
-    {
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Email)
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(2),
-            signingCredentials: creds);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

@@ -13,7 +13,10 @@ services:
       - SQL_PORT=${SQL_PORT}
       - AZURITE_CONNECTION_STRING=${AZURITE_CONNECTION_STRING}
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_started
+      azurite:
+        condition: service_healthy
     networks:
       - beatblock
 
@@ -84,10 +87,16 @@ services:
       - azurite_data:/data
     environment:
       - AZURITE_ACCOUNTS=devstoreaccount1:Eby8vdM02xNozJeWz0uG2fFtqS/fA1sJbGZ1Q2z2VGHkAZd0pYxkAzj6Cc==
-    command: ["azurite-blob", "--blobHost", "0.0.0.0", "--silent"]
+    command: ["azurite-blob", "--blobHost", "0.0.0.0", "--location", "/data", "--silent"]
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:10000/devstoreaccount1?comp=list')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     networks:
       - beatblock
-
+  
 volumes:
   sqlserver_data:
   azurite_data:
