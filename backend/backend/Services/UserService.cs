@@ -2,10 +2,6 @@
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Repositories;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace BeatBlock.Services;
 

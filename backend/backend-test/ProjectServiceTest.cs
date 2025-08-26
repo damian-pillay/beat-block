@@ -5,7 +5,6 @@ using BeatBlock.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using BeatBlock.Helpers;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace BeatBlock.UnitTests;
@@ -428,6 +427,23 @@ public class ProjectServiceTest
 
         // Act
         var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes, ContentTypeHelper.DefaultContentType, userId);
+
+        // Assert
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
+    public async Task GIVEN_InvalidUserIdforProjectFiles_USING_GetProjectFileStreamAsync_ReturnsNull()
+    {
+        // Arrange
+        var invalidUserId = Guid.NewGuid();
+        int projectId = 1;
+        string fileType = "files";
+
+        _projectRepositoryMock.GetCompressedFilePathAsync(projectId, invalidUserId).Returns((string?)null);
+
+        // Act
+        var result = await _projectService.GetProjectFileStreamAsync(projectId, fileType, ContentTypeHelper.ContentTypes, ContentTypeHelper.DefaultContentType, invalidUserId);
 
         // Assert
         Assert.That(result, Is.Null);
