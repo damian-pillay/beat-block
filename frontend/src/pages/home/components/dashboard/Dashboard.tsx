@@ -1,4 +1,3 @@
-import ActionButton from "./SearchActionButton";
 import SearchBar from "./SearchBar";
 import GreetingMessage from "./GreetingMessage";
 import AddButton from "./AddButton";
@@ -19,8 +18,8 @@ export default function Dashboard() {
         <UploadModal isOpen={isUploadReady} />
         <SearchBar />
         <div className="flex gap-1 w-fit h-12">
-          <ActionButton icon="filter_alt" ariaLabel="Filter" />
-          <ActionButton icon="sort" ariaLabel="Sort" />
+          {/* <ActionButton icon="filter_alt" ariaLabel="Filter" />
+          <ActionButton icon="sort" ariaLabel="Sort" /> */}
           <AddButton isOpen={isUploadReady} handleToggle={handleToggle} />
         </div>
       </div>
