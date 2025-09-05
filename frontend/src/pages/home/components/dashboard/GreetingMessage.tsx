@@ -1,9 +1,12 @@
 import useUserInfo from "../../api/useUserInfo";
 import { AnimatePresence, motion } from "framer-motion";
 import DisplayNameLoading from "../../../common/components/loading/DisplayNameLoading";
+import React from "react";
 
 export default function GreetingMessage() {
   const { data: userInfo, isLoading, isError } = useUserInfo();
+
+  console.log(userInfo.firstName);
 
   const hour = new Date().getHours();
   let greeting;
@@ -18,17 +21,19 @@ export default function GreetingMessage() {
       greeting = "Good Evening";
   }
 
-  let displayName: string;
+  let displayName: React.ReactNode;
 
-  if (userInfo) {
-    displayName = userInfo.alias ?? userInfo.firstName;
+  if (isLoading) {
+    displayName = <DisplayNameLoading />;
   } else if (isError) {
     displayName = "User";
-  } else if (isLoading) {
-    displayName = "Loading";
+  } else if (userInfo) {
+    displayName = userInfo.alias?.trim() || userInfo.firstName;
   } else {
     displayName = "User";
   }
+
+  console.log(displayName);
 
   return (
     <AnimatePresence mode="wait">
