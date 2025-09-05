@@ -27,17 +27,17 @@ public class ProjectService : IProjectService
         _logger = logger;
     }
 
-    public IEnumerable<ProjectResponse> GetAllProjects()
+    public IEnumerable<ProjectResponse> GetAllProjects(Guid userId)
     {
-        var projects = _repository.GetAllProjects();
+        var projects = _repository.GetAllProjects(userId);
 
         var projectsResponse = projects.Select(project => ConvertToProjectResponse(project));
 
         return projectsResponse;
     }
 
-    public async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto)
-    {
+    public async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest projectDto, Guid userId)
+    { 
         _logger.LogInformation("Creating project: {ProjectName}", projectDto.Name);
 
         var filePath = await _blobStorageRepository.UploadAsync(projectDto.CompressedFile, ProjectFilesDir);
@@ -72,18 +72,18 @@ public class ProjectService : IProjectService
             ImagePath = imagePath,
             CreatedAt = DateTime.Today,
             UpdatedAt = DateTime.Today,
-            
+            UserId = userId
         };
 
         await _repository.AddAsync(project);
         return ConvertToProjectResponse(project);
     }
 
-    public async Task<ProjectResponse?> GetProjectByIdAsync(int id)
+    public async Task<ProjectResponse?> GetProjectByIdAsync(int id, Guid userId)
     {
         _logger.LogInformation("Fetching project with Id: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {
@@ -94,11 +94,11 @@ public class ProjectService : IProjectService
         return ConvertToProjectResponse(project);
     }
 
-    public async Task<bool> DeleteProjectAsync(int id)
+    public async Task<bool> DeleteProjectAsync(int id, Guid userId)
     {
         _logger.LogInformation("Attempting to delete project with Id: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {
@@ -129,15 +129,17 @@ public class ProjectService : IProjectService
         int id,
         string fileType,
         FrozenDictionary<string, string> ContentTypes,
-        string DefaultContentType)
+        string DefaultContentType,
+        Guid userId
+        )
     {
         _logger.LogInformation("Attempting to retrieve {FileType} for project with Id: {ProjectId}", fileType, id);
 
         var blobPath = fileType switch
         {
-            CompressedFileType => await _repository.GetCompressedFilePathAsync(id),
-            AudioFileType => await _repository.GetAudioFilePathAsync(id),
-            ImageFileType => await _repository.GetImageFilePathAsync(id),
+            CompressedFileType => await _repository.GetCompressedFilePathAsync(id, userId),
+            AudioFileType => await _repository.GetAudioFilePathAsync(id, userId),
+            ImageFileType => await _repository.GetImageFilePathAsync(id, userId),
             _ => null
         };
 
@@ -175,11 +177,11 @@ public class ProjectService : IProjectService
             ContentType = contentType
         };
     }
-    public async Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto)
+    public async Task<ProjectResponse?> UpdateProjectAsync(int id, UpdateProjectRequest requestDto, Guid userId)
     {
         _logger.LogInformation("Starting update for project with ID: {ProjectId}", id);
 
-        var project = await _repository.GetByIdAsync(id);
+        var project = await _repository.GetByIdAsync(id, userId);
 
         if (project == null)
         {

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LineTexture } from "../../../../assets/textures";
 import MenuButton from "./MenuButton";
+import LogOutMenuItem from "./MenuItems/LogOutMenuItem";
 
 export default function NavMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +31,8 @@ export default function NavMenu() {
     setMenuOpen((prev) => !prev);
   }
 
+  const menuItems = [{ component: LogOutMenuItem }];
+
   return (
     <div className="absolute block" ref={menuRef}>
       <MenuButton isOpen={menuOpen} toggleMenu={toggleMenu} />
@@ -51,34 +54,8 @@ export default function NavMenu() {
             </div>
 
             <ul className="flex flex-col justify-center items-center">
-              {["About", "Services", "Contact"].map((item, index) => (
-                <motion.li
-                  key={item}
-                  className="py-2 px-4 cursor-pointer"
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.15 * index }}
-                  exit={{ x: -20, opacity: 0 }}
-                >
-                  <motion.span
-                    className="font-medium"
-                    whileHover={{
-                      scale: 1.08,
-                      transition: {
-                        duration: 0.01,
-                        ease: "backOut",
-                      },
-                    }}
-                    whileTap={{
-                      color: "#ff0000",
-                      fontWeight: "medium",
-                      transition: { duration: 0.01 },
-                    }}
-                    style={{ display: "inline-block" }}
-                  >
-                    {item}
-                  </motion.span>
-                </motion.li>
+              {menuItems.map((menuItem, index) => (
+                <menuItem.component key={`menu-item-${index}`} index={index} />
               ))}
             </ul>
           </motion.div>

@@ -3,30 +3,36 @@ using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Models.DTOs.Response;
 using BeatBlock.Services;
 using BeatBlock.Services.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeatBlock.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectController : ControllerBase
 {
     private readonly IProjectService _projectService;
     private readonly IProjectUploadValidator _uploadValidator;
+    private readonly IUserService _userService;
     private readonly ILogger _logger;
 
-    public ProjectController(IProjectService projectService, IProjectUploadValidator uploadValidator, ILogger<ProjectController> logger)
+    public ProjectController(IProjectService projectService, IProjectUploadValidator uploadValidator, ILogger<ProjectController> logger, IUserService userService)
     {
         _projectService = projectService;
         _uploadValidator = uploadValidator;
         _logger = logger;
+        _userService = userService;
     }
 
     [HttpGet]
     public ActionResult<GetAllProjectsResponse> GetAll()
     {
+        var userId = User.GetUserId();
+
         _logger.LogInformation("Fetching all projects");
-        var projectsResponse = _projectService.GetAllProjects();
+        var projectsResponse = _projectService.GetAllProjects(userId);
         var response = new GetAllProjectsResponse(projectsResponse);
 
         return Ok(response);
@@ -35,22 +41,26 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProjectById(int id)
     {
-        _logger.LogInformation("Fetching project by ID: {ProjectId}", id);
-        var project = await _projectService.GetProjectByIdAsync(id);
+        var userId = User.GetUserId();
+
+        _logger.LogInformation("Fetching project by ID: {ProjectId} for user by ID: {UserId}", id, userId);
+        var project = await _projectService.GetProjectByIdAsync(id, userId);
 
         if (project == null)
         {
-            _logger.LogWarning("Project with ID {ProjectId} not found", id);
-            return NotFound();
+            _logger.LogWarning("Project with ID {ProjectId} not found for User with ID {UserId}", id, userId);
+            return Forbid();
         }
 
-        _logger.LogInformation("Project found: {ProjectName} (Id: {ProjectId})", project.Name, project.Id);
+        _logger.LogInformation("Project found: {ProjectName} (Id: {ProjectId}) for User with ID {UserId}", project.Name, project.Id, userId);
         return Ok(project);
     }
 
     [HttpGet("{id}/{fileType}")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
+        var userId = User.GetUserId();
+
         _logger.LogInformation("Fetching file of type '{FileType}' for project ID: {ProjectId}", fileType, id);
 
         var result = await _projectService
@@ -58,13 +68,14 @@ public class ProjectController : ControllerBase
                 id,
                 fileType.ToLower(),
                 ContentTypeHelper.ContentTypes,
-                ContentTypeHelper.DefaultContentType
+                ContentTypeHelper.DefaultContentType,
+                userId
             );
 
         if (result == null)
         {
             _logger.LogWarning("File of type '{FileType}' for project ID {ProjectId} not found", fileType, id);
-            return NotFound();
+            return Forbid();
         }
 
         Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{result.FileName}\"");
@@ -75,6 +86,14 @@ public class ProjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
+        var userId = User.GetUserId();
+
+        if (!await _userService.UserExistsAsync(userId))
+        {
+            _logger.LogWarning("User ID {UserId} does not exist in the system", userId);
+            return Forbid();
+        }
+
         _logger.LogInformation("Received request to create a new project");
         _uploadValidator.Validate(projectDto, ModelState);
 
@@ -84,7 +103,7 @@ public class ProjectController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var createdProject = await _projectService.CreateProjectAsync(projectDto);
+        var createdProject = await _projectService.CreateProjectAsync(projectDto, userId);
 
         _logger.LogInformation("Project created successfully with ID: {ProjectId}", createdProject.Id);
 
@@ -94,6 +113,7 @@ public class ProjectController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest projectDto)
     {
+        var userId = User.GetUserId();
         _logger.LogInformation("Received request to update project ID: {ProjectId}", id);
 
         _uploadValidator.Validate(projectDto, ModelState);
@@ -104,12 +124,12 @@ public class ProjectController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var updatedProject = await _projectService.UpdateProjectAsync(id, projectDto);
+        var updatedProject = await _projectService.UpdateProjectAsync(id, projectDto, userId);
 
         if (updatedProject == null)
         {
             _logger.LogWarning("Project with ID {ProjectId} not found for update", id);
-            return NotFound();
+            return Forbid();
         }
 
         _logger.LogInformation("Project with ID {ProjectId} updated successfully", id);
@@ -119,13 +139,15 @@ public class ProjectController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
+        var userId = User.GetUserId();
+
         _logger.LogInformation("Received request to delete project ID: {ProjectId}", id);
-        var result = await _projectService.DeleteProjectAsync(id);
+        var result = await _projectService.DeleteProjectAsync(id, userId);
 
         if (!result)
         {
             _logger.LogWarning("Project with ID {ProjectId} not found for deletion", id);
-            return NotFound();
+            return Forbid();
         }
 
         _logger.LogInformation("Project with ID {ProjectId} deleted successfully", id);

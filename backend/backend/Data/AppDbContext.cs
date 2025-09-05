@@ -6,6 +6,7 @@ namespace BeatBlock.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<Project> Project { get; set; }
+    public DbSet<User> User { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     { }

@@ -12,6 +12,7 @@ import ProjectDeleteIcon from "./project-delete.svg";
 import ProjectEditIcon from "./project-edit.svg";
 import ProjectPlayIcon from "./project-play.svg";
 import InfoIcon from "./info-icon.svg";
+import QuestionMark from "./question-mark.svg";
 
 export {
   BeatblockLogo,
@@ -28,4 +29,5 @@ export {
   ProjectEditIcon,
   ProjectPlayIcon,
   InfoIcon,
+  QuestionMark,
 };

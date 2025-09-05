@@ -15,10 +15,13 @@ public class ProjectRepository : IProjectRepository
         _logger = logger;
     }
 
-    public IEnumerable<Project> GetAllProjects()
+    public IEnumerable<Project> GetAllProjects(Guid userId)
     {
         _logger.LogInformation("Retrieving all projects.");
-        return _context.Project.ToList();
+
+        var userProjects = _context.Project.Where(p  => p.UserId == userId).ToList();
+
+        return userProjects;
     }
 
     public async Task AddAsync(Project project)
@@ -30,14 +33,16 @@ public class ProjectRepository : IProjectRepository
         _logger.LogInformation("Project added with Id {ProjectId}", project.Id);
     }
 
-    public async Task<Project?> GetByIdAsync(int id)
+    public async Task<Project?> GetByIdAsync(int id, Guid userId)
     {
-        _logger.LogInformation("Fetching project by ID: {ProjectId}", id);
-        var project = await _context.Project.FindAsync(id);
+        _logger.LogInformation("Fetching project by ID: {ProjectId} for user {UserId}", id, userId);
+
+        var project = await _context.Project
+            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
 
         if (project == null)
         {
-            _logger.LogWarning("Project with ID {ProjectId} not found.", id);
+            _logger.LogWarning("Project with ID {ProjectId} not found or does not belong to user {UserId}.", id, userId);
         }
 
         return project;
@@ -70,12 +75,12 @@ public class ProjectRepository : IProjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<string?> GetImageFilePathAsync(int projectId)
+    public async Task<string?> GetImageFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching image path for Project ID: {ProjectId}", projectId);
 
         var imagePath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.ImagePath)
             .FirstOrDefaultAsync();
 
@@ -87,12 +92,12 @@ public class ProjectRepository : IProjectRepository
         return imagePath;
     }
 
-    public async Task<string?> GetCompressedFilePathAsync(int projectId)
+    public async Task<string?> GetCompressedFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching compressed file path for Project ID: {ProjectId}", projectId);
 
         var filePath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.FilePath)
             .FirstOrDefaultAsync();
 
@@ -104,12 +109,12 @@ public class ProjectRepository : IProjectRepository
         return filePath;
     }
 
-    public async Task<string?> GetAudioFilePathAsync(int projectId)
+    public async Task<string?> GetAudioFilePathAsync(int projectId, Guid userId)
     {
         _logger.LogInformation("Fetching audio path for Project ID: {ProjectId}", projectId);
 
         var audioPath = await _context.Project
-            .Where(p => p.Id == projectId)
+            .Where(p => p.Id == projectId && p.UserId == userId)
             .Select(p => p.AudioPath)
             .FirstOrDefaultAsync();
 

@@ -2,6 +2,7 @@
 
 public class Project
 {
+    public Guid UserId { get; set; }
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
@@ -14,4 +15,5 @@ public class Project
     public string? ImagePath { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public User User { get; set; } = null!;
 }

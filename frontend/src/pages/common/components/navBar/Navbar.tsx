@@ -1,9 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  BeatblockLogo,
-  BeatblockLogoSmall,
-  DefaultProfileIcon,
-} from "../../../../assets/icons";
+import { BeatblockLogo, BeatblockLogoSmall } from "../../../../assets/icons";
 import NavMenu from "./NavMenu";
 
 export default function Navbar() {
@@ -29,18 +25,7 @@ export default function Navbar() {
         />
       </Link>
 
-      <section className="flex justify-end items-center h-full w-1/3 md:px-8 px-6">
-        <button
-          className="text-white text-2xl rounded-full cursor-pointer"
-          aria-label="profile"
-        >
-          <img
-            src={DefaultProfileIcon}
-            alt="profile icon"
-            className="md:h-12 md:w-12 w-8 h-8 drag-none"
-          />
-        </button>
-      </section>
+      <section className="flex justify-end items-center h-full w-1/3 md:px-8 px-6"></section>
     </nav>
   );
 }
