@@ -10,7 +10,7 @@ export default function Onboarding({
 }) {
   return (
     <div
-      className="border h-screen w-full flex justify-center"
+      className="h-screen w-full flex justify-center"
       style={{
         backgroundImage: AuthenticationBackground,
         backgroundSize: "cover",

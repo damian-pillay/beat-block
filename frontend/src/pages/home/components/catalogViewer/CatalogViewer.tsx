@@ -14,7 +14,9 @@ export default function Catalog() {
 
   const catalog =
     !searchBarText || searchBarText === ""
-      ? fullcatalog.projects
+      ? fullcatalog
+        ? fullcatalog.projects
+        : undefined
       : fullcatalog.projects.filter((project: ProjectResponse) =>
           project.name.toLowerCase().includes(searchBarText.toLowerCase())
         );

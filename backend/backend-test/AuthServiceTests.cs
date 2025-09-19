@@ -16,7 +16,7 @@ public class AuthServiceTests
     private const string Password = "Secret123!";
     private const string WrongPassword = "BadPass123!";
     private const string Email = "test@example.com";
-    private const string JwtSecret = "this_is_a_super_secret_key_123456"; 
+    private const string JwtSecret = "this_is_a_super_secret_key_123456";
 
     [SetUp]
     public void Setup()
