@@ -19,7 +19,7 @@ public class ProjectRepository : IProjectRepository
     {
         _logger.LogInformation("Retrieving all projects.");
 
-        var userProjects = _context.Project.Where(p  => p.UserId == userId).ToList();
+        var userProjects = _context.Project.Where(p => p.UserId == userId).ToList();
 
         return userProjects;
     }
