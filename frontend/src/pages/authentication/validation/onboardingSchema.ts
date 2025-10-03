@@ -7,29 +7,25 @@ export type LoginFormData = InferType<typeof loginSchema>;
 const passwordSchema = yup
   .string()
   .required("Password is required")
-  .min(8, "Password must be at least 8 characters long")
   .test(
-    "has-lowercase",
-    "Password must include at least one lowercase letter",
-    (value) => /[a-z]/.test(value || "")
-  )
-  .test(
-    "has-uppercase",
-    "Password must include at least one uppercase letter",
-    (value) => /[A-Z]/.test(value || "")
-  )
-  .test("has-number", "Password must include at least one number", (value) =>
-    /\d/.test(value || "")
-  )
-  .test(
-    "has-special",
-    "Password must include at least one special character",
-    (value) => /[^A-Za-z0-9]/.test(value || "")
+    "is-strong",
+    "Password must include the following:\n• At least 8 characters\n• One lowercase letter\n• One uppercase letter\n• One number\n• One special character",
+    (value) => {
+      if (!value) return false;
+      return (
+        value.length >= 8 &&
+        /[a-z]/.test(value) &&
+        /[A-Z]/.test(value) &&
+        /\d/.test(value) &&
+        /[^A-Za-z0-9]/.test(value)
+      );
+    }
   );
 
 export const signUpSchema = yup.object({
   confirmPassword: yup
     .string()
+    .required("Password confirmation is required")
     .oneOf([yup.ref("password")], "Passwords must match"),
   password: passwordSchema,
   alias: yup.string().max(20, "Alias must be at most 20 characters long"),
@@ -45,6 +41,6 @@ export const loginSchema = yup.object({
   password: yup.string().required("Password is required"),
   email: yup
     .string()
-    .email("Invalid email format")
+    .email("Invalid format - must be in the form example@email.com")
     .required("Email is required"),
 });

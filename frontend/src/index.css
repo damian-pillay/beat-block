@@ -25,14 +25,13 @@ body {
 }
 
 .rounded-scrollbar::-webkit-scrollbar-track {
-  background: #383737;
   border-radius: 0px 0.5rem 0 0.5rem;
 }
 
 .rounded-scrollbar::-webkit-scrollbar-thumb {
   background-color: #4c4b4b;
   border-radius: 8px;
-  border: 2px solid #383737; /* creates inner spacing */
+  border: 2px solid #383737;
 }
 
 .drag-none {
