@@ -5,6 +5,7 @@ using BeatBlock.Services;
 using BeatBlock.Services.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BeatBlock.Controllers;
 
@@ -27,6 +28,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("project-list")]
     public ActionResult<GetAllProjectsResponse> GetAll()
     {
         var userId = User.GetUserId();
@@ -39,6 +41,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [EnableRateLimiting("project-list")]
     public async Task<IActionResult> GetProjectById(int id)
     {
         var userId = User.GetUserId();
@@ -57,6 +60,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id}/{fileType}")]
+    [EnableRateLimiting("project-file")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
         var userId = User.GetUserId();
@@ -84,6 +88,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("project-create")]
     public async Task<IActionResult> CreateProject([FromForm] CreateProjectRequest projectDto)
     {
         var userId = User.GetUserId();
@@ -111,6 +116,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPatch("{id}")]
+    [EnableRateLimiting("project-update")]
     public async Task<IActionResult> UpdateProject(int id, [FromForm] UpdateProjectRequest projectDto)
     {
         var userId = User.GetUserId();
@@ -137,6 +143,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [EnableRateLimiting("project-delete")]
     public async Task<IActionResult> DeleteProject(int id)
     {
         var userId = User.GetUserId();

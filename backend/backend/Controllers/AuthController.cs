@@ -3,6 +3,7 @@ using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BeatBlock.Controllers;
 
@@ -18,6 +19,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginDto)
     {
         var token = await _authService.LoginAsync(loginDto.Email, loginDto.Password);
