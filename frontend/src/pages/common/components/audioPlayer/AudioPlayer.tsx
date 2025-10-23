@@ -5,7 +5,7 @@ import { useAudioPlayerStore } from "../../services/useAudioPlayerStore";
 import { useEffect, useRef, useState } from "react";
 
 export default function AudioPlayer() {
-  const { audioData, closePlayer, filePath, isPlaying, togglePlaying } =
+  const { audioData, closePlayer, filePath, isPlaying, setIsPlaying } =
     useAudioPlayerStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [duration, setDuration] = useState<number>(0.0);
@@ -23,14 +23,14 @@ export default function AudioPlayer() {
 
   function toggleAudio() {
     if (!audioRef.current) return;
-    togglePlaying();
 
-    if (isPlaying) {
+    if (audioRef.current.paused) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    } else {
       audioRef.current.pause();
-      return;
+      setIsPlaying(false);
     }
-
-    audioRef.current.play();
   }
 
   useEffect(() => {
@@ -45,9 +45,12 @@ export default function AudioPlayer() {
     audioRef.current = audio;
 
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-
     const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
