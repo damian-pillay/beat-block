@@ -76,6 +76,7 @@ export default function AudioPlayer() {
 
   return (
     <motion.div
+      id="audio-player"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       exit={{ y: 100 }}

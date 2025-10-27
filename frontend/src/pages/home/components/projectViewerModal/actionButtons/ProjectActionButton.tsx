@@ -19,6 +19,7 @@ export default function ProjectActionButton({
     <>
       <AnimatePresence>
         <motion.button
+          id={alt}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClick}

@@ -23,7 +23,7 @@ export default function ProjectDownloadButton({
 }: ProjectDownloadButtonProps) {
   const [isHover, setIsHover] = useState(false);
   const { refetch } = useFetchFile({
-    field: type,
+    field: type.toLowerCase(),
     projectId: id,
     isEnabled: false,
   });
@@ -56,6 +56,7 @@ export default function ProjectDownloadButton({
 
   return (
     <motion.button
+      id={`${type.toLowerCase()}-download-button`}
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
       onClick={

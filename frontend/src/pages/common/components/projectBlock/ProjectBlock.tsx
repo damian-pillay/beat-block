@@ -56,7 +56,7 @@ export default function ProjectBlock({
               transition: { duration: 0.03, ease: "easeOut" },
             }}
             onClick={() => setIsModalOpen(true)}
-            className="flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
+            className="project-block flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
             <img
               src={image ?? DefaultAudioImage}

@@ -60,7 +60,6 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id}/{fileType}")]
-    [EnableRateLimiting("project-file")]
     public async Task<IActionResult> GetProjectFile(int id, string fileType)
     {
         var userId = User.GetUserId();

@@ -57,7 +57,13 @@ export default function LoginButton({
       pending: "Logging in...",
       error: {
         render({ data: error }: { data: AxiosError }) {
-          return `Sign up failed: ${error?.response?.data || "Unknown error"}`;
+          return `Sign up failed: ${
+            error?.response?.data
+              ? error.response.data
+              : error.response
+              ? error.response.status + " - " + error.response.statusText
+              : "unknown error"
+          }`;
         },
       },
     });

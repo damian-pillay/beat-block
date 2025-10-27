@@ -49,7 +49,7 @@ export default function ProjectViewerModal({
           transition: { duration: 0.3, type: "tween" },
         }}
         transition={{ duration: 0.8, type: "spring", delay: 0.02 }}
-        className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-200 w-[90%] z-50 rounded-4xl bg-[#272626] shadow-lg"
+        className="project-viewer-modal fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-200 w-[90%] z-50 rounded-4xl bg-[#272626] shadow-lg"
       >
         <div className="relative flex flex-col gap-7 p-8 rounded-4xl ">
           <img
@@ -62,8 +62,9 @@ export default function ProjectViewerModal({
           />
           <section className="w-full flex h-60 gap-5">
             <img
+              id="project-audio-image"
               src={image ?? DefaultAudioImage}
-              alt="default-audio-image"
+              alt="audio-image"
               className="rounded-3xl object-cover aspect-square drag-none w-1/3"
             />
             <section className="flex flex-col justify-between w-full h-full py-0">
@@ -93,7 +94,7 @@ export default function ProjectViewerModal({
                     project,
                     action.field as DropzoneField
                   )}
-                  type={action.title.toLowerCase()}
+                  type={action.title}
                   title={project.name}
                 />
               ))}
