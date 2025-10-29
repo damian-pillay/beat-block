@@ -1,6 +1,5 @@
 import { useProjectStore } from "../../projectEditor/services/useProjectStore";
 import { dropzoneConfig } from "../utils/dropzoneConfig";
-import { showInfoToast } from "../utils/toastConfig";
 import { showErrorToast } from "../utils/toastConfig";
 import { type DropzoneField } from "../types/dropzoneField";
 
@@ -19,8 +18,16 @@ export default function useFileHandler(field: DropzoneField) {
     }
 
     if (!dropzoneConfig[field].mimeTypes.includes(files[0].type)) {
-      showInfoToast(files[0].type);
       showErrorToast("Please drop a valid file type");
+      return;
+    }
+
+    if (files[0].size > dropzoneConfig[field].maxSize) {
+      showErrorToast(
+        `${dropzoneConfig[field].fileType} should not exceed ${
+          dropzoneConfig[field].maxSize / (1024 * 1024)
+        }MB`
+      );
       return;
     }
 

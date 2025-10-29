@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { UploadIcon } from "../../../../../assets/icons";
 import FileBrowseButton from "../_shared/FileBrowseButton";
+import { dropzoneConfig } from "../../../utils/dropzoneConfig";
 
 export default function ProjectUploadPlaceholder() {
   return (
@@ -46,7 +47,10 @@ export default function ProjectUploadPlaceholder() {
         exit={{ opacity: 0, y: 10 }}
         className=""
       >
-        You can upload files in .zip formats only.
+        You can upload files in .zip formats only.{" "}
+        <span className="text-zinc-500">{` (${
+          dropzoneConfig["compressedFile"].maxSize / (1024 * 1024)
+        }MB Max)`}</span>
       </motion.p>
     </div>
   );
