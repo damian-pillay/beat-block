@@ -13,12 +13,12 @@ export default function useFileHandler(field: DropzoneField) {
     }
 
     if (files.length !== 1) {
-      showErrorToast("Please only drop one file.");
+      showErrorToast("Please only select one file.");
       return;
     }
 
     if (!dropzoneConfig[field].mimeTypes.includes(files[0].type)) {
-      showErrorToast("Please drop a valid file type");
+      showErrorToast("Please select a valid file type");
       return;
     }
 
