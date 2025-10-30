@@ -11,9 +11,11 @@ import { useEffect } from "react";
 interface ProjectBlockProps {
   project: ProjectResponse;
   isDeleting: boolean;
+  previewImage?: string | null;
 }
 
 export default function ProjectBlock({
+  previewImage = undefined,
   project,
   isDeleting,
 }: ProjectBlockProps) {
@@ -59,7 +61,7 @@ export default function ProjectBlock({
             className="project-block flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
             <img
-              src={image ?? DefaultAudioImage}
+              src={previewImage ?? image ?? DefaultAudioImage}
               alt="default audio icon"
               className="h-full rounded-3xl object-cover drag-none aspect-square"
             />

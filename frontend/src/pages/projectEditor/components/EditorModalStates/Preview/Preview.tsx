@@ -2,9 +2,22 @@ import ProjectBlock from "../../../../common/components/projectBlock/ProjectBloc
 import { toProjectResponse } from "../../../../common/helper/projectRequestToResponseConvertor";
 import { useProjectStore } from "../../../services/useProjectStore";
 import ProjectSubmitButton from "./ProjectSubmitButton";
+import { useEffect, useState } from "react";
 
 export default function Preview() {
   const { requestForm: project } = useProjectStore();
+  const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!project.imageFile) return;
+
+    const objectUrl = URL.createObjectURL(project.imageFile);
+    setImage(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [project.imageFile]);
 
   return (
     <div className="flex flex-col justify-between gap-5 h-full w-full">
@@ -23,7 +36,11 @@ export default function Preview() {
         }}
         className="flex p-2 rounded-4xl bg-[#171515] h-full w-[90%] mx-auto items-center "
       >
-        <ProjectBlock project={toProjectResponse(project)} isDeleting={false} />
+        <ProjectBlock
+          project={toProjectResponse(project)}
+          isDeleting={false}
+          previewImage={image}
+        />
       </section>
       <section className="flex justify-center py-2">
         <p>Publish your project if you are happy with your results !</p>
