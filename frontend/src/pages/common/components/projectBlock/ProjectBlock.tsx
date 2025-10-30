@@ -12,9 +12,11 @@ interface ProjectBlockProps {
   project: ProjectResponse;
   isDeleting: boolean;
   previewImage?: string | null;
+  isPreview?: boolean;
 }
 
 export default function ProjectBlock({
+  isPreview = false,
   previewImage = undefined,
   project,
   isDeleting,
@@ -57,7 +59,7 @@ export default function ProjectBlock({
               backgroundColor: "#383737",
               transition: { duration: 0.03, ease: "easeOut" },
             }}
-            onClick={() => setIsModalOpen(true)}
+            onClick={!isPreview ? () => setIsModalOpen(true) : undefined}
             className="project-block flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
             <img

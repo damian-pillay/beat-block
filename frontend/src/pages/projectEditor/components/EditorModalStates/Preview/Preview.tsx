@@ -40,6 +40,7 @@ export default function Preview() {
           project={toProjectResponse(project)}
           isDeleting={false}
           previewImage={image}
+          isPreview={true}
         />
       </section>
       <section className="flex justify-center py-2">

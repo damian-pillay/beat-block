@@ -1,7 +1,30 @@
 import { AnimatePresence, motion } from "framer-motion";
 import ProjectUploadDropzone from "../../../common/components/fileDropzone/projectDropzone/ProjectUploadDropzone";
+import { useEffect } from "react";
 
-export default function UploadModal({ isOpen }: { isOpen: boolean }) {
+export default function UploadModal({
+  isOpen,
+  closeModal,
+}: {
+  isOpen: boolean;
+  closeModal: () => void;
+}) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, closeModal]);
+
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -12,6 +35,7 @@ export default function UploadModal({ isOpen }: { isOpen: boolean }) {
             animate={{ opacity: 0.6 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black z-40"
+            onClick={closeModal}
           />
           <motion.div
             key="upload-modal"

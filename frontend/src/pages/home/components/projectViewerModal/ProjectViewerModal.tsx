@@ -17,6 +17,7 @@ import ProjectEditButton from "./actionButtons/ProjectEditButton";
 import { checkFileUploaded } from "../../../common/helper/fileUploadedValidator";
 import type { DropzoneField } from "../../../common/types/dropzoneField";
 import ProjectPlayButton from "./actionButtons/ProjectPlayButton";
+import { useEffect } from "react";
 
 interface HandleAwayClickProps {
   handleAwayClick: () => void;
@@ -29,6 +30,20 @@ export default function ProjectViewerModal({
   project,
   image,
 }: HandleAwayClickProps) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleAwayClick();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleAwayClick]);
+
   return createPortal(
     <>
       <motion.div

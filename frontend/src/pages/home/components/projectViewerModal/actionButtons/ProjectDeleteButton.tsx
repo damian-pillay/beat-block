@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useDeletionStore } from "../../../services/useDeletionStore";
 import { queryClient } from "../../../../../lib/queryClient";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import DeleteConfirmationButton from "./DeleteConfirmationButton";
 
@@ -22,6 +22,23 @@ export default function ProjectDeleteButton({
   const { markDeleting, clearDeleting } = useDeletionStore();
   const { mutateAsync: deleteProject } = useDeleteProject();
   const [isDeleting, setIsDeleting] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsDeleting(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsDeleting]);
 
   function toggleIsDeleting() {
     setIsDeleting((prev) => !prev);
@@ -53,7 +70,7 @@ export default function ProjectDeleteButton({
   }
 
   return (
-    <div className="relative h-18">
+    <div ref={containerRef} className="relative h-18">
       <ProjectActionButton
         alt={alt}
         icon={ProjectDeleteIcon}

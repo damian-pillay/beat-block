@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, SeparatorVertical, X } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 type buttonState = "keep" | "delete" | "neutral";
 
@@ -12,27 +12,9 @@ export default function DeleteConfirmationButton({
   onDelete: () => void;
 }) {
   const [buttonState, setButtonState] = useState<buttonState>("neutral");
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        onKeep();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onKeep]);
 
   return (
     <motion.div
-      ref={containerRef}
       key="deleting-overlay"
       initial={{ scale: 1, opacity: 0, y: -10 }}
       animate={{ scale: 1, opacity: 1, y: 10 }}
