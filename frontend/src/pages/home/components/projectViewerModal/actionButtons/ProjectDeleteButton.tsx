@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useDeletionStore } from "../../../services/useDeletionStore";
 import { queryClient } from "../../../../../lib/queryClient";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import DeleteConfirmationButton from "./DeleteConfirmationButton";
 
 export default function ProjectDeleteButton({
   projectId,
@@ -18,8 +21,13 @@ export default function ProjectDeleteButton({
   const alt = "Delete Project";
   const { markDeleting, clearDeleting } = useDeletionStore();
   const { mutateAsync: deleteProject } = useDeleteProject();
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  function handleClick() {
+  function toggleIsDeleting() {
+    setIsDeleting((prev) => !prev);
+  }
+
+  function handleDelete() {
     onDelete();
 
     setTimeout(() => {
@@ -45,10 +53,20 @@ export default function ProjectDeleteButton({
   }
 
   return (
-    <ProjectActionButton
-      alt={alt}
-      icon={ProjectDeleteIcon}
-      onClick={handleClick}
-    />
+    <div className="relative h-18">
+      <ProjectActionButton
+        alt={alt}
+        icon={ProjectDeleteIcon}
+        onClick={toggleIsDeleting}
+      />
+      <AnimatePresence>
+        {isDeleting && (
+          <DeleteConfirmationButton
+            onDelete={handleDelete}
+            onKeep={() => setIsDeleting(false)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
