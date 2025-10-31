@@ -186,13 +186,13 @@ export default function AudioPlayer() {
                   className="cursor-pointer"
                 />
               </motion.button>
-              <motion.button
+              {/* <motion.button
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}
                 className="cursor-pointer"
               >
                 <img src={InfoIcon} className="h-5 cursor-pointer" />
-              </motion.button>
+              </motion.button> */}
               <motion.button
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}
