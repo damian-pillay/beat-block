@@ -20,7 +20,7 @@ export default function DeleteConfirmationButton({
       animate={{ scale: 1, opacity: 1, y: 10 }}
       exit={{ scale: 1, opacity: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      className="absolute left-1/2 h-30 w-70 bg-[#272626] justify-around bottom-[-4] -translate-x-1/2 p-2 flex flex-col items-center rounded-xl"
+      className="absolute left-1/2 h-30 w-70 bg-[#272626] justify-around bottom-[-4] -translate-x-1/2 p-2 flex flex-col items-center rounded-3xl"
       style={{
         boxShadow: "0 -3px 16px rgba(0,0,0,0.3)",
       }}

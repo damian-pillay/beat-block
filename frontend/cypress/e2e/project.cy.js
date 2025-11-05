@@ -1,11 +1,16 @@
 /// <reference types="cypress" />
 
-context("Actions", () => {
+describe("", () => {
   beforeEach(() => {
     cy.clearAllCookies();
-    cy.visit("http://localhost:5174/");
-    cy.get('input[placeholder="Enter your email"]').type("b-ano@email.com");
-    cy.get('input[placeholder="Enter your password"]').type("Dlp131220!");
+    cy.visit("/");
+    cy.fixture("user").as("userData");
+
+    cy.get("@userData").then((user) => {
+      cy.get('input[placeholder="Enter your email"]').type(user.email);
+      cy.get('input[placeholder="Enter your password"]').type(user.password);
+    });
+
     cy.contains("button", "LOGIN").click();
     cy.get("#greetings-message").should("exist").should("be.visible");
   });
@@ -84,7 +89,7 @@ context("Actions", () => {
       .should("be.visible");
   });
 
-  it("should play audio when project play button is clicked", () => {
+  it("should open audio player when project play button is clicked", () => {
     cy.get(".project-block").first().click();
     const projectViewerModal = cy.get(".project-viewer-modal");
 

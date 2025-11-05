@@ -1,9 +1,10 @@
 /// <reference types="cypress" />
 
-context("Actions", () => {
-  beforeEach(() => {
+describe("Logging in", () => {
+  beforeEach(function () {
     cy.clearAllCookies();
-    cy.visit("http://localhost:5174/");
+    cy.visit("/");
+    cy.fixture("user").as("userData");
   });
 
   it("should redirect to login page", () => {
@@ -18,8 +19,11 @@ context("Actions", () => {
   });
 
   it("should log into home page with valid credentials", () => {
-    cy.get('input[placeholder="Enter your email"]').type("b-ano@email.com");
-    cy.get('input[placeholder="Enter your password"]').type("Dlp131220!");
+    cy.get("@userData").then((user) => {
+      cy.get('input[placeholder="Enter your email"]').type(user.email);
+      cy.get('input[placeholder="Enter your password"]').type(user.password);
+    });
+
     cy.contains("button", "LOGIN").click();
     cy.get("#greetings-message").should("exist").should("be.visible");
   });
