@@ -114,7 +114,7 @@ public static class ProjectExceptionMap
                  "Concurrency Conflict",
                  "The resource was modified by another process. Please retry your operation.",
                  "https://tools.ietf.org/html/rfc7231#section-6.5.8")
-            },            
+            },
             {
                 typeof(Exception),
                 (StatusCodes.Status429TooManyRequests,
