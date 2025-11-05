@@ -12,21 +12,34 @@ import useLogin from "../api/useLogin";
 
 interface LoginButtonProps {
   formData: LoginFormData;
+  onValidationError: (errors: {
+    [key in keyof LoginFormData]?: string;
+  }) => void;
 }
 
-export default function LoginButton({ formData }: LoginButtonProps) {
+export default function LoginButton({
+  formData,
+  onValidationError,
+}: LoginButtonProps) {
   const { mutateAsync: login } = useLogin();
   const navigate = useNavigate();
 
   async function validateSignUpInfo() {
     try {
-      loginSchema.validateSync(formData);
+      loginSchema.validateSync(formData, { abortEarly: false });
+      onValidationError({}); // Clear any existing errors
       return true;
     } catch (error) {
       if (error instanceof ValidationError) {
-        showErrorToast(error.message);
+        const fieldErrors: { [key in keyof LoginFormData]?: string } = {};
+        error.inner.forEach((err) => {
+          if (err.path) {
+            fieldErrors[err.path as keyof LoginFormData] = err.message;
+          }
+        });
+        onValidationError(fieldErrors);
       } else {
-        showErrorToast("An unexpected error occured whilst logging in");
+        showErrorToast("An unexpected error occurred whilst logging in");
       }
       return false;
     }
@@ -44,7 +57,13 @@ export default function LoginButton({ formData }: LoginButtonProps) {
       pending: "Logging in...",
       error: {
         render({ data: error }: { data: AxiosError }) {
-          return `Sign up failed: ${error?.response?.data || "Unknown error"}`;
+          return `Sign up failed: ${
+            error?.response?.data
+              ? error.response.data
+              : error.response
+              ? error.response.status + " - " + error.response.statusText
+              : "unknown error"
+          }`;
         },
       },
     });

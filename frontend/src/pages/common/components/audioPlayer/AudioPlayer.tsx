@@ -2,23 +2,35 @@ import { Pause, Play, SkipBack, SkipForward, Volume2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { InfoIcon } from "../../../../assets/icons";
 import { useAudioPlayerStore } from "../../services/useAudioPlayerStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function AudioPlayer() {
-  const { audioData, closePlayer, filePath, isPlaying, togglePlaying } =
+  const { audioData, closePlayer, filePath, isPlaying, setIsPlaying } =
     useAudioPlayerStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [duration, setDuration] = useState<number>(0.0);
+  const [currentTime, setCurrentTime] = useState(0.0);
+
+  function handleSeek(event: React.ChangeEvent<HTMLInputElement>) {
+    const currentTime = event.target.value;
+
+    setCurrentTime(parseFloat(currentTime));
+
+    if (audioRef.current) {
+      audioRef.current.currentTime = parseFloat(currentTime);
+    }
+  }
 
   function toggleAudio() {
     if (!audioRef.current) return;
-    togglePlaying();
 
-    if (isPlaying) {
+    if (audioRef.current.paused) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    } else {
       audioRef.current.pause();
-      return;
+      setIsPlaying(false);
     }
-
-    audioRef.current.play();
   }
 
   useEffect(() => {
@@ -32,7 +44,19 @@ export default function AudioPlayer() {
     const audio = new Audio(filePath);
     audioRef.current = audio;
 
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
     const playPromise = audio.play();
+    setDuration(audio.duration);
+    console.log(audio.duration);
 
     if (playPromise !== undefined) {
       playPromise.catch((err) => {
@@ -52,6 +76,7 @@ export default function AudioPlayer() {
 
   return (
     <motion.div
+      id="audio-player"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       exit={{ y: 100 }}
@@ -65,7 +90,16 @@ export default function AudioPlayer() {
         }}
       />
       <div className="w-full h-[85%] bg-[#171515] flex justify-center">
-        <div className=" w-full max-w-[89rem] px-10 flex justify-start">
+        <div className="relative w-full max-w-[89rem] px-10 flex justify-start">
+          <input
+            type="range"
+            min={0}
+            max={duration}
+            step={0.01}
+            value={currentTime}
+            onChange={handleSeek}
+            className={`absolute h-[2px] text-red-500 w-full left-0 accent-red-600 rounded-lg`}
+          />
           <div className="relative w-full py-2 gap-7 flex justify-start items center">
             <img
               src={audioData?.image}
@@ -152,13 +186,13 @@ export default function AudioPlayer() {
                   className="cursor-pointer"
                 />
               </motion.button>
-              <motion.button
+              {/* <motion.button
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}
                 className="cursor-pointer"
               >
                 <img src={InfoIcon} className="h-5 cursor-pointer" />
-              </motion.button>
+              </motion.button> */}
               <motion.button
                 transition={{ duration: 0.2 }}
                 whileHover={{ scale: 1.15 }}

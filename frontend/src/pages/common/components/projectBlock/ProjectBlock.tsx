@@ -11,9 +11,13 @@ import { useEffect } from "react";
 interface ProjectBlockProps {
   project: ProjectResponse;
   isDeleting: boolean;
+  previewImage?: string | null;
+  isPreview?: boolean;
 }
 
 export default function ProjectBlock({
+  isPreview = false,
+  previewImage = undefined,
   project,
   isDeleting,
 }: ProjectBlockProps) {
@@ -55,11 +59,11 @@ export default function ProjectBlock({
               backgroundColor: "#383737",
               transition: { duration: 0.03, ease: "easeOut" },
             }}
-            onClick={() => setIsModalOpen(true)}
-            className="flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
+            onClick={!isPreview ? () => setIsModalOpen(true) : undefined}
+            className="project-block flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
             <img
-              src={image ?? DefaultAudioImage}
+              src={previewImage ?? image ?? DefaultAudioImage}
               alt="default audio icon"
               className="h-full rounded-3xl object-cover drag-none aspect-square"
             />

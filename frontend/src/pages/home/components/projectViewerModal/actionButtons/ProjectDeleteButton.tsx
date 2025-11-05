@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useDeletionStore } from "../../../services/useDeletionStore";
 import { queryClient } from "../../../../../lib/queryClient";
+import { useState, useRef, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import DeleteConfirmationButton from "./DeleteConfirmationButton";
 
 export default function ProjectDeleteButton({
   projectId,
@@ -18,8 +21,30 @@ export default function ProjectDeleteButton({
   const alt = "Delete Project";
   const { markDeleting, clearDeleting } = useDeletionStore();
   const { mutateAsync: deleteProject } = useDeleteProject();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  function handleClick() {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsDeleting(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsDeleting]);
+
+  function toggleIsDeleting() {
+    setIsDeleting((prev) => !prev);
+  }
+
+  function handleDelete() {
     onDelete();
 
     setTimeout(() => {
@@ -45,10 +70,20 @@ export default function ProjectDeleteButton({
   }
 
   return (
-    <ProjectActionButton
-      alt={alt}
-      icon={ProjectDeleteIcon}
-      onClick={handleClick}
-    />
+    <div ref={containerRef} className="relative h-18">
+      <ProjectActionButton
+        alt={alt}
+        icon={ProjectDeleteIcon}
+        onClick={toggleIsDeleting}
+      />
+      <AnimatePresence>
+        {isDeleting && (
+          <DeleteConfirmationButton
+            onDelete={handleDelete}
+            onKeep={() => setIsDeleting(false)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

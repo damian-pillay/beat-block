@@ -10,7 +10,7 @@ namespace BeatBlock.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserRepository _userRepository ;
+    private readonly IUserRepository _userRepository;
     private readonly IConfiguration _config;
 
     const string dummyHash = "$2a$12$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";

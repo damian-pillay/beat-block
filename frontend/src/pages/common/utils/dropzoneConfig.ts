@@ -3,6 +3,8 @@ import { Trash2, X } from "lucide-react";
 export const dropzoneConfig = {
   compressedFile: {
     title: "Project Files *",
+    fileType: "compressed files",
+    maxSize: 300 * 1024 * 1024,
     extensions: [".zip", ".rar"],
     mimeTypes: ["application/zip", "application/x-zip-compressed"],
     description: undefined,
@@ -11,7 +13,9 @@ export const dropzoneConfig = {
     clearButton: Trash2,
   },
   audioFile: {
-    title: "Rendered Audio for Preview (Optional)",
+    title: "Rendered Audio for Preview",
+    fileType: "audio files",
+    maxSize: 30 * 1024 * 1024,
     extensions: [".wav", ".mp3"],
     mimeTypes: ["audio/mpeg", "audio/wav"],
     description: undefined,
@@ -21,9 +25,11 @@ export const dropzoneConfig = {
   },
   imageFile: {
     title: "Artwork",
+    fileType: "image files",
+    maxSize: 5 * 1024 * 1024,
     extensions: [".jpeg", ".jpg", ".png"],
     mimeTypes: ["image/jpeg", "image/png"],
-    description: "1000 x 1000 px max",
+    description: undefined,
     styleClass: "aspect-square gap-3 text-sm max-w-48",
     clearButtonPosition: "right-2 top-2",
     clearButton: X,

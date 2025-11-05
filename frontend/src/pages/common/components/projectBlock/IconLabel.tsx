@@ -13,7 +13,8 @@ export default function IconLabel({
     <ToolTipProvider text={alt}>
       {({ onMouseEnter, onMouseLeave, renderToolTip }) => (
         <li
-          className="relative flex justify-start items-center gap-2"
+          id={alt}
+          className="icon-label relative flex justify-start items-center gap-2"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >

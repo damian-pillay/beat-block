@@ -5,6 +5,10 @@ import { useState } from "react";
 import { type LoginFormData } from "../validation/onboardingSchema";
 import LoginButton from "./LoginButton";
 
+type FormErrors = {
+  [K in keyof LoginFormData]?: string;
+};
+
 export default function Login() {
   const initialValues = {
     email: "",
@@ -12,12 +16,19 @@ export default function Login() {
   };
 
   const [formValues, setFormValues] = useState<LoginFormData>(initialValues);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   function handleInputChange(key: keyof LoginFormData, value: string) {
     setFormValues((prev) => ({
       ...prev,
       [key]: value,
     }));
+    if (errors[key]) {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: undefined,
+      }));
+    }
   }
 
   return (
@@ -28,7 +39,7 @@ export default function Login() {
       transition={{ duration: 0.3 }}
       className="w-full h-full flex items-center justify-center p-23 px-12"
     >
-      <form className=" relative h-80 w-full rounded-3xl flex flex-col justify-between overflow-hidden gap-2 p-6 px-14 items-center">
+      <form className=" relative w-full rounded-3xl flex flex-col justify-between overflow-hidden gap-2 p-6 px-14 items-center">
         <div className="absolute inset-0 h-full w-full bg-white opacity-10" />
         <h2 className="text-2xl text-white font-bold">LOGIN</h2>
         <div className="w-full flex flex-col gap-4">
@@ -42,11 +53,13 @@ export default function Login() {
               onChange={(value) =>
                 handleInputChange(input.key as keyof LoginFormData, value)
               }
+              error={errors[input.key as keyof LoginFormData]}
+              isRequired={input.isRequired}
             />
           ))}
         </div>
         <div className="flex justify-center w-full py-2">
-          <LoginButton formData={formValues} />
+          <LoginButton formData={formValues} onValidationError={setErrors} />
         </div>
       </form>
     </motion.div>

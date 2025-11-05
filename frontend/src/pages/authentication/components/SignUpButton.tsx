@@ -12,21 +12,34 @@ import { useNavigate } from "react-router-dom";
 
 interface SignUpButtonProps {
   formData: SignUpFormData;
+  onValidationError: (errors: {
+    [key in keyof SignUpFormData]?: string;
+  }) => void;
 }
 
-export default function SignUpButton({ formData }: SignUpButtonProps) {
+export default function SignUpButton({
+  formData,
+  onValidationError,
+}: SignUpButtonProps) {
   const { mutateAsync: signUp } = useSignUp();
   const navigate = useNavigate();
 
   async function validateSignUpInfo() {
     try {
-      signUpSchema.validateSync(formData);
+      signUpSchema.validateSync(formData, { abortEarly: false });
+      onValidationError({});
       return true;
     } catch (error) {
       if (error instanceof ValidationError) {
-        showErrorToast(error.message);
+        const fieldErrors: { [key in keyof SignUpFormData]?: string } = {};
+        error.inner.forEach((err) => {
+          if (err.path) {
+            fieldErrors[err.path as keyof SignUpFormData] = err.message;
+          }
+        });
+        onValidationError(fieldErrors);
       } else {
-        showErrorToast("An unexpected error occured");
+        showErrorToast("An unexpected error occurred");
       }
       return false;
     }

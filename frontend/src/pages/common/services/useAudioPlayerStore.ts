@@ -7,7 +7,7 @@ interface AudioPlayerState {
   filePath?: string;
   audioData?: AudioData;
   queueAudio: (data: AudioData, path: string) => void;
-  togglePlaying: () => void;
+  setIsPlaying: (playState: boolean) => void;
   closePlayer: () => void;
 }
 
@@ -23,10 +23,7 @@ export const useAudioPlayerStore = create<AudioPlayerState>((set) => ({
       filePath: path,
     }),
 
-  togglePlaying: () =>
-    set((state) => ({
-      isPlaying: !state.isPlaying,
-    })),
+  setIsPlaying: (playState) => set({ isPlaying: playState }),
 
   closePlayer: () =>
     set({

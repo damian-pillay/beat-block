@@ -29,6 +29,9 @@ export default function FilePlaceholder({ field }: FilePlaceholderProps) {
         <FileBrowseButton field={field}>browse</FileBrowseButton>{" "}
         {field === image && <br />}
         {formatList(config.extensions)}
+        <span className="text-zinc-500">{` (${
+          config.maxSize / (1024 * 1024)
+        }MB Max)`}</span>
       </p>
       {config.description && <p className="opacity-30">{config.description}</p>}
     </>

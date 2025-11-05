@@ -5,10 +5,8 @@ import React from "react";
 
 export default function GreetingMessage() {
   const { data: userInfo, isLoading, isError } = useUserInfo();
-
-  console.log(userInfo.firstName);
-
   const hour = new Date().getHours();
+
   let greeting;
   switch (true) {
     case hour < 12:
@@ -39,6 +37,7 @@ export default function GreetingMessage() {
     <AnimatePresence mode="wait">
       <motion.h1
         key={`${greeting}-${displayName}`}
+        id="greetings-message"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

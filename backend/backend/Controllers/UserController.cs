@@ -2,6 +2,7 @@
 using BeatBlock.Models.DTOs.Request;
 using BeatBlock.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BeatBlock.Controllers
 {
@@ -16,6 +17,7 @@ namespace BeatBlock.Controllers
             _userService = userService;
         }
 
+        [EnableRateLimiting("register")]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequestDTO registerDto)
         {
