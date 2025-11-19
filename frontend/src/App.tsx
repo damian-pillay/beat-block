@@ -6,13 +6,11 @@ import MessageToast from "./pages/common/components/toast/MessageToast";
 import { useAudioPlayerStore } from "./pages/common/services/useAudioPlayerStore";
 import AudioPlayer from "./pages/common/components/audioPlayer/AudioPlayer";
 import Onboarding from "./pages/authentication/layout/Onboarding.js";
-import useUserInfo from "./pages/home/api/useUserInfo.js";
 import ProtectedRoute from "./pages/common/components/routes/ProtectedRoute.js";
 
 function App() {
   const location = useLocation();
   const { isOpen } = useAudioPlayerStore();
-  useUserInfo();
 
   return (
     <>
@@ -22,7 +20,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<ProjectEditor />} />
           </Route>
-
           <Route
             element={<ProtectedRoute redirectTo="/" redirectIfAuthenticated />}
           >

@@ -1,4 +1,5 @@
 import { AuthenticationBackground } from "../../../assets/textures";
+import { motion } from "framer-motion";
 import AuthInfoPanel from "../components/AuthInfoPanel";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
@@ -9,14 +10,7 @@ export default function Onboarding({
   isSignUp?: boolean;
 }) {
   return (
-    <div
-      className="h-screen w-full flex justify-center"
-      style={{
-        backgroundImage: AuthenticationBackground,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <motion.div className="h-screen w-full flex justify-center">
       <img
         src={AuthenticationBackground}
         alt="Authentication Background"
@@ -28,6 +22,6 @@ export default function Onboarding({
           {isSignUp ? <SignUp /> : <Login />}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -5,7 +5,7 @@ import ProjectSubmitButton from "./ProjectSubmitButton";
 import { useEffect, useState } from "react";
 
 export default function Preview() {
-  const { requestForm: project } = useProjectStore();
+  const { requestForm: project, currentProjectId } = useProjectStore();
   const [image, setImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Preview() {
         className="flex p-2 rounded-4xl bg-[#171515] h-full w-[90%] mx-auto items-center "
       >
         <ProjectBlock
-          project={toProjectResponse(project)}
+          project={toProjectResponse(project, currentProjectId)}
           isDeleting={false}
           previewImage={image}
           isPreview={true}
