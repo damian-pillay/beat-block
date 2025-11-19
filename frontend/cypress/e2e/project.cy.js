@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("", () => {
+describe("Opening project modal", () => {
   beforeEach(() => {
     cy.clearAllCookies();
     cy.visit("/");
