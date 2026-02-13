@@ -15,6 +15,7 @@ export default function PageNotFound() {
 
   return (
     <motion.div
+      key="Not Found"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

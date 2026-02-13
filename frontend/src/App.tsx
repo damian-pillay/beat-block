@@ -7,6 +7,7 @@ import { useAudioPlayerStore } from "./pages/common/services/useAudioPlayerStore
 import AudioPlayer from "./pages/common/components/audioPlayer/AudioPlayer";
 import Onboarding from "./pages/authentication/layout/Onboarding.js";
 import ProtectedRoute from "./pages/common/components/routes/ProtectedRoute.js";
+import PageNotFound from "./pages/common/components/NotFound/PageNotFound.js";
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<ProjectEditor />} />
           </Route>
+          <Route path="*" element={<PageNotFound />} />
           <Route
             element={<ProtectedRoute redirectTo="/" redirectIfAuthenticated />}
           >
