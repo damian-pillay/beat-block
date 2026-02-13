@@ -9,6 +9,7 @@ interface ProjectStore {
 
   mode: "edit" | "create";
   projectResponse?: ProjectResponse;
+  currentProjectId: number | null;
 
   hydrateRequestForm: (currentProject: ProjectResponse) => void;
 }
@@ -16,11 +17,13 @@ interface ProjectStore {
 export const useProjectStore = create<ProjectStore>()((set) => ({
   requestForm: {},
   mode: "create",
+  currentProjectId: null,
 
   hydrateRequestForm: (currentProject) => {
     set({
       mode: "edit",
       projectResponse: currentProject,
+      currentProjectId: currentProject.id,
       requestForm: {
         name: currentProject.name,
         description: currentProject.description ?? undefined,

@@ -62,8 +62,13 @@ export default function ProjectBlock({
             onClick={!isPreview ? () => setIsModalOpen(true) : undefined}
             className="project-block flex md:h-48 h-38 w-full mx-auto [@media(max-width:1280px)]:max-w-[780px] max-w-2xl rounded-4xl bg-[#272626] p-5 justify-between gap-5 items-center cursor-pointer select-none"
           >
-            <img
+            <motion.img
+              key={previewImage ?? image ?? DefaultAudioImage}
               src={previewImage ?? image ?? DefaultAudioImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
               alt="default audio icon"
               className="h-full rounded-3xl object-cover drag-none aspect-square"
             />

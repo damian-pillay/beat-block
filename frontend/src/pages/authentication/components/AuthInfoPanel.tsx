@@ -7,7 +7,6 @@ export default function AuthInfoPanel({ isSignUp }: { isSignUp: boolean }) {
     <section className="w-[50%] h-full flex items-center justify-center p-23 px-17">
       <div className="flex flex-col justify-between items-start w-full h-150">
         <section className="flex flex-col gap-8 items-start w-full">
-          {" "}
           <img src={BeatblockLogo} className="object-contain h-14" />
           {isSignUp ? (
             <motion.h1

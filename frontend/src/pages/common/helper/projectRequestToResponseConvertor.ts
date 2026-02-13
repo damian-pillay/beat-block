@@ -1,9 +1,12 @@
 import type { ProjectRequest } from "../types/projectRequest";
 import type { ProjectResponse } from "../types/projectResponse";
 
-export function toProjectResponse(project: ProjectRequest): ProjectResponse {
+export function toProjectResponse(
+  project: ProjectRequest,
+  projectId?: number | null
+): ProjectResponse {
   return {
-    id: -1, // Placeholder or generated
+    id: projectId ?? -1, // Placeholder or generated
     name: project.name ?? "Untitled Project",
     description: project.description ?? null,
     keySignature: project.keySignature ?? null,

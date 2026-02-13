@@ -13,6 +13,7 @@ import ProjectEditIcon from "./project-edit.svg";
 import ProjectPlayIcon from "./project-play.svg";
 import InfoIcon from "./info-icon.svg";
 import QuestionMark from "./question-mark.svg";
+import RecordWithNeedle from "./record-with-needle.svg";
 
 export {
   BeatblockLogo,
@@ -30,4 +31,5 @@ export {
   ProjectPlayIcon,
   InfoIcon,
   QuestionMark,
+  RecordWithNeedle,
 };
